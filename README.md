@@ -28,6 +28,7 @@ npm run dev
 - antd css-in-js 解决
 - shell 脚本自动化部署
 - 多仓库关联(gitee,github)
+- cwebp将所有jpg与png批量转换webp，减少体积
 
 ## 代码规范
 

@@ -1227,7 +1227,7 @@ export default function DataService() {
       {/* 顶部标题区 */}
       <section
         ref={heroRef}
-        className={`text-center pt-[150px] pb-[90px] bg-[url('/13.jpg')] bg-center bg-cover shadow-[0_4px_24px_rgba(229,57,53,0.06)] transition-all duration-1000 ${
+        className={`text-center pt-[150px] pb-[90px] bg-[url('/13.webp')] bg-center bg-cover shadow-[0_4px_24px_rgba(229,57,53,0.06)] transition-all duration-1000 ${
           isHeroInView
             ? 'opacity-100 translate-y-0'
             : 'opacity-0 translate-y-20'

@@ -101,28 +101,28 @@ export default function HomePage() {
       id: 'goverment',
       title: '某市公安情报分析以案搜案',
       industry: '政府',
-      image: '/某市公安情报分析以案搜案.png',
+      image: '/某市公安情报分析以案搜案.webp',
       desc: '基于AI大模型训练平台，形成辅助合成研判能力',
     },
     {
       id: 'operator',
       title: '某省联通智能受理',
       industry: '运营商',
-      image: '/运营商1.png',
+      image: '/运营商1.webp',
       desc: '通过大模型实现智能受理',
     },
     {
       id: 'enterprise',
       title: '某集团智能问答系统',
       industry: '企业',
-      image: '/某集团智能问答系统.png',
+      image: '/某集团智能问答系统.webp',
       desc: '面向企业集团构建的统一知识聚合检索系统',
     },
     {
       id: 'education',
       title: '某高职校AI+知识服务',
       industry: '教育',
-      image: '/某高职校DEEPSEEK-AI+知识服务应用.png',
+      image: '/某高职校DEEPSEEK-AI+知识服务应用.webp',
       desc: 'AI智能助手提升高校管理效率和决策支持',
     },
   ];
@@ -189,7 +189,7 @@ export default function HomePage() {
         }`}
       >
         {/* 背景装饰 */}
-        <div className="absolute inset-0 bg-[url('/12.jpg')] bg-cover bg-center opacity-20"></div>
+        <div className="absolute inset-0 bg-[url('/12.webp')] bg-cover bg-center opacity-20"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 to-transparent"></div>
 
         {/* 浮动装饰元素 */}

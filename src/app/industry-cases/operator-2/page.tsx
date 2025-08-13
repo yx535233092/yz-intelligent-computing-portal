@@ -26,7 +26,7 @@ export default function YunnanMobileSolutionPage() {
     subtitle: '基于AI的方案智能编制与推荐系统',
     description:
       '通过方案智能体的打标、推荐和编制，辅助一线进行优质方案的快速检索，促进方案编写效率提升40%，编写质量提升30%。',
-    detailPicName: '云南移动方案助手.png',
+    detailPicName: '云南移动方案助手.webp',
   };
 
   return (

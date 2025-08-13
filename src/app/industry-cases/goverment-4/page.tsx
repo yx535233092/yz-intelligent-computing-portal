@@ -27,7 +27,7 @@ export default function JiangsuDataManagementPage() {
     subtitle: '基于大模型的自然语言数据查询分析平台',
     description:
       '借助大模型能力构建智能问数智能体，实现自然语言到SQL语句的转化，快速查询数据并生成图表，为江苏省数据管理提供高效的智能化数据分析服务。',
-    detailPicName: '江苏省大数据智能问数.png',
+    detailPicName: '江苏省大数据智能问数.webp',
   };
 
   return (

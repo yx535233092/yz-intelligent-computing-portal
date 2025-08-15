@@ -119,7 +119,7 @@ export default function JiangsuDataManagementPage() {
                 <ClockCircleOutlined className="text-2xl text-orange-600" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                查询响应时效性低
+                查询流程繁复
               </h3>
               <p className="text-gray-600 text-sm">
                 一次查询需要在多个人员间流转，耗时较长，影响决策效率
@@ -221,100 +221,147 @@ export default function JiangsuDataManagementPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              建设内容
+              解决方案
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               基于大模型构建智能问数平台，实现自然语言数据查询分析
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 mb-16">
-            <div className="space-y-8">
-              <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <BarChartOutlined className="text-xl text-blue-600" />
+          {/* 数据预处理 */}
+          <div className="mb-16">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
+              <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+                数据预处理
+              </h3>
+              <div className="grid md:grid-cols-3 gap-8">
+                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
+                  <div className="w-16 h-16 bg-blue-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <DatabaseOutlined className="text-2xl text-blue-600" />
                   </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                      数据治理
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      经过表注释补全、表结构优化、宽表加工等手续将客户的原始数据治理成标准化的数据资产
-                    </p>
-                    <ul className="text-sm text-gray-500 space-y-1">
-                      <li>• 表注释补全</li>
-                      <li>• 表结构优化</li>
-                      <li>• 宽表加工</li>
-                    </ul>
-                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                    数据集成
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    整合来自不同数据源的数据，集成至业务数据库
+                  </p>
                 </div>
-              </div>
-            </div>
 
-            <div className="space-y-8">
-              <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <SearchOutlined className="text-xl text-purple-600" />
+                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
+                  <div className="w-16 h-16 bg-green-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <SettingOutlined className="text-2xl text-green-600" />
                   </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                      智能问数智能体
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      依托大模型强大能力构建智能体，实现自然语言到SQL语句的转化，精准查询数据并生成图表
-                    </p>
-                    <ul className="text-sm text-gray-500 space-y-1">
-                      <li>• 自然语言到SQL转化</li>
-                      <li>• 智能数据查询</li>
-                      <li>• 自动图表生成</li>
-                    </ul>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                    数据治理
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    通过数据清洗、质量检查和标准化处理，确保数据质量
+                  </p>
+                </div>
+
+                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
+                  <div className="w-16 h-16 bg-purple-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <BookOutlined className="text-2xl text-purple-600" />
                   </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                    元数据优化
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    完善表结构注释、字段说明，优化表结构，构建标准化的数据字典
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              核心技术能力
-            </h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="text-center p-6 bg-white rounded-xl">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
-                  <BookOutlined className="text-blue-600" />
+          {/* 问数智能体优化 */}
+          <div className="mb-16">
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-100">
+              <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+                问数智能体优化
+              </h3>
+              <div className="grid md:grid-cols-3 gap-8">
+                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
+                  <div className="w-16 h-16 bg-orange-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <SearchOutlined className="text-2xl text-orange-600" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                    构建问数场景案例
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    通过添加实际案例来提升模型解决问题的准确率
+                  </p>
                 </div>
-                <h4 className="font-semibold text-gray-900 mb-2">
-                  自然语言理解
-                </h4>
-                <p className="text-sm text-gray-600">
-                  准确理解用户的自然语言查询意图
-                </p>
-              </div>
 
-              <div className="text-center p-6 bg-white rounded-xl">
-                <div className="w-12 h-12 bg-green-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
-                  <SettingOutlined className="text-green-600" />
+                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
+                  <div className="w-16 h-16 bg-indigo-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <ThunderboltOutlined className="text-2xl text-indigo-600" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                    提示词工程
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    制定默认提示词，加强模型对业务场景的理解
+                  </p>
                 </div>
-                <h4 className="font-semibold text-gray-900 mb-2">
-                  SQL自动生成
-                </h4>
-                <p className="text-sm text-gray-600">
-                  将自然语言转化为可执行的SQL命令
-                </p>
-              </div>
 
-              <div className="text-center p-6 bg-white rounded-xl">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
-                  <BarChartOutlined className="text-purple-600" />
+                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
+                  <div className="w-16 h-16 bg-teal-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <BookOutlined className="text-2xl text-teal-600" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                    预设专业名词
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    建立行业专业术语词典，确保模型能准确理解专业概念
+                  </p>
                 </div>
-                <h4 className="font-semibold text-gray-900 mb-2">
-                  智能图表展示
-                </h4>
-                <p className="text-sm text-gray-600">
-                  自动生成直观的图表形式展现查询结果
-                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* 其他约束定制 */}
+          <div className="mb-16">
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-8 border border-green-100">
+              <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+                其他约束定制
+              </h3>
+              <div className="grid md:grid-cols-3 gap-8">
+                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
+                  <div className="w-16 h-16 bg-red-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <SafetyOutlined className="text-2xl text-red-600" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                    安全约束
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    制定约束提示词，确保模型输出安全、合规
+                  </p>
+                </div>
+
+                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
+                  <div className="w-16 h-16 bg-yellow-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <SettingOutlined className="text-2xl text-yellow-600" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                    输出格式约束
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    规范化查询结果的输出格式，确保结果的一致性和易读性
+                  </p>
+                </div>
+
+                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
+                  <div className="w-16 h-16 bg-cyan-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <BarChartOutlined className="text-2xl text-cyan-600" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                    可视化展示
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    自动生成多样化的图表和可视化展示，提升数据分析效果
+                  </p>
+                </div>
               </div>
             </div>
           </div>

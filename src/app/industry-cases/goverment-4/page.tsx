@@ -2,6 +2,7 @@
 
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import Image from 'next/image';
+import { Image as AntdImage } from 'antd';
 import {
   ArrowLeftOutlined,
   CheckCircleOutlined,
@@ -234,41 +235,72 @@ export default function JiangsuDataManagementPage() {
               <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
                 数据预处理
               </h3>
-              <div className="grid md:grid-cols-3 gap-8">
-                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
-                  <div className="w-16 h-16 bg-blue-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <DatabaseOutlined className="text-2xl text-blue-600" />
+
+              <div className="grid lg:grid-cols-2 gap-12 items-center mb-8">
+                {/* 左侧图片区域 */}
+                <div className="relative">
+                  <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
+                    <AntdImage
+                      src="/数据集成.webp"
+                      alt="数据预处理流程图"
+                      className="w-full h-full object-cover rounded-xl"
+                      style={{ width: '100%', height: '100%' }}
+                      preview={{
+                        mask: (
+                          <div className="text-white text-center">
+                            <div className="text-lg mb-1">🔍</div>
+                            <div className="text-sm">点击预览</div>
+                          </div>
+                        ),
+                        maskClassName: 'rounded-xl',
+                      }}
+                    />
                   </div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
-                    数据集成
-                  </h4>
-                  <p className="text-gray-600 text-sm">
-                    整合来自不同数据源的数据，集成至业务数据库
-                  </p>
                 </div>
 
-                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
-                  <div className="w-16 h-16 bg-green-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <SettingOutlined className="text-2xl text-green-600" />
+                {/* 右侧功能说明 */}
+                <div className="grid gap-6">
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm">
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <DatabaseOutlined className="text-xl text-blue-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                        数据集成
+                      </h4>
+                      <p className="text-gray-600 text-sm">
+                        整合来自不同数据源的数据，集成至业务数据库
+                      </p>
+                    </div>
                   </div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
-                    数据治理
-                  </h4>
-                  <p className="text-gray-600 text-sm">
-                    通过数据清洗、质量检查和标准化处理，确保数据质量
-                  </p>
-                </div>
 
-                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
-                  <div className="w-16 h-16 bg-purple-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <BookOutlined className="text-2xl text-purple-600" />
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm">
+                    <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <SettingOutlined className="text-xl text-green-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                        数据治理
+                      </h4>
+                      <p className="text-gray-600 text-sm">
+                        通过数据清洗、质量检查和标准化处理，确保数据质量
+                      </p>
+                    </div>
                   </div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
-                    元数据优化
-                  </h4>
-                  <p className="text-gray-600 text-sm">
-                    完善表结构注释、字段说明，优化表结构，构建标准化的数据字典
-                  </p>
+
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm">
+                    <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <BookOutlined className="text-xl text-purple-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                        元数据优化
+                      </h4>
+                      <p className="text-gray-600 text-sm">
+                        完善表结构注释、字段说明，优化表结构，构建标准化的数据字典
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -280,41 +312,72 @@ export default function JiangsuDataManagementPage() {
               <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
                 问数智能体优化
               </h3>
-              <div className="grid md:grid-cols-3 gap-8">
-                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
-                  <div className="w-16 h-16 bg-orange-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <SearchOutlined className="text-2xl text-orange-600" />
+
+              <div className="grid lg:grid-cols-2 gap-12 items-center mb-8">
+                {/* 左侧功能说明 */}
+                <div className="grid gap-6">
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm">
+                    <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <SearchOutlined className="text-xl text-orange-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                        构建问数场景案例
+                      </h4>
+                      <p className="text-gray-600 text-sm">
+                        通过添加实际案例来提升模型解决问题的准确率
+                      </p>
+                    </div>
                   </div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
-                    构建问数场景案例
-                  </h4>
-                  <p className="text-gray-600 text-sm">
-                    通过添加实际案例来提升模型解决问题的准确率
-                  </p>
+
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm">
+                    <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <ThunderboltOutlined className="text-xl text-indigo-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                        提示词工程
+                      </h4>
+                      <p className="text-gray-600 text-sm">
+                        制定默认提示词，加强模型对业务场景的理解
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm">
+                    <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <BookOutlined className="text-xl text-teal-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                        预设专业名词
+                      </h4>
+                      <p className="text-gray-600 text-sm">
+                        建立行业专业术语词典，确保模型能准确理解专业概念
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
-                  <div className="w-16 h-16 bg-indigo-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <ThunderboltOutlined className="text-2xl text-indigo-600" />
+                {/* 右侧图片区域 */}
+                <div className="relative">
+                  <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
+                    <AntdImage
+                      src="/案例.webp"
+                      alt="智能体优化架构图"
+                      className="w-full h-full object-cover rounded-xl"
+                      style={{ width: '100%', height: '100%' }}
+                      preview={{
+                        mask: (
+                          <div className="text-white text-center">
+                            <div className="text-lg mb-1">🔍</div>
+                            <div className="text-sm">点击预览</div>
+                          </div>
+                        ),
+                        maskClassName: 'rounded-xl',
+                      }}
+                    />
                   </div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
-                    提示词工程
-                  </h4>
-                  <p className="text-gray-600 text-sm">
-                    制定默认提示词，加强模型对业务场景的理解
-                  </p>
-                </div>
-
-                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
-                  <div className="w-16 h-16 bg-teal-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <BookOutlined className="text-2xl text-teal-600" />
-                  </div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
-                    预设专业名词
-                  </h4>
-                  <p className="text-gray-600 text-sm">
-                    建立行业专业术语词典，确保模型能准确理解专业概念
-                  </p>
                 </div>
               </div>
             </div>
@@ -326,41 +389,72 @@ export default function JiangsuDataManagementPage() {
               <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
                 其他约束定制
               </h3>
-              <div className="grid md:grid-cols-3 gap-8">
-                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
-                  <div className="w-16 h-16 bg-red-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <SafetyOutlined className="text-2xl text-red-600" />
+
+              <div className="grid lg:grid-cols-2 gap-12 items-center mb-8">
+                {/* 左侧图片区域 */}
+                <div className="relative">
+                  <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
+                    <AntdImage
+                      src="/约束.webp"
+                      alt="约束定制配置图"
+                      className="w-full h-full object-cover rounded-xl"
+                      style={{ width: '100%', height: '100%' }}
+                      preview={{
+                        mask: (
+                          <div className="text-white text-center">
+                            <div className="text-lg mb-1">🔍</div>
+                            <div className="text-sm">点击预览</div>
+                          </div>
+                        ),
+                        maskClassName: 'rounded-xl',
+                      }}
+                    />
                   </div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
-                    安全约束
-                  </h4>
-                  <p className="text-gray-600 text-sm">
-                    制定约束提示词，确保模型输出安全、合规
-                  </p>
                 </div>
 
-                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
-                  <div className="w-16 h-16 bg-yellow-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <SettingOutlined className="text-2xl text-yellow-600" />
+                {/* 右侧功能说明 */}
+                <div className="grid gap-6">
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm">
+                    <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <SafetyOutlined className="text-xl text-red-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                        安全约束
+                      </h4>
+                      <p className="text-gray-600 text-sm">
+                        制定约束提示词，确保模型输出安全、合规
+                      </p>
+                    </div>
                   </div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
-                    输出格式约束
-                  </h4>
-                  <p className="text-gray-600 text-sm">
-                    规范化查询结果的输出格式，确保结果的一致性和易读性
-                  </p>
-                </div>
 
-                <div className="text-center p-6 bg-white rounded-xl shadow-sm">
-                  <div className="w-16 h-16 bg-cyan-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <BarChartOutlined className="text-2xl text-cyan-600" />
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm">
+                    <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <SettingOutlined className="text-xl text-yellow-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                        输出格式约束
+                      </h4>
+                      <p className="text-gray-600 text-sm">
+                        规范化查询结果的输出格式，确保结果的一致性和易读性
+                      </p>
+                    </div>
                   </div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
-                    可视化展示
-                  </h4>
-                  <p className="text-gray-600 text-sm">
-                    自动生成多样化的图表和可视化展示，提升数据分析效果
-                  </p>
+
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm">
+                    <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <BarChartOutlined className="text-xl text-cyan-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                        可视化展示
+                      </h4>
+                      <p className="text-gray-600 text-sm">
+                        自动生成多样化的图表和可视化展示，提升数据分析效果
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

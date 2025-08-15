@@ -111,7 +111,7 @@ export default function JiangsuDataManagementPage() {
                 数据分析应用短板
               </h3>
               <p className="text-gray-600 text-sm">
-                虽已整合基础数据库，但在数据分析应用方面存在明显短板，无法充分发挥数据价值
+                无法通过已有数据形成符合主题、结构清晰的数据报表，无法满足领导决策需求
               </p>
             </div>
             <div className="text-center p-6 rounded-xl bg-orange-50 border border-orange-100">
@@ -122,7 +122,7 @@ export default function JiangsuDataManagementPage() {
                 查询响应时效性低
               </h3>
               <p className="text-gray-600 text-sm">
-                领导查询需求响应慢，需要等待工程师定制开发和报表输出，影响决策效率
+                一次查询需要在多个人员间流转，耗时较长，影响决策效率
               </p>
             </div>
             <div className="text-center p-6 rounded-xl bg-yellow-50 border border-yellow-100">
@@ -169,17 +169,7 @@ export default function JiangsuDataManagementPage() {
                       提供结果
                     </p>
                   </div>
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                    </div>
-                    <p className="text-gray-600">
-                      <span className="font-semibold text-gray-900">
-                        时效性差：
-                      </span>
-                      复杂查询需求往往需要数天甚至数周才能获得结果，错失决策时机
-                    </p>
-                  </div>
+
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                       <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
@@ -188,7 +178,7 @@ export default function JiangsuDataManagementPage() {
                       <span className="font-semibold text-gray-900">
                         资源消耗大：
                       </span>
-                      大量工程师时间用于重复性的定制开发工作，无法聚焦核心业务
+                      大量工程师时间用于定制开发工作，无法聚焦核心业务
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
@@ -247,16 +237,15 @@ export default function JiangsuDataManagementPage() {
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                      人口库主体分析层
+                      数据治理
                     </h3>
                     <p className="text-gray-600 mb-4">
-                      根据人口数据特点，从多维度进行统计分析，构建完整的人口数据分析体系
+                      经过表注释补全、表结构优化、宽表加工等手续将客户的原始数据治理成标准化的数据资产
                     </p>
                     <ul className="text-sm text-gray-500 space-y-1">
-                      <li>• 人口户籍统计分析</li>
-                      <li>• 出生数据统计分析</li>
-                      <li>• 结婚离婚统计分析</li>
-                      <li>• 死亡数据统计分析</li>
+                      <li>• 表注释补全</li>
+                      <li>• 表结构优化</li>
+                      <li>• 宽表加工</li>
                     </ul>
                   </div>
                 </div>
@@ -274,13 +263,12 @@ export default function JiangsuDataManagementPage() {
                       智能问数智能体
                     </h3>
                     <p className="text-gray-600 mb-4">
-                      依托大模型强大能力构建智能体，实现text2sql转化，精准查询数据并生成图表
+                      依托大模型强大能力构建智能体，实现自然语言到SQL语句的转化，精准查询数据并生成图表
                     </p>
                     <ul className="text-sm text-gray-500 space-y-1">
                       <li>• 自然语言到SQL转化</li>
                       <li>• 智能数据查询</li>
                       <li>• 自动图表生成</li>
-                      <li>• 查询结果分析说明</li>
                     </ul>
                   </div>
                 </div>

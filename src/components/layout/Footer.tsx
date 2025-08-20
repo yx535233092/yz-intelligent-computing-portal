@@ -5,7 +5,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Footer() {
-  const unPaintPath = ['/hj-platform', '/pro-services/app-service/app-detail'];
+  const unPaintPath = [
+    '/hj-platform',
+    '/pro-services/app-service/app-detail',
+    '/document-process',
+  ];
   const pathname = usePathname();
   if (unPaintPath.includes(pathname)) {
     return null;

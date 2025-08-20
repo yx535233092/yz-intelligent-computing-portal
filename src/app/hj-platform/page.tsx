@@ -82,10 +82,9 @@ export default function HjPlatform() {
       <iframe
         src={`${getApiBaseUrl()}/platform/docchain/chat`}
         style={{
-          height: '100vh',
+          height: 'calc(100vh - 64px)',
           width: '100%',
           border: 'none',
-          margin: '0 0 20px 0',
         }}
       ></iframe>
     </div>

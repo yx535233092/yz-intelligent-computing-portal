@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
+import { App } from 'antd';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/layout/HeroSection';
@@ -38,10 +39,12 @@ export default function RootLayout({
 
       <body>
         <AntdRegistry>
-          <Header />
-          <HeroSection />
-          {children}
-          <Footer />
+          <App>
+            <Header />
+            <HeroSection />
+            {children}
+            <Footer />
+          </App>
         </AntdRegistry>
       </body>
     </html>

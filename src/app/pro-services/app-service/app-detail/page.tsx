@@ -10,7 +10,7 @@ function AppDetailContent() {
   const app = applications.find((app) => app.name === appName);
 
   if (app) {
-    return <iframe src={app.url} />;
+    return <iframe style={{ height: 'calc(100vh - 64px)' }} src={app.url} />;
   } else {
     return (
       <div className="flex justify-center items-center h-screen">

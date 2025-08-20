@@ -154,7 +154,7 @@ export default function ShandongMobileTenderPage() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-                    人员资质、法规查询—减少人力投入
+                    问答式查询—减少人力投入
                   </h3>
                   <p className="text-gray-700 text-lg leading-relaxed">
                     通过建立标书信息库，通过问答式自助查询资质、法规，实现资质、证照信息的高效流转，确保标书撰写的快速响应。

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Button, Table, Tabs, Spin, Skeleton, App } from 'antd';
+import { Button, Table, Tabs, Spin, Skeleton, App, Pagination } from 'antd';
 import {
   PlayCircleOutlined,
   DownloadOutlined,
@@ -84,8 +84,9 @@ export default function OCRRecognizePage() {
   const { message } = App.useApp();
   const [selectedFiles, setSelectedFiles] = useState<FileItem[]>([]);
   const [currentPreviewFile, setCurrentPreviewFile] = useState<FileItem | null>(
-    sampleFiles[0]
+    null
   );
+  const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
   const [isRecognizing, setIsRecognizing] = useState(false);
   const [hasRecognized, setHasRecognized] = useState(false);
   const [activeTab, setActiveTab] = useState('fields');
@@ -173,34 +174,83 @@ export default function OCRRecognizePage() {
     [message]
   );
 
-  // 页面初始化时自动加载第一张图片
-  React.useEffect(() => {
-    if (sampleFiles[0]) {
-      fetchIDCardImages(sampleFiles[0].id);
-    }
-  }, [fetchIDCardImages]);
+  // 页面初始化逻辑移除 - 不再自动设置预览文件
 
   // 处理文件选择（多选）
   const handleFileSelect = (file: FileItem) => {
+    // 选择文件时清空识别结果
+    setOcrResults({});
+    setHasRecognized(false);
+
     setSelectedFiles((prev) => {
       const isSelected = prev.some((f) => f.id === file.id);
       if (isSelected) {
         // 取消选择
-        return prev.filter((f) => f.id !== file.id);
+        const newSelected = prev.filter((f) => f.id !== file.id);
+
+        // 如果取消选择的是当前预览文件，需要调整预览
+        if (currentPreviewFile?.id === file.id) {
+          if (newSelected.length > 0) {
+            // 调整预览索引
+            const newIndex = Math.min(
+              currentPreviewIndex,
+              newSelected.length - 1
+            );
+            setCurrentPreviewIndex(newIndex);
+            setCurrentPreviewFile(newSelected[newIndex]);
+            // 自动获取新预览文件的图片
+            if (newSelected[newIndex].id <= 3) {
+              fetchIDCardImages(newSelected[newIndex].id);
+            }
+          } else {
+            // 如果没有选中文件了，清除预览
+            setCurrentPreviewFile(null);
+            setCurrentPreviewIndex(0);
+          }
+        } else {
+          // 如果取消的不是当前预览文件，需要更新索引
+          const currentFileIndex = newSelected.findIndex(
+            (f) => f.id === currentPreviewFile?.id
+          );
+          if (currentFileIndex >= 0) {
+            setCurrentPreviewIndex(currentFileIndex);
+          }
+        }
+
+        return newSelected;
       } else {
         // 添加选择
-        return [...prev, file];
+        const newSelected = [...prev, file];
+        // 如果是第一个选中的文件，自动设为预览文件
+        if (prev.length === 0) {
+          setCurrentPreviewFile(file);
+          setCurrentPreviewIndex(0);
+          // 自动获取图片
+          if (file.id <= 3) {
+            fetchIDCardImages(file.id);
+          }
+        }
+        return newSelected;
       }
     });
   };
 
-  // 处理预览文件切换
-  const handlePreviewFileSelect = (file: FileItem) => {
-    setCurrentPreviewFile(file);
+  // 处理分页切换
+  const handlePageChange = (page: number) => {
+    const index = page - 1; // 分页从1开始，索引从0开始
+    if (index >= 0 && index < selectedFiles.length) {
+      // 切换预览时清空识别结果
+      setOcrResults({});
+      setHasRecognized(false);
 
-    // 如果是示例文件，自动获取图片
-    if (file.id <= 3) {
-      fetchIDCardImages(file.id);
+      setCurrentPreviewIndex(index);
+      const file = selectedFiles[index];
+      setCurrentPreviewFile(file);
+
+      // 如果是示例文件，自动获取图片
+      if (file.id <= 3) {
+        fetchIDCardImages(file.id);
+      }
     }
   };
 
@@ -531,9 +581,8 @@ export default function OCRRecognizePage() {
                   const isSelected = selectedFiles.some(
                     (f) => f.id === file.id
                   );
-                  const isCurrentPreview = currentPreviewFile?.id === file.id;
                   return (
-                    <div key={file.id} className="relative">
+                    <div key={file.id}>
                       <div
                         onClick={() => handleFileSelect(file)}
                         className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 ${
@@ -554,29 +603,6 @@ export default function OCRRecognizePage() {
                           <span className="text-xs md:text-sm text-gray-700 truncate flex-1">
                             {file.name}
                           </span>
-                          <div className="flex items-center gap-2">
-                            {isCurrentPreview && (
-                              <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full border border-blue-200">
-                                <EyeOutlined className="text-xs" />
-                                预览中
-                              </span>
-                            )}
-                            {isSelected && !isCurrentPreview && (
-                              <Button
-                                size="small"
-                                type="primary"
-                                ghost
-                                icon={<EyeOutlined />}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handlePreviewFileSelect(file);
-                                }}
-                                className="text-xs h-6 px-2 border-blue-300 text-blue-600 hover:bg-blue-50 hover:border-blue-400"
-                              >
-                                预览
-                              </Button>
-                            )}
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -616,10 +642,28 @@ export default function OCRRecognizePage() {
           {/* 中间 - 身份证预览区域 */}
           <div className="md:col-span-1 lg:col-span-4 xl:col-span-5 h-full">
             <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 h-full flex flex-col">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                <EyeOutlined />
-                身份证预览
-              </h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                  <EyeOutlined />
+                  身份证预览
+                </h2>
+                {selectedFiles.length > 1 && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-600">
+                      {currentPreviewIndex + 1} / {selectedFiles.length}
+                    </span>
+                    <Pagination
+                      simple
+                      size="small"
+                      current={currentPreviewIndex + 1}
+                      total={selectedFiles.length}
+                      pageSize={1}
+                      onChange={handlePageChange}
+                      showSizeChanger={false}
+                    />
+                  </div>
+                )}
+              </div>
 
               <div className="flex-1 flex flex-col">
                 {currentPreviewFile ? (

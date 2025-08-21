@@ -1,0 +1,20 @@
+services:
+  h3c-portal:
+    container_name: h3c-portal
+    image: node:lts
+    ports:
+      - '3000:3000'
+    volumes:
+      - /Users/x1a0/Desktop/code/h3c/Intelligent_computing_portal:/app
+    working_dir: /app
+    command: npm run dev
+
+  my-nginx:
+    container_name: my-nginx
+    image: nginx:latest
+    ports:
+      - '9000:9000'
+    volumes:
+      - /Users/x1a0/Desktop/code/h3c/Intelligent_computing_portal/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - h3c-portal

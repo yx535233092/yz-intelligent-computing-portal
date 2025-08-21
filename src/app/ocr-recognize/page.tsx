@@ -56,23 +56,30 @@ const getRecognitionResults = (ocrData: OCRResult | null) => {
   if (!ocrData) return [];
 
   const baseResults = [
-    { key: '1', field: '姓名', value: ocrData.full_name },
-    { key: '2', field: '性别', value: ocrData.gender },
-    { key: '3', field: '国家', value: ocrData.nation },
-    { key: '4', field: '出生日期', value: ocrData.birth_date },
-    { key: '5', field: '出生地点', value: ocrData.birth_location },
-    { key: '6', field: '身份证号', value: ocrData.id_number },
-    { key: '7', field: '地址1', value: ocrData.address_location_1 },
-    { key: '8', field: '地址2', value: ocrData.address_location_2 },
-    { key: '9', field: '签发日期', value: ocrData.sign_date },
-    { key: '10', field: '有效期至', value: ocrData.expire_date },
+    { key: '1', field: '姓名（Họ và Tên）', value: ocrData.full_name },
+    { key: '2', field: '性别（Giới tính）', value: ocrData.gender },
+    { key: '4', field: '出生日期（Ngày sinh）', value: ocrData.birth_date },
+    { key: '6', field: '身份证号（Số CMND）', value: ocrData.id_number },
+    { key: '9', field: '签发日期（Ngày cấp）', value: ocrData.sign_date },
+    {
+      key: '10',
+      field: '失效日期（Ngày hết hạn）',
+      value: ocrData.expire_date,
+    },
+    { key: '5', field: '籍贯（Quê quán）', value: ocrData.birth_location },
+    {
+      key: '7',
+      field: '家庭住址（Địa chỉ Thường Trú）',
+      value: `${ocrData.address_location_1} ${ocrData.address_location_2}`,
+    },
+    { key: '3', field: '国籍（Dân tộc）', value: ocrData.nation },
   ];
 
   // 如果有qr_data字段且不为空，则添加到结果中
   if (ocrData.qr_data && ocrData.qr_data.trim() !== '') {
     baseResults.push({
       key: '11',
-      field: '二维码数据',
+      field: '二维码数据（QR Code）',
       value: ocrData.qr_data,
     });
   }
@@ -342,21 +349,20 @@ export default function OCRRecognizePage() {
 
         const baseExcelData: Record<string, string> = {
           文件名: fileName,
-          姓名: ocrResult.full_name || '',
-          性别: ocrResult.gender || '',
-          民族: ocrResult.nation || '',
-          出生日期: ocrResult.birth_date || '',
-          出生地点: ocrResult.birth_location || '',
-          身份证号: ocrResult.id_number || '',
-          地址1: ocrResult.address_location_1 || '',
-          地址2: ocrResult.address_location_2 || '',
-          签发日期: ocrResult.sign_date || '',
-          有效期至: ocrResult.expire_date || '',
+          '姓名（Họ và Tên）': ocrResult.full_name || '',
+          '性别（Giới tính）': ocrResult.gender || '',
+          '出生日期（Ngày sinh）': ocrResult.birth_date || '',
+          '身份证号（Số CMND）	': ocrResult.id_number || '',
+          '签发日期（Ngày cấp）': ocrResult.sign_date || '',
+          '失效日期（Ngày hết hạn）': ocrResult.expire_date || '',
+          '籍贯（Quê quán）': ocrResult.birth_location || '',
+          '家庭住址（Địa chỉ Thường Trú）': `${ocrResult.address_location_1} ${ocrResult.address_location_2}`,
+          '国籍（Dân tộc）': ocrResult.nation || '',
         };
 
         // 如果有qr_data字段且不为空，则添加到Excel数据中
         if (ocrResult.qr_data && ocrResult.qr_data.trim() !== '') {
-          baseExcelData['二维码数据'] = ocrResult.qr_data;
+          baseExcelData['二维码数据（QR Code）'] = ocrResult.qr_data;
         }
 
         excelData.push(baseExcelData);
@@ -369,20 +375,19 @@ export default function OCRRecognizePage() {
       // 设置列宽 - 适应横向布局
       const baseColWidths = [
         { wch: 20 }, // 文件名
-        { wch: 15 }, // 姓名
-        { wch: 10 }, // 性别
-        { wch: 10 }, // 民族
+        { wch: 20 }, // 姓名
+        { wch: 15 }, // 性别
         { wch: 15 }, // 出生日期
-        { wch: 20 }, // 出生地点
         { wch: 20 }, // 身份证号
-        { wch: 25 }, // 地址1
-        { wch: 25 }, // 地址2
         { wch: 15 }, // 签发日期
-        { wch: 15 }, // 有效期至
+        { wch: 15 }, // 失效日期
+        { wch: 20 }, // 籍贯
+        { wch: 30 }, // 家庭住址
+        { wch: 20 }, // 国籍
       ];
 
       // 检查是否有任何记录包含二维码数据
-      const hasQrData = excelData.some((row) => row['二维码数据']);
+      const hasQrData = excelData.some((row) => row['二维码数据（QR Code）']);
       if (hasQrData) {
         baseColWidths.push({ wch: 30 }); // 二维码数据
       }

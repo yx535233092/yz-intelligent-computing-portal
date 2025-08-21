@@ -177,7 +177,7 @@ export default function TextTranslatePage() {
         <div className="py-8 text-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-2">
             <TranslationOutlined className="text-[#d32d26]" />
-            文本翻译
+            小语种翻译
           </h1>
         </div>
 

@@ -9,10 +9,7 @@ export default function HjPlatform() {
 
   // 根据环境设置API地址
   const getApiBaseUrl = () => {
-    if (process.env.NODE_ENV === 'production') {
-      return 'http://192.168.10.24:9000';
-    }
-    return 'http://localhost:9000';
+    return location.origin;
   };
 
   useEffect(() => {

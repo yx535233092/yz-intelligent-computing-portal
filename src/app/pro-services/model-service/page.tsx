@@ -305,7 +305,7 @@ export default function ModelService() {
                     </span>
                   </div>
                   <p className="text-gray-600 text-sm">
-                    大模型训练推理首选，支持7B-70B参数规模
+                    大模型训练推理首选，支持主流模型各类参数规模
                   </p>
                 </div>
 
@@ -355,7 +355,9 @@ export default function ModelService() {
                     />
                   </svg>
                 </div>
-                <p className="text-green-100 text-sm mt-1">性能提升高达10倍</p>
+                <p className="text-green-100 text-sm mt-1">
+                  实际客户项目中性能提升显著
+                </p>
               </div>
             </div>
 
@@ -383,7 +385,7 @@ export default function ModelService() {
                 <div className="bg-white rounded-xl p-4 shadow-sm">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-semibold text-gray-800">
-                      昆仑芯 P800-PCLE/P800 OAM
+                      昆仑芯 P800PCLE/P800 OAM
                     </span>
                     <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
                       昆仑芯
@@ -397,14 +399,14 @@ export default function ModelService() {
                 <div className="bg-white rounded-xl p-4 shadow-sm">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-semibold text-gray-800">
-                      昇腾 910B2/3
+                      昇腾910B
                     </span>
                     <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
                       华为
                     </span>
                   </div>
                   <p className="text-gray-600 text-sm">
-                    华为昇腾AI处理器，支持MindSpore框架
+                    华为昇腾AI处理器，支持MindIE、vLLM-Ascend等框架
                   </p>
                 </div>
 

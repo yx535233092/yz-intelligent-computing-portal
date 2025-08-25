@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Button, Table, Tabs, Spin, Skeleton, App, Pagination } from 'antd';
+import { Button, Table, Tabs, Spin, Skeleton, App } from 'antd';
 import {
   PlayCircleOutlined,
   DownloadOutlined,
@@ -90,20 +90,16 @@ const getRecognitionResults = (ocrData: OCRResult | null) => {
 export default function OCRRecognizePage() {
   const { message } = App.useApp();
   const [selectedFiles, setSelectedFiles] = useState<FileItem[]>([]);
-  const [currentPreviewFile, setCurrentPreviewFile] = useState<FileItem | null>(
-    null
-  );
-  const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
   const [isRecognizing, setIsRecognizing] = useState(false);
   const [hasRecognized, setHasRecognized] = useState(false);
   const [activeTab, setActiveTab] = useState('fields');
-  const [isLoadingImages, setIsLoadingImages] = useState(false);
+  const [loadingFileIds, setLoadingFileIds] = useState<Set<number>>(new Set());
   const [ocrResults, setOcrResults] = useState<Record<number, OCRResult>>({});
 
   // 获取身份证图片
   const fetchIDCardImages = useCallback(
     async (fileId: number) => {
-      setIsLoadingImages(true);
+      setLoadingFileIds((prev) => new Set(prev).add(fileId));
       const startTime = Date.now();
 
       try {
@@ -145,15 +141,17 @@ export default function OCRRecognizePage() {
           await new Promise((resolve) => setTimeout(resolve, remainingTime));
         }
 
-        // 更新当前预览文件，添加图片数据
-        setCurrentPreviewFile((prev) =>
-          prev
-            ? {
-                ...prev,
-                frontImage: data.file_1_base64,
-                backImage: data.file_2_base64,
-              }
-            : null
+        // 更新选中文件列表中的图片数据
+        setSelectedFiles((prev) =>
+          prev.map((file) =>
+            file.id === fileId
+              ? {
+                  ...file,
+                  frontImage: data.file_1_base64,
+                  backImage: data.file_2_base64,
+                }
+              : file
+          )
         );
 
         // message.success('图片加载成功');
@@ -175,7 +173,11 @@ export default function OCRRecognizePage() {
           message.error('获取图片失败，请重试');
         }
       } finally {
-        setIsLoadingImages(false);
+        setLoadingFileIds((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(fileId);
+          return newSet;
+        });
       }
     },
     [message]
@@ -193,72 +195,17 @@ export default function OCRRecognizePage() {
       const isSelected = prev.some((f) => f.id === file.id);
       if (isSelected) {
         // 取消选择
-        const newSelected = prev.filter((f) => f.id !== file.id);
-
-        // 如果取消选择的是当前预览文件，需要调整预览
-        if (currentPreviewFile?.id === file.id) {
-          if (newSelected.length > 0) {
-            // 调整预览索引
-            const newIndex = Math.min(
-              currentPreviewIndex,
-              newSelected.length - 1
-            );
-            setCurrentPreviewIndex(newIndex);
-            setCurrentPreviewFile(newSelected[newIndex]);
-            // 自动获取新预览文件的图片
-            if (newSelected[newIndex].id <= 3) {
-              fetchIDCardImages(newSelected[newIndex].id);
-            }
-          } else {
-            // 如果没有选中文件了，清除预览
-            setCurrentPreviewFile(null);
-            setCurrentPreviewIndex(0);
-          }
-        } else {
-          // 如果取消的不是当前预览文件，需要更新索引
-          const currentFileIndex = newSelected.findIndex(
-            (f) => f.id === currentPreviewFile?.id
-          );
-          if (currentFileIndex >= 0) {
-            setCurrentPreviewIndex(currentFileIndex);
-          }
-        }
-
-        return newSelected;
+        return prev.filter((f) => f.id !== file.id);
       } else {
         // 添加选择
         const newSelected = [...prev, file];
-        // 如果是第一个选中的文件，自动设为预览文件
-        if (prev.length === 0) {
-          setCurrentPreviewFile(file);
-          setCurrentPreviewIndex(0);
-          // 自动获取图片
-          if (file.id <= 3) {
-            fetchIDCardImages(file.id);
-          }
+        // 自动获取图片（如果是示例文件）
+        if (file.id <= 3) {
+          fetchIDCardImages(file.id);
         }
         return newSelected;
       }
     });
-  };
-
-  // 处理分页切换
-  const handlePageChange = (page: number) => {
-    const index = page - 1; // 分页从1开始，索引从0开始
-    if (index >= 0 && index < selectedFiles.length) {
-      // 切换预览时清空识别结果
-      setOcrResults({});
-      setHasRecognized(false);
-
-      setCurrentPreviewIndex(index);
-      const file = selectedFiles[index];
-      setCurrentPreviewFile(file);
-
-      // 如果是示例文件，自动获取图片
-      if (file.id <= 3) {
-        fetchIDCardImages(file.id);
-      }
-    }
   };
 
   // 开始识别（批量）
@@ -655,102 +602,100 @@ export default function OCRRecognizePage() {
                 {selectedFiles.length > 1 && (
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-gray-600">
-                      {currentPreviewIndex + 1} / {selectedFiles.length}
+                      已选择 {selectedFiles.length} 个文件
                     </span>
-                    <Pagination
-                      simple
-                      size="small"
-                      current={currentPreviewIndex + 1}
-                      total={selectedFiles.length}
-                      pageSize={1}
-                      onChange={handlePageChange}
-                      showSizeChanger={false}
-                    />
                   </div>
                 )}
               </div>
 
-              <div className="flex-1 flex flex-col">
-                {currentPreviewFile ? (
-                  <div className="flex-1 space-y-4 md:space-y-6">
-                    {/* 正面 */}
-                    <div className="flex-1">
-                      <h3 className="text-sm md:text-base font-medium text-gray-700 mb-2 md:mb-3">
-                        正面 - {currentPreviewFile.name}
-                      </h3>
-                      <div className="aspect-[1.6/1] bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
-                        {isLoadingImages ? (
-                          <div className="text-center">
-                            <Spin size="large" />
-                            <p className="text-sm text-gray-500 mt-2">
-                              正在加载图片...
-                            </p>
-                          </div>
-                        ) : currentPreviewFile.frontImage ? (
-                          <img
-                            src={`data:image/jpeg;base64,${currentPreviewFile.frontImage}`}
-                            alt="身份证正面"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="text-center px-4">
-                            <IdcardOutlined className="text-3xl md:text-4xl text-gray-400 mb-2" />
-                            <p className="text-sm md:text-base text-gray-500">
-                              身份证正面
-                            </p>
-                            <p className="text-xs md:text-sm text-gray-400 truncate">
-                              {currentPreviewFile.name}
-                            </p>
-                            {currentPreviewFile.id <= 3 && (
-                              <p className="text-xs text-red-500 mt-2">
-                                图片加载失败，请点击&ldquo;重新加载图片&rdquo;
-                              </p>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
+              <div className="flex-1 overflow-y-auto">
+                {selectedFiles.length > 0 ? (
+                  <div className="space-y-4">
+                    {selectedFiles.map((file, index) => (
+                      <div
+                        key={file.id}
+                        className="border border-gray-200 rounded-lg p-3"
+                      >
+                        <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                          <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs">
+                            {index + 1}
+                          </span>
+                          {file.name}
+                        </h3>
 
-                    {/* 背面 */}
-                    <div className="flex-1">
-                      <h3 className="text-sm md:text-base font-medium text-gray-700 mb-2 md:mb-3">
-                        背面 - {currentPreviewFile.name}
-                      </h3>
-                      <div className="aspect-[1.6/1] bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
-                        {isLoadingImages ? (
-                          <div className="text-center">
-                            <Spin size="large" />
-                            <p className="text-sm text-gray-500 mt-2">
-                              正在加载图片...
-                            </p>
+                        {/* 正反面左右布局 */}
+                        <div className="grid grid-cols-2 gap-3">
+                          {/* 正面 */}
+                          <div>
+                            <h4 className="text-xs font-medium text-gray-600 mb-2">
+                              正面
+                            </h4>
+                            <div className="aspect-[1.6/1] bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
+                              {loadingFileIds.has(file.id) ? (
+                                <div className="text-center">
+                                  <Spin size="small" />
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    加载中...
+                                  </p>
+                                </div>
+                              ) : file.frontImage ? (
+                                <img
+                                  src={`data:image/jpeg;base64,${file.frontImage}`}
+                                  alt={`${file.name} 正面`}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="text-center px-2">
+                                  <IdcardOutlined className="text-xl text-gray-400 mb-1" />
+                                  <p className="text-xs text-gray-500">正面</p>
+                                  {file.id <= 3 && (
+                                    <p className="text-xs text-red-500 mt-1">
+                                      加载失败
+                                    </p>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        ) : currentPreviewFile.backImage ? (
-                          <img
-                            src={`data:image/jpeg;base64,${currentPreviewFile.backImage}`}
-                            alt="身份证背面"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="text-center px-4">
-                            <IdcardOutlined className="text-3xl md:text-4xl text-gray-400 mb-2" />
-                            <p className="text-sm md:text-base text-gray-500">
-                              身份证背面
-                            </p>
-                            <p className="text-xs md:text-sm text-gray-400 truncate">
-                              {currentPreviewFile.name}
-                            </p>
-                            {currentPreviewFile.id <= 3 && (
-                              <p className="text-xs text-red-500 mt-2">
-                                图片加载失败，请点击&ldquo;重新加载图片&rdquo;
-                              </p>
-                            )}
+
+                          {/* 背面 */}
+                          <div>
+                            <h4 className="text-xs font-medium text-gray-600 mb-2">
+                              背面
+                            </h4>
+                            <div className="aspect-[1.6/1] bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
+                              {loadingFileIds.has(file.id) ? (
+                                <div className="text-center">
+                                  <Spin size="small" />
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    加载中...
+                                  </p>
+                                </div>
+                              ) : file.backImage ? (
+                                <img
+                                  src={`data:image/jpeg;base64,${file.backImage}`}
+                                  alt={`${file.name} 背面`}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="text-center px-2">
+                                  <IdcardOutlined className="text-xl text-gray-400 mb-1" />
+                                  <p className="text-xs text-gray-500">背面</p>
+                                  {file.id <= 3 && (
+                                    <p className="text-xs text-red-500 mt-1">
+                                      加载失败
+                                    </p>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        )}
+                        </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
                 ) : (
-                  <div className="flex-1 flex flex-col items-center justify-center text-gray-500">
+                  <div className="flex flex-col items-center justify-center text-gray-500 h-full">
                     <IdcardOutlined className="text-4xl md:text-6xl mb-4 text-gray-300" />
                     <p className="text-sm md:text-lg text-center px-4">
                       请选择要识别的身份证文件

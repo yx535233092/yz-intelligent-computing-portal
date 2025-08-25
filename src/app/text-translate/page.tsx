@@ -6,26 +6,55 @@ import {
   TranslationOutlined,
   CopyOutlined,
   ClearOutlined,
+  SwapOutlined,
 } from '@ant-design/icons';
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-// 语言选项配置
-const languageOptions = [
-  {
-    value: 'vietnamese',
-    label: '越南语',
-    code: 'vi',
-    apiEndpoint: 'chinese_to_vietnamese', // 根据提供的API保持不变
-  },
-];
+// 语言映射（code -> 中文名）
+const languageMap: Record<string, string> = {
+  ar: '阿拉伯语',
+  cs: '捷克语',
+  da: '丹麦语',
+  de: '德语',
+  en: '英语',
+  es: '西班牙语',
+  fi: '芬兰语',
+  ru: '俄语',
+  sv: '瑞典语',
+  th: '泰语',
+  tr: '土耳其语',
+  uk: '乌克兰语',
+  vi: '越南语',
+  zh: '中文',
+  ms: '马来语',
+  nb: '挪威语',
+  nl: '荷兰语',
+  no: '挪威语',
+  pl: '波兰语',
+  pt: '葡萄牙语',
+  ro: '罗马尼亚语',
+  fr: '法语',
+  hr: '克罗地亚语',
+  hu: '匈牙利语',
+  id: '印尼语',
+  it: '意大利语',
+  ja: '日语',
+  ko: '韩语',
+};
+
+const languageOptions = Object.entries(languageMap).map(([code, name]) => ({
+  value: code,
+  label: name,
+}));
 
 export default function TextTranslatePage() {
   const [inputText, setInputText] = useState('');
   const [translatedText, setTranslatedText] = useState('');
   const [isTranslating, setIsTranslating] = useState(false);
-  const [targetLanguage, setTargetLanguage] = useState('vietnamese');
+  const [sourceLanguage, setSourceLanguage] = useState<string>('zh');
+  const [targetLanguage, setTargetLanguage] = useState<string>('vi');
   const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(
     null
   );
@@ -43,11 +72,8 @@ export default function TextTranslatePage() {
       try {
         console.log('发送翻译请求:', text);
 
-        const selectedLanguage = languageOptions.find(
-          (lang) => lang.value === targetLanguage
-        );
-        const apiEndpoint =
-          selectedLanguage?.apiEndpoint || 'chinese_to_vietnamese';
+        // 后端当前路径保持不变，但通过 body 传递 from/to 来控制语言
+        const apiEndpoint = 'chinese_to_vietnamese';
 
         const response = await fetch(
           `http://39.175.132.230:35001/v1/${apiEndpoint}/?chinese_text=${encodeURIComponent(text)}`,
@@ -55,8 +81,9 @@ export default function TextTranslatePage() {
             method: 'POST',
             headers: {
               accept: 'application/json',
+              'Content-Type': 'application/json',
             },
-            body: '',
+            body: JSON.stringify({ from: sourceLanguage, to: targetLanguage }),
           }
         );
 
@@ -92,7 +119,7 @@ export default function TextTranslatePage() {
         setIsTranslating(false);
       }
     },
-    [targetLanguage]
+    [sourceLanguage, targetLanguage]
   );
 
   // 防抖处理的翻译函数
@@ -143,6 +170,18 @@ export default function TextTranslatePage() {
     };
   }, [debounceTimer]);
 
+  // 当语言切换时，如当前有输入，则重新触发翻译
+  useEffect(() => {
+    if (inputText.trim()) {
+      // 清空之前的翻译结果，避免显示失败状态
+      setTranslatedText('');
+      // 设置翻译状态为true，确保显示"正在翻译中"
+      setIsTranslating(true);
+      debouncedTranslate(inputText);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sourceLanguage, targetLanguage]);
+
   // 复制翻译结果
   const handleCopy = async () => {
     if (!translatedText) {
@@ -170,6 +209,23 @@ export default function TextTranslatePage() {
     setIsTranslating(false);
   };
 
+  // 互换语言与文本
+  const handleSwapLanguages = () => {
+    const currentSource = sourceLanguage;
+    const currentTarget = targetLanguage;
+    setSourceLanguage(currentTarget);
+    setTargetLanguage(currentSource);
+    // 将已翻译结果作为新的输入，便于继续翻译
+    if (translatedText.trim()) {
+      const newInput = translatedText;
+      setInputText(newInput);
+      setTranslatedText('');
+      // 设置翻译状态为true，确保显示"正在翻译中"
+      setIsTranslating(true);
+      debouncedTranslate(newInput);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -187,9 +243,29 @@ export default function TextTranslatePage() {
           <div className="bg-gray-50 rounded-lg h-full flex flex-col">
             {/* 输入区域标题和工具栏 */}
             <div className="flex items-center justify-between p-4 bg-gray-200 rounded-t-lg">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
-                <span className="font-medium text-gray-700">中文输入</span>
+                <span className="font-medium text-gray-700">源语言</span>
+                <Select
+                  value={sourceLanguage}
+                  onChange={setSourceLanguage}
+                  size="small"
+                  style={{ width: 140 }}
+                  bordered={false}
+                  showSearch
+                  optionFilterProp="children"
+                >
+                  {languageOptions.map((option) => (
+                    <Option key={option.value} value={option.value}>
+                      {option.label}
+                    </Option>
+                  ))}
+                </Select>
+                <Button
+                  icon={<SwapOutlined />}
+                  size="small"
+                  onClick={handleSwapLanguages}
+                />
               </div>
               <div className="flex items-center gap-2">
                 <Button
@@ -210,7 +286,7 @@ export default function TextTranslatePage() {
               <TextArea
                 value={inputText}
                 onChange={handleInputChange}
-                placeholder="请在此输入要翻译的中文内容..."
+                placeholder="请输入需要翻译的内容..."
                 className="h-full resize-none border-none shadow-none"
                 style={{
                   boxShadow: 'none',
@@ -234,8 +310,10 @@ export default function TextTranslatePage() {
                   value={targetLanguage}
                   onChange={setTargetLanguage}
                   size="small"
-                  style={{ width: 100 }}
+                  style={{ width: 140 }}
                   bordered={false}
+                  showSearch
+                  optionFilterProp="children"
                 >
                   {languageOptions.map((option) => (
                     <Option key={option.value} value={option.value}>

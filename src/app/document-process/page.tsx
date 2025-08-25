@@ -18,11 +18,13 @@ function DocumentProcessContent() {
         style={{
           height: 'calc(100vh - 64px)',
         }}
-        src={`http://192.168.10.24:7860/?title=${title}`}
+        src={`http://39.175.132.230:35022/`}
       ></iframe>
     </div>
   );
 }
+// http://39.175.132.230:35022/
+//http://192.168.10.24:7860/?title=${title}
 
 export default function DocumentProcess() {
   return (

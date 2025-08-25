@@ -1,16 +1,19 @@
-import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
+import type { Metadata, Viewport } from 'next';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { App } from 'antd';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import HeroSection from '@/components/layout/HeroSection';
+import ClientLayout from '@/components/layout/ClientLayout';
 
+/**
+ * 元数据配置
+ */
 export const metadata: Metadata = {
   title: '新华三 - 智算门户',
-  description: '新华三 - 智算门户',
 };
 
+/**
+ * 视口配置
+ */
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1.0,
@@ -19,6 +22,9 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 };
 
+/**
+ * 根布局
+ */
 export default function RootLayout({
   children,
 }: {
@@ -40,10 +46,7 @@ export default function RootLayout({
       <body>
         <AntdRegistry>
           <App>
-            <Header />
-            <HeroSection />
-            {children}
-            <Footer />
+            <ClientLayout>{children}</ClientLayout>
           </App>
         </AntdRegistry>
       </body>

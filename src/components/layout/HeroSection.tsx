@@ -30,11 +30,7 @@ const pageConfigs: Record<string, PageConfig> = {
 
 export default function HeroSection() {
   // 渲染hero的地址
-  const renderPath = ['/industry-cases', '/contact-us'];
   const pathname = usePathname();
-  if (!renderPath.includes(pathname)) {
-    return null;
-  }
 
   const defaultConfig = {
     title: '智算门户',
@@ -62,46 +58,43 @@ export default function HeroSection() {
 
   const currentConfig = getPageConfig();
 
-  // 在渲染列表中的路由，渲染组件
-  if (renderPath.includes(pathname)) {
-    return (
-      <>
-        {/* hero */}
-        <div
-          className="w-full h-100 flex flex-col justify-center pl-60 gap-6"
-          style={{
-            background: `linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.1)), url('${currentConfig.backgroundImage}') no-repeat center/cover`,
-          }}
-        >
-          <h1 className="text-white text-7xl font-medium tracking-wider">
-            {currentConfig.title}
-          </h1>
-          <span className="text-white text-3xl font-normal">
-            {currentConfig.subtitle}
-          </span>
-        </div>
+  return (
+    <>
+      {/* hero */}
+      <div
+        className="w-full h-100 flex flex-col justify-center pl-60 gap-6"
+        style={{
+          background: `linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.1)), url('${currentConfig.backgroundImage}') no-repeat center/cover`,
+        }}
+      >
+        <h1 className="text-white text-7xl font-medium tracking-wider">
+          {currentConfig.title}
+        </h1>
+        <span className="text-white text-3xl font-normal">
+          {currentConfig.subtitle}
+        </span>
+      </div>
 
-        {/* 面包屑 */}
-        <ConfigProvider
-          theme={{
-            components: {
-              Breadcrumb: {
-                lastItemColor: '#d32d26',
-                lineHeight: 4,
-                fontSize: 18,
-              },
+      {/* 面包屑 */}
+      <ConfigProvider
+        theme={{
+          components: {
+            Breadcrumb: {
+              lastItemColor: '#d32d26',
+              lineHeight: 4,
+              fontSize: 18,
             },
+          },
+        }}
+      >
+        <Breadcrumb
+          className="border-b border-gray-200"
+          style={{
+            paddingLeft: '15rem',
           }}
-        >
-          <Breadcrumb
-            className="border-b border-gray-200"
-            style={{
-              paddingLeft: '15rem',
-            }}
-            items={currentConfig.breadcrumb}
-          />
-        </ConfigProvider>
-      </>
-    );
-  }
+          items={currentConfig.breadcrumb}
+        />
+      </ConfigProvider>
+    </>
+  );
 }

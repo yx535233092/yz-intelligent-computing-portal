@@ -64,20 +64,20 @@ const ProductCard = ({
       transition: 'all 0.3s ease',
     }}
   >
-    <div className="flex items-center gap-8">
-      <div className={`flex-shrink-0 ${commonStyles.demoContainer}`}>
-        {demoContent}
-      </div>
-      <div className="flex-1">
-        <h3 className="text-2xl font-semibold text-[#222] mb-4">{title}</h3>
-        <p className="text-[#666] leading-6 mb-5">
-          {description.map((line, index) => (
-            <span key={index}>
-              {line}
-              {index < description.length - 1 && <br />}
-            </span>
-          ))}
-        </p>
+    <div className="flex flex-col items-center text-center h-full">
+      <div className={`mb-6 ${commonStyles.demoContainer}`}>{demoContent}</div>
+      <div className="flex-1 flex flex-col justify-between">
+        <div>
+          <h3 className="text-xl font-semibold text-[#222] mb-4">{title}</h3>
+          <p className="text-[#666] leading-6 mb-5 text-sm">
+            {description.map((line, index) => (
+              <span key={index}>
+                {line}
+                {index < description.length - 1 && <br />}
+              </span>
+            ))}
+          </p>
+        </div>
         <a
           href={link}
           target="_blank"
@@ -88,7 +88,7 @@ const ProductCard = ({
             padding: '8px 16px',
             borderRadius: '25px',
             textDecoration: 'none',
-            fontSize: '16px',
+            fontSize: '14px',
             fontWeight: '600',
             boxShadow: '0 4px 15px rgba(211, 45, 38, 0.3)',
             border: '2px solid transparent',
@@ -1336,7 +1336,7 @@ export default function DataService() {
         </div>
 
         {/* 选项卡内容 */}
-        <div className="flex flex-col gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products[activeTab as keyof typeof products]?.map(
             (product, index) => (
               <ProductCard

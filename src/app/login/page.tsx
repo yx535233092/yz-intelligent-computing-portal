@@ -52,7 +52,7 @@ export default function Login() {
       });
 
       setToken(res.access_token);
-      router.push('/');
+      location.href = location.origin;
     } catch (error) {
       console.error('登录失败', error);
     }

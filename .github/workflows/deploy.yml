@@ -32,7 +32,7 @@ jobs:
       - name: Tar Build
         run: tar -czvf build.tar.gz .next/ public/ package.json next.config.ts ecosystem.config.js
 
-      # 7.检查上传路径是否存在
+      # 6.检查上传路径是否存在
       - name: Check Upload Path
         uses: appleboy/ssh-action@master
         with:
@@ -48,7 +48,7 @@ jobs:
               echo "目录已存在。"
             fi
 
-      # 6.上传构建产物
+      # 7.上传构建产物
       - name: Copy to Server
         uses: appleboy/scp-action@master
         with:
@@ -60,7 +60,7 @@ jobs:
           target: /private/yz-portal/frontend/
           clean: true
 
-      # 5.部署到服务器,解压打包文件，重启pm2服务
+      # 8.部署到服务器,解压打包文件，重启pm2服务
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:

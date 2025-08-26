@@ -75,6 +75,9 @@ jobs:
             tar -xzvf build.tar.gz
             # 删除打包文件
             rm -rf build.tar.gz
+            # 安装依赖
+            echo "正在安装生产环境依赖..."
+            npm install --production
             # 检查pm2进程
             if pm2 describe "yz-portal" > /dev/null 2>&1; then
               echo "yz-portal 已启动，正在重载"

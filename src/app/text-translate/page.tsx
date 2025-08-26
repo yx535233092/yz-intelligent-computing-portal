@@ -82,6 +82,7 @@ export default function TextTranslatePage() {
             headers: {
               accept: 'application/json',
               'Content-Type': 'application/json',
+              Authorization: `Bearer f5d6fdb6821e237d3011553a78756974`,
             },
             body: JSON.stringify({ from: sourceLanguage, to: targetLanguage }),
           }

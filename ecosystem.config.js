@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'h3c-portal',
+      name: 'yz-portal',
       script: 'npm',
       args: 'start',
       env: {

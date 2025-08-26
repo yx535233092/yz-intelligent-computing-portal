@@ -1,0 +1,49 @@
+name: h3c_portal CI/CD PipeLine
+
+# 当代码推送至master分支，触发工作流
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1.检出代码
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2.设置nodejs环境
+      - name: Setup Nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      # 3.安装依赖
+      - name: Install Dependencies
+        run: npm Install
+
+      # 4.构建Nextjs 项目
+      - name: Build Nextjs Project
+        run: npm run build
+
+      # 5.部署到服务器
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.TULING_TOWN_PRIVATE }}
+          port: ${{ secrets.PORT }}
+          script: |
+            # 进入目录
+            cd /private/yz-portal/frontend
+            # 拉取最新代码
+            git pull origin master
+            # 安装依赖
+            npm install
+            # 构建项目
+            npm run build
+            # 重启pm2进程
+            pm2 reload yz-portal

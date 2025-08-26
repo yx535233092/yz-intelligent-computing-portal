@@ -12,7 +12,7 @@ const BASE_URL = 'http://39.175.132.230:35001/';
 // 2.创建实例
 const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000,
+  timeout: 100000,
   headers: {
     'Content-Type': 'application/json',
   },

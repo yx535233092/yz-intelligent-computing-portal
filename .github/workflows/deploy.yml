@@ -57,7 +57,7 @@ jobs:
           key: ${{ secrets.TULING_TOWN_PRIVATE }}
           port: ${{ secrets.PORT }}
           source: build.tar.gz
-          target: /private/yz-portal/frontend/build.tar.gz
+          target: /private/yz-portal/frontend/
           clean: true
 
       # 5.部署到服务器,解压打包文件，重启pm2服务

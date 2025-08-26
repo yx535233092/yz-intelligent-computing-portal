@@ -50,7 +50,7 @@ export default function ConsultServicePage() {
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">技术支撑</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              为AI项目提供专业的技术支撑服务，从战略规划到技术实施，全方位助力您的AI项目成功
+              为AI项目提供专业的技术支撑服务，从底层规划到技术实施，全方位助力您的AI项目成功
             </p>
           </div>
           ​

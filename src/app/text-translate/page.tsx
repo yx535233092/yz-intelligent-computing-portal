@@ -8,6 +8,7 @@ import {
   ClearOutlined,
   SwapOutlined,
 } from '@ant-design/icons';
+import { translateAPI } from '@/apis/features';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -72,39 +73,22 @@ export default function TextTranslatePage() {
       try {
         console.log('发送翻译请求:', text);
 
-        // 后端当前路径保持不变，但通过 body 传递 from/to 来控制语言
-        const apiEndpoint = 'chinese_to_vietnamese';
+        const res = await translateAPI({
+          from: sourceLanguage,
+          to: targetLanguage,
+          chinese_text: text,
+        });
 
-        const response = await fetch(
-          `http://39.175.132.230:35001/v1/${apiEndpoint}/?chinese_text=${encodeURIComponent(text)}`,
-          {
-            method: 'POST',
-            headers: {
-              accept: 'application/json',
-              'Content-Type': 'application/json',
-              Authorization: `Bearer f5d6fdb6821e237d3011553a78756974`,
-            },
-            body: JSON.stringify({ from: sourceLanguage, to: targetLanguage }),
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(
-            `HTTP错误! 状态码: ${response.status} - ${response.statusText}`
-          );
-        }
-
-        const data = await response.json();
-        console.log('翻译结果:', data);
+        console.log('翻译结果:', res);
 
         // 根据API返回的数据结构设置翻译结果
-        if (data && typeof data === 'object') {
+        if (res && typeof res === 'object') {
           // 如果返回的是对象，尝试获取翻译结果
-          const result = data.out_text || JSON.stringify(data);
+          const result = res.out_text || JSON.stringify(res);
           setTranslatedText(result);
         } else {
           // 如果直接返回字符串
-          setTranslatedText(data || '翻译失败');
+          setTranslatedText(res || '翻译失败');
         }
       } catch (error) {
         console.error('翻译失败:', error);

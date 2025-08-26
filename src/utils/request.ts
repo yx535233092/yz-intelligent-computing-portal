@@ -3,9 +3,11 @@ import axios, {
   type AxiosResponse,
   type AxiosError,
 } from 'axios';
+import { getToken } from '@/utils/token';
+import Cookies from 'js-cookie';
 
-// 1.定义请求地址
-const BASE_URL = 'http://localhost:9000/';
+// 请求地址(后端地址)
+const BASE_URL = 'http://39.175.132.230:35001/';
 
 // 2.创建实例
 const api: AxiosInstance = axios.create({
@@ -15,9 +17,14 @@ const api: AxiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
 // 3.请求拦截
 api.interceptors.request.use(
   (config) => {
+    const token = getToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -31,6 +38,8 @@ api.interceptors.response.use(
     return response.data;
   },
   (error: AxiosError) => {
+    // 清除token
+    Cookies.remove('token');
     return Promise.reject(error);
   }
 );

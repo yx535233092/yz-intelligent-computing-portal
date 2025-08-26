@@ -1,0 +1,18 @@
+.gradient-text {
+  /* background: radial-gradient(100% 80%, #d32d26 0%, #ffa45a 100%); */
+  background: linear-gradient(
+    135deg,
+    #d32d26 30%,
+    #953716 40%,
+    #d32d26 40%,
+    #953716 60%,
+    #d32d26 100%
+  );
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.05em;
+}
+
+.no-drag {
+  -webkit-user-drag: none;
+}

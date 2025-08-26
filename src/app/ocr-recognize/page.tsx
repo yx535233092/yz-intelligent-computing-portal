@@ -11,13 +11,9 @@ import {
 } from '@ant-design/icons';
 import type { TabsProps } from 'antd';
 import * as XLSX from 'xlsx';
+import { getOcrPicAPI, ocrFileAPI } from '@/apis/features';
 
 // API响应类型定义
-interface IDCardResponse {
-  file_1_base64: string; // 正面图
-  file_2_base64: string; // 背面图
-  [key: string]: string | number | boolean;
-}
 
 // OCR识别结果类型定义
 interface OCRResult {
@@ -105,30 +101,13 @@ export default function OCRRecognizePage() {
       try {
         console.log(`正在请求API，文件ID: ${fileId}`);
 
-        const response = await fetch(
-          `http://39.175.132.230:35001/v1/vietnamese_id_card_parse_get_image_only/?input_path_1=1&input_path_2=1&mode=${fileId}`,
-          {
-            method: 'POST',
-            headers: {
-              accept: 'application/json',
-            },
-            body: '', // 空请求体
-          }
-        );
+        const response = await getOcrPicAPI({
+          input_path_1: '',
+          input_path_2: '',
+          mode: fileId,
+        });
 
-        console.log(`API响应状态: ${response.status} ${response.statusText}`);
-
-        if (response.status === 503) {
-          throw new Error('服务暂时不可用，请稍后重试');
-        }
-
-        if (!response.ok) {
-          throw new Error(
-            `HTTP错误! 状态码: ${response.status} - ${response.statusText}`
-          );
-        }
-
-        const data: IDCardResponse = await response.json();
+        const data = response;
         console.log('API响应数据:', data);
 
         // 计算已经过去的时间
@@ -230,24 +209,13 @@ export default function OCRRecognizePage() {
         try {
           console.log(`开始OCR识别，文件ID: ${file.id}`);
 
-          const response = await fetch(
-            `http://39.175.132.230:35001/v1/vietnamese_id_card_parse/?input_path_1=1&input_path_2=1&mode=${file.id}`,
-            {
-              method: 'POST',
-              headers: {
-                accept: 'application/json',
-              },
-              body: '', // 空请求体
-            }
-          );
+          const response = await ocrFileAPI({
+            input_path_1: '',
+            input_path_2: '',
+            mode: file.id,
+          });
 
-          if (!response.ok) {
-            throw new Error(
-              `HTTP错误! 状态码: ${response.status} - ${response.statusText}`
-            );
-          }
-
-          const data: OCRResult = await response.json();
+          const data = response;
           console.log(`文件 ${file.name} OCR识别结果:`, data);
 
           newResults[file.id] = data;
@@ -464,39 +432,6 @@ export default function OCRRecognizePage() {
         </div>
       ),
     },
-    // {
-    //   key: 'excel',
-    //   label: (
-    //     <span className="flex items-center gap-2">
-    //       <TableOutlined />
-    //       Excel预览
-    //     </span>
-    //   ),
-    //   children: (
-    //     <div className="h-full">
-    //       {!hasRecognized && !isRecognizing ? (
-    //         <div className="flex flex-col items-center justify-center h-full text-gray-500">
-    //           <TableOutlined className="text-6xl mb-4 text-gray-300" />
-    //           <p className="text-lg">请点击&ldquo;开始识别&rdquo;以查看表格</p>
-    //         </div>
-    //       ) : isRecognizing ? (
-    //         <div className="space-y-4">
-    //           <Skeleton active />
-    //           <Skeleton active />
-    //         </div>
-    //       ) : (
-    //         <Table
-    //           columns={excelColumns}
-    //           dataSource={getExcelData(ocrResult)}
-    //           pagination={false}
-    //           size="small"
-    //           scroll={{ x: 'max-content' }}
-    //           className="h-full"
-    //         />
-    //       )}
-    //     </div>
-    //   ),
-    // },
   ];
 
   return (

@@ -26376,7 +26376,7 @@ class Type1Parser {
           case 'FamilyBlues':
           case 'FamilyOtherBlues':
             const e = this.readNumberArray();
-            (e.length > 0 && e.length, 0);
+            e.length > 0 && e.length, 0;
             break;
           case 'StemSnapH':
           case 'StemSnapV':

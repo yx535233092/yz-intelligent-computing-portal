@@ -14,7 +14,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // 检查是否已登录（这里应该检查实际的认证状态）
+  // 检查是否已登录
   if (!req.cookies.get('token')) {
     return NextResponse.redirect(new URL('/login', req.nextUrl.origin));
   }

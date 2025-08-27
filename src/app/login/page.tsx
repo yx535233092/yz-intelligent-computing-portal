@@ -14,8 +14,8 @@ import { useContext } from 'react';
 
 export default function Login() {
   const router = useRouter();
-  const [username, setUsername] = useState('testuser');
-  const [password, setPassword] = useState('password');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const circleBig = useRef<HTMLCanvasElement>(null);
   const circleSmall = useRef<HTMLCanvasElement>(null);
   useEffect(() => {

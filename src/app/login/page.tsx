@@ -62,7 +62,7 @@ export default function Login() {
       } finally {
         toggleLoading(false);
       }
-    }, 1000);
+    }, 300);
   };
 
   return (

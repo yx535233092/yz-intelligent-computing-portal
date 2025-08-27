@@ -20,6 +20,7 @@
     "@gradio/client": "^1.15.7",
     "@js-preview/docx": "^1.6.4",
     "@js-preview/excel": "^1.7.14",
+    "@reduxjs/toolkit": "^2.8.2",
     "@tailwindcss/typography": "^0.5.16",
     "antd": "^5.26.6",
     "axios": "^1.11.0",
@@ -30,6 +31,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",
+    "react-redux": "^9.2.0",
     "x-data-spreadsheet": "^1.1.9",
     "xlsx": "^0.18.5"
   },

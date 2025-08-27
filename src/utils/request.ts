@@ -40,6 +40,8 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     // 清除token
     Cookies.remove('token');
+    // 重定向到登录页
+    location.href = location.origin + '/login';
     return Promise.reject(error);
   }
 );

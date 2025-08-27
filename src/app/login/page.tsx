@@ -9,6 +9,8 @@ import { useEffect, useRef, useState } from 'react';
 import { loginAPI } from '@/apis/system';
 import { setToken } from '@/utils/token';
 import { useRouter } from 'next/navigation';
+import LoadingContext from '@/components/common/LoadingContext';
+import { useContext } from 'react';
 
 export default function Login() {
   const router = useRouter();
@@ -44,18 +46,23 @@ export default function Login() {
     }
   }, []);
 
-  const handleLogin = async () => {
-    try {
-      const res = await loginAPI({
-        username,
-        password,
-      });
-
-      setToken(res.access_token);
-      location.href = location.origin;
-    } catch (error) {
-      console.error('登录失败', error);
-    }
+  const { toggleLoading, isLoading } = useContext(LoadingContext);
+  const handleLogin = () => {
+    toggleLoading(true);
+    setTimeout(async () => {
+      try {
+        const res = await loginAPI({
+          username,
+          password,
+        });
+        setToken(res.access_token);
+        location.href = location.origin;
+      } catch (error) {
+        console.error('登录失败', error);
+      } finally {
+        toggleLoading(false);
+      }
+    }, 1000);
   };
 
   return (

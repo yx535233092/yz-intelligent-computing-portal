@@ -4,11 +4,16 @@ import Header from './Header';
 import Footer from './Footer';
 import HeroSection from './HeroSection';
 import { usePathname } from 'next/navigation';
+import { Spin } from 'antd';
+import { useState } from 'react';
+import LoadingContext from '../common/LoadingContext';
 
-export default function ClientLayout({
+function PageContent({
   children,
+  isLoading,
 }: {
   children: React.ReactNode;
+  isLoading: boolean;
 }) {
   type PageConfig = {
     isHideHeader: boolean;
@@ -78,10 +83,38 @@ export default function ClientLayout({
 
   return (
     <>
+      <Spin
+        spinning={isLoading}
+        tip="加载中，请稍后..."
+        size="large"
+        fullscreen
+      ></Spin>
       {!config.isHideHeader && <Header></Header>}
       {!config.isHideHero && <HeroSection></HeroSection>}
       {children}
       {!config.isHideFooter && <Footer></Footer>}
     </>
+  );
+}
+
+export default function ClientLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // 加载状态和切换函数
+  const [isLoading, setIsLoading] = useState(false);
+  const toggleLoading = (value: boolean) => {
+    setIsLoading(value);
+  };
+  const contextValue = {
+    isLoading,
+    toggleLoading,
+  };
+
+  return (
+    <LoadingContext.Provider value={contextValue}>
+      <PageContent isLoading={isLoading}>{children}</PageContent>
+    </LoadingContext.Provider>
   );
 }

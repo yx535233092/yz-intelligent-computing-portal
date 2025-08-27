@@ -41,7 +41,9 @@ api.interceptors.response.use(
     // 清除token
     Cookies.remove('token');
     // 重定向到登录页
-    location.href = location.origin + '/login';
+    if (location.pathname !== '/login') {
+      location.href = location.origin + '/login';
+    }
     return Promise.reject(error);
   }
 );

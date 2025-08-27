@@ -11,6 +11,7 @@ import { setToken } from '@/utils/token';
 import { useRouter } from 'next/navigation';
 import LoadingContext from '@/components/common/LoadingContext';
 import { useContext } from 'react';
+import { message } from 'antd';
 
 export default function Login() {
   const router = useRouter();
@@ -47,6 +48,7 @@ export default function Login() {
   }, []);
 
   const { toggleLoading, isLoading } = useContext(LoadingContext);
+  const [messageApi, contextHolder] = message.useMessage();
   const handleLogin = () => {
     toggleLoading(true);
     setTimeout(async () => {
@@ -58,6 +60,7 @@ export default function Login() {
         setToken(res.access_token);
         location.href = location.origin;
       } catch (error) {
+        messageApi.error('用户名或密码错误，登录失败！');
         console.error('登录失败', error);
       } finally {
         toggleLoading(false);
@@ -67,6 +70,7 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
+      {contextHolder}
       {/* 大圆圈 */}
       <canvas
         id="circle-big"
@@ -92,11 +96,20 @@ export default function Login() {
           <span className=" w-[60%] text-gray-400 text-center tracking-wider my-8">
             释放AI大模型潜能 · 加速智能应用落地
           </span>
-          <form className="flex flex-col gap-6 w-full px-30" action="post">
+          <form
+            className="flex flex-col gap-6 w-full px-30"
+            action="post"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleLogin();
+              }
+            }}
+          >
             {/* 用户名 */}
             <div className="relative">
               <input
-                className="text-lg border-2 border-gray-300 rounded-[50px] py-3 pl-12 pr-8 focus:outline-none focus:border-brand w-full transition-all duration-300"
+                className="text-lg border-2 border-gray-300 rounded-[50px] py-2 pl-12 pr-8 focus:outline-none focus:border-brand w-full transition-all duration-300"
                 type="username"
                 placeholder="请输入用户名"
                 value={username}
@@ -113,7 +126,7 @@ export default function Login() {
             {/* 密码 */}
             <div className="relative">
               <input
-                className="text-lg border-2 border-gray-300 rounded-[50px] py-3 pl-12 pr-8 focus:outline-none focus:border-brand w-full transition-all duration-300"
+                className="text-lg border-2 border-gray-300 rounded-[50px] py-2 pl-12 pr-8 focus:outline-none focus:border-brand w-full transition-all duration-300"
                 type="password"
                 placeholder="请输入密码"
                 value={password}
@@ -133,7 +146,7 @@ export default function Login() {
             </div>
             {/* 登录 */}
             <button
-              className="cursor-pointer rounded-[50px] bg-brand text-white text-lg py-3 px-8 tracking-wider bg-gradient-to-r from-orange-800 to-brand transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg hover:scale-105"
+              className="cursor-pointer rounded-[50px] bg-brand text-white text-lg py-2 px-8 tracking-wider bg-gradient-to-r from-orange-800 to-brand transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg hover:scale-105"
               onClick={handleLogin}
               type="button"
             >

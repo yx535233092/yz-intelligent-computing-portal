@@ -23,7 +23,7 @@ import {
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useInView } from '@/hooks/useInView';
 import styles from './page.module.css';
-import { applications } from '@/constants';
+import applications from '@/lib/constants/applications';
 
 // 图标映射
 const iconMap: { [key: string]: React.ReactNode } = {

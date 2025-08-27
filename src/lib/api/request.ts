@@ -3,8 +3,7 @@ import axios, {
   type AxiosResponse,
   type AxiosError,
 } from 'axios';
-import { getToken } from '@/utils/token';
-import Cookies from 'js-cookie';
+import { getToken, removeToken } from '@/lib/utils/cookies';
 
 // 请求地址(后端地址)
 const BASE_URL = 'http://39.175.132.230:35001/';
@@ -39,7 +38,7 @@ api.interceptors.response.use(
   },
   (error: AxiosError) => {
     // 清除token
-    Cookies.remove('token');
+    removeToken();
     // 重定向到登录页
     if (location.pathname !== '/login') {
       location.href = location.origin + '/login';

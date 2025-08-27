@@ -7,8 +7,8 @@ import { message } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import Logo from '@/components/common/Logo';
 import LoadingContext from '@/components/common/LoadingContext';
-import styles from '@/app/(auth)/login/page.module.css';
 import { login } from '../services/login';
+import styles from '../styles/login.module.css';
 
 function LoginForm() {
   const [username, setUsername] = useState('');

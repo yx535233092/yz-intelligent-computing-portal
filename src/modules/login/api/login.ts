@@ -1,4 +1,4 @@
-import api from '@/utils/request';
+import api from '@/lib/api/request';
 
 export const loginAPI = (data: LoginData): Promise<LoginRes> => {
   return api({

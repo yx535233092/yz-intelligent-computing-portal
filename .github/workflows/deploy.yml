@@ -30,7 +30,7 @@ jobs:
 
       # 5.构建产物打包
       - name: Tar Build
-        run: tar -cvf build.tar.gz .next/ public/ package.json next.config.ts ecosystem.config.js
+        run: tar -czvf build.tar.gz .next/ public/ package.json next.config.ts ecosystem.config.js
 
       # 6.检查上传路径是否存在
       - name: Check Upload Path
@@ -72,7 +72,7 @@ jobs:
             # 进入目录
             cd /private/yz-portal/frontend
             # 解压打包文件
-            tar -xvf build.tar.gz
+            tar -xzvf build.tar.gz
             # 删除打包文件
             rm -rf build.tar.gz
             # 安装依赖

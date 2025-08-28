@@ -88,7 +88,14 @@ export default function Login() {
         <div className="w-[50%] h-full flex flex-col items-center">
           {/* 标题 */}
           <div className="flex items-center gap-3 mt-40">
-            <Logo></Logo>
+            <Image
+              src="/logo.webp"
+              alt="logo"
+              width={250}
+              height={100}
+              className="w-25 h-10"
+              priority
+            ></Image>
             <h1 className={`text-[36px] font-bold ${styles['gradient-text']}`}>
               智算服务平台
             </h1>
@@ -153,16 +160,16 @@ export default function Login() {
               登录平台
             </button>
             {/* 注册 */}
-            <span className="text-gray-400 text-center tracking-wider">
+            {/* <span className="text-gray-400 text-center tracking-wider">
               还没有账号？
               <Link href="">立即注册</Link>
-            </span>
+            </span> */}
           </form>
         </div>
         {/* 右侧 */}
         <div className="w-[50%] h-full  relative">
           <Image
-            className={`rounded-r-3xl opacity-90 ${styles['no-drag']}`}
+            className={`rounded-r-3xl opacity-85 ${styles['no-drag']}`}
             style={{
               width: '100%',
               height: '100%',
@@ -177,7 +184,7 @@ export default function Login() {
             <div className="bg-white rounded-xl p-3 shadow-lg">
               <Logo></Logo>
             </div>
-            <h1 className="text-4xl font-bold tracking-wider"> 智算服务平台</h1>
+            <h1 className="text-4xl font-bold tracking-wider"> 智算专业服务</h1>
             <p className="text-md w-[70%] text-center tracking-wider text-gray-300 leading-6">
               我们提供从技术咨询、模型优化、算力管理到应用定制的全流程专家服务，致力于打通大模型从技术潜力到商业价值的“最后一公里”，助您高效构建、部署与扩展AI应用。
             </p>

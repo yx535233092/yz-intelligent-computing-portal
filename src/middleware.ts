@@ -7,6 +7,8 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  console.log(pathname);
+
   const loginUrlReg = /^(\/login)$/;
 
   // 白名单-登录

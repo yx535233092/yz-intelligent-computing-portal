@@ -171,6 +171,7 @@ export default function Login() {
             height={1080}
             src="/12.webp"
             alt="login-bg"
+            priority
           />
           <div className="flex flex-col w-full items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white gap-6">
             <div className="bg-white rounded-xl p-3 shadow-lg">

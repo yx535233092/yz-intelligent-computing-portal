@@ -162,7 +162,7 @@ export default function Login() {
         {/* 右侧 */}
         <div className="w-[50%] h-full  relative">
           <Image
-            className={`rounded-r-3xl opacity-70 ${styles['no-drag']}`}
+            className={`rounded-r-3xl opacity-90 ${styles['no-drag']}`}
             style={{
               width: '100%',
               height: '100%',

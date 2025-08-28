@@ -3,7 +3,7 @@
 import Logo from '@/components/common/Logo';
 import { RollbackOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 function Siderbar({
   menus,

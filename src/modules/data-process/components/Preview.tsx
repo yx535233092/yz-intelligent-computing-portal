@@ -2,10 +2,12 @@ import { Button, Tabs, Empty, TabsProps } from 'antd';
 import { DownloadOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import FilePreview from '@/components/common/FilePreview';
+import CompareModal from './CompareModal';
 
 function Preview({ activeFile }: { activeFile: FileItem | null }) {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analyzeResult, setAnalyzeResult] = useState<string>('');
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   const items: TabsProps['items'] = [
     {
@@ -73,12 +75,22 @@ function Preview({ activeFile }: { activeFile: FileItem | null }) {
           </Button>
         </div>
       </div>
-      <div className="flex-1 px-6 pb-4">
+      <div className="flex-1 px-6 pb-4 relative">
         {activeFile ? (
-          <Tabs
-            defaultActiveKey="1"
-            items={analyzeResult ? items : items.slice(0, 1)}
-          />
+          <div>
+            <div
+              className="z-10 absolute top-3 right-8 text-brand px-2 py-1 bg-red-100 rounded-xl hover:translate-y-[-2px] hover:bg-red-200 transition-all duration-300 cursor-pointer"
+              onClick={() => {
+                setIsOpenModal(true);
+              }}
+            >
+              对比视图
+            </div>
+            <Tabs
+              defaultActiveKey="1"
+              items={analyzeResult ? items : items.slice(0, 1)}
+            />
+          </div>
         ) : (
           <div className="flex-1 flex items-center justify-center h-[770px]">
             <Empty
@@ -89,6 +101,11 @@ function Preview({ activeFile }: { activeFile: FileItem | null }) {
           </div>
         )}
       </div>
+      <CompareModal
+        open={isOpenModal}
+        setOpen={setIsOpenModal}
+        activeFile={activeFile}
+      />
     </div>
   );
 }

@@ -8,7 +8,11 @@ import {
 import { useEffect, useState } from 'react';
 import { Empty, Tooltip } from 'antd';
 
-function MediaFileList({}) {
+function MediaFileList({
+  handleCreateMediaTask,
+}: {
+  handleCreateMediaTask: () => void;
+}) {
   const [taskList, setTaskList] = useState<TaskItem[]>([]);
   const [activeTask, setActiveTask] = useState<TaskItem | null>(null);
 
@@ -43,6 +47,7 @@ function MediaFileList({}) {
                   fontSize: '24px',
                   cursor: 'pointer',
                 }}
+                onClick={() => handleCreateMediaTask()}
               />
             </Tooltip>
           </div>

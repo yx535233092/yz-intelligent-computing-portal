@@ -7,10 +7,12 @@ import Preview from '@/modules/data-process/components/Preview';
 import Header from '@/modules/data-process/components/Header';
 import MediaFileList from '@/modules/data-process/components/MediaFileList';
 import MediaPreview from '@/modules/data-process/components/MediaPreview';
+import CreateMediaTask from '@/modules/data-process/components/CreateMediaTask';
 
 export default function DataProcess() {
   const [activeMenu, setActiveMenu] = useState(0);
   const [activeFile, setActiveFile] = useState<FileItem | null>(null);
+  const [isCreatingMediaTask, setIsCreatingMediaTask] = useState(false);
 
   // 菜单列表
   const menus = [
@@ -71,6 +73,10 @@ export default function DataProcess() {
     setActiveFile(file);
   };
 
+  const handleCreateMediaTask = () => {
+    setIsCreatingMediaTask(true);
+  };
+
   return (
     <div>
       {/* 标题栏 */}
@@ -102,8 +108,14 @@ export default function DataProcess() {
                 {menus.find((item) => item.key === activeMenu)?.type ===
                   'media' && (
                   <div className="flex gap-8 w-full">
-                    <MediaFileList></MediaFileList>
-                    <MediaPreview></MediaPreview>
+                    <MediaFileList
+                      handleCreateMediaTask={handleCreateMediaTask}
+                    ></MediaFileList>
+                    {isCreatingMediaTask ? (
+                      <CreateMediaTask />
+                    ) : (
+                      <MediaPreview></MediaPreview>
+                    )}
                   </div>
                 )}
               </>

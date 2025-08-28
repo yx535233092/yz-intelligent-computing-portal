@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
-import { applications } from '@/constants';
+import { applications } from '@/lib/constants';
 
 function AppDetailContent() {
   const searchParams = useSearchParams();

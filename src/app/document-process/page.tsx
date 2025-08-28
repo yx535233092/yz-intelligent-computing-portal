@@ -18,7 +18,7 @@ function DocumentProcessContent() {
         style={{
           height: 'calc(100vh - 64px)',
         }}
-        src={`http://39.175.132.230:35022/`}
+        src={`http://192.168.10.24:7860/?title=${title}`}
       ></iframe>
     </div>
   );

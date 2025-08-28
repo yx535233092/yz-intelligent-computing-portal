@@ -101,10 +101,10 @@ export default function Login() {
             </h1>
           </div>
           <span className=" w-[60%] text-gray-400 text-center tracking-wider my-8">
-            释放AI大模型潜能 · 加速智能应用落地
+            {/* 释放AI大模型潜能 · 加速智能应用落地 */}
           </span>
           <form
-            className="flex flex-col gap-6 w-full px-30"
+            className="flex flex-col gap-6 w-full px-40"
             action="post"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
@@ -184,8 +184,11 @@ export default function Login() {
             <div className="bg-white rounded-xl p-3 shadow-lg">
               <Logo></Logo>
             </div>
-            <h1 className="text-4xl font-bold tracking-wider"> 智算专业服务</h1>
-            <p className="text-md w-[70%] text-center tracking-wider text-gray-300 leading-6">
+            <h1 className="text-4xl font-bold tracking-wider">
+              {' '}
+              一站式智算专业服务
+            </h1>
+            <p className="text-lg w-[70%] text-center tracking-wider text-gray-300 leading-6">
               我们提供从技术咨询、模型优化、算力管理到应用定制的全流程专家服务，致力于打通大模型从技术潜力到商业价值的“最后一公里”，助您高效构建、部署与扩展AI应用。
             </p>
           </div>

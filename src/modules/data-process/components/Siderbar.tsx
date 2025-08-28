@@ -1,9 +1,8 @@
 'use client';
 
-import Logo from '@/components/common/Logo';
-import { RollbackOutlined } from '@ant-design/icons';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 
 function Siderbar({
   menus,
@@ -15,9 +14,10 @@ function Siderbar({
   }[];
   onMenuChange: (menu: number) => void;
 }) {
+  // 选中菜单
   const [activeMenu, setActiveMenu] = useState(0);
-
-  const router = useRouter();
+  // 是否折叠
+  const [isClose, setIsClose] = useState(false);
 
   // 切换选中的解析文件类型
   const changeActiveItem = (item: Item) => {
@@ -29,38 +29,56 @@ function Siderbar({
   };
 
   return (
-    <div className="w-[320px]  flex flex-col">
-      {/* 标题 */}
-      <div className="h-[80px] flex items-center justify-between px-6">
-        <div className="flex gap-2 items-center">
-          <Logo></Logo>
-          <h1 className="text-2xl font-bold ">数据处理服务</h1>
-        </div>
-        {/* 返回上页 */}
-        <RollbackOutlined
-          onClick={() => {
-            router.back();
-          }}
-          className="ml-6 text-xl font-bold"
-          style={{
-            color: '#888',
-          }}
-        />
-      </div>
-      <div className="flex-1 p-6 flex flex-col gap-2">
-        {menus.map((item) => {
-          return (
-            <div
-              className={`w-full h-[50px] rounded-xl flex items-center px-6 text-lg transition-all duration-300 cursor-pointer ${
-                activeMenu === item.key ? 'bg-red-700' : 'bg-white'
-              } ${activeMenu === item.key ? 'text-white' : 'text-black'}`}
-              key={item.key}
-              onClick={() => changeActiveItem(item)}
-            >
-              {item.label}
+    <div className={`flex flex-col ${isClose ? 'w-[80px]' : 'w-[320px]'}`}>
+      {/* 菜单 */}
+      <div className="flex-1 px-6 flex flex-col gap-4">
+        {isClose ? (
+          <div className="py-6 flex justify-center">
+            <Tooltip title="展开">
+              <MenuUnfoldOutlined
+                style={{
+                  color: '#888',
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  setIsClose(false);
+                }}
+              />
+            </Tooltip>
+          </div>
+        ) : (
+          <div>
+            <div className="text-lg font-bold py-6 border-b border-gray-200 flex justify-between">
+              <h1>数据类型</h1>
+              <Tooltip title="折叠">
+                <MenuFoldOutlined
+                  style={{
+                    color: '#888',
+                    fontSize: '24px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    setIsClose(true);
+                  }}
+                />
+              </Tooltip>
             </div>
-          );
-        })}
+            {menus.map((item) => {
+              return (
+                <div
+                  className={`w-full h-[50px] rounded-xl flex items-center px-6 text-lg transition-all duration-300 cursor-pointer ${
+                    activeMenu === item.key ? 'bg-red-700' : 'bg-white'
+                  } ${activeMenu === item.key ? 'text-white' : 'text-black'}`}
+                  key={item.key}
+                  onClick={() => changeActiveItem(item)}
+                >
+                  {item.label}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -14,3 +14,10 @@ interface FileItem {
 interface FileListRes {
   files: FileItem[];
 }
+
+interface TaskItem {
+  id: string;
+  name: string;
+  status: string;
+  createdAt: string;
+}

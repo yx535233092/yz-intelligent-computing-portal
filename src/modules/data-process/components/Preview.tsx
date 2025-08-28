@@ -15,16 +15,16 @@ function Preview({ activeFile }: { activeFile: FileItem | null }) {
       label: '原始文件',
       children: <FilePreview file={activeFile?.url || ''} />,
     },
-    {
-      key: '2',
-      label: '解析结果',
-      children: <FilePreview file={activeFile?.url || ''} />,
-    },
-    {
-      key: '3',
-      label: 'Markdown（去除标签）',
-      children: <FilePreview file={activeFile?.url || ''} />,
-    },
+    // {
+    //   key: '2',
+    //   label: '解析结果',
+    //   children: <FilePreview file={activeFile?.url || ''} />,
+    // },
+    // {
+    //   key: '3',
+    //   label: 'Markdown（去除标签）',
+    //   children: <FilePreview file={activeFile?.url || ''} />,
+    // },
   ];
 
   return (

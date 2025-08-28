@@ -105,17 +105,17 @@ function LoginForm() {
           >
             登录平台
           </button>
-          {/* 注册 */}
-          <span className="text-gray-400 text-center tracking-wider">
+          {/* TODO：注册 */}
+          {/* <span className="text-gray-400 text-center tracking-wider">
             还没有账号？
             <Link href="">立即注册</Link>
-          </span>
+          </span> */}
         </form>
       </div>
       {/* 右侧 */}
       <div className="w-[50%] h-full  relative">
         <Image
-          className={`rounded-r-3xl opacity-70 ${styles['no-drag']}`}
+          className={`rounded-r-3xl opacity-85 ${styles['no-drag']}`}
           style={{
             width: '100%',
             height: '100%',
@@ -124,6 +124,7 @@ function LoginForm() {
           height={1080}
           src="/12.webp"
           alt="login-bg"
+          priority
         />
         <div className="flex flex-col w-full items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white gap-6">
           <div className="bg-white rounded-xl p-3 shadow-lg">

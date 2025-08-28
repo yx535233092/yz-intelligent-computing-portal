@@ -80,6 +80,11 @@ function PageContent({
       isHideHero: true,
       isHideFooter: true,
     },
+    '/pro-services/data-service/media-process': {
+      isHideHeader: true,
+      isHideHero: true,
+      isHideFooter: true,
+    },
   };
 
   // 获取当前路由页面配置

@@ -210,6 +210,11 @@ export default function DataService() {
       label: '图片解析',
       title: '智能图片解析',
     },
+    {
+      key: 'midea',
+      label: '媒体解析',
+      title: '智能媒体解析',
+    },
   ];
 
   // 优势数据
@@ -1213,6 +1218,120 @@ export default function DataService() {
                   <div className="w-4/5 h-0.5 bg-slate-200 rounded"></div>
                   <div className="w-full h-0.5 bg-slate-200 rounded"></div>
                   <div className="w-3/4 h-0.5 bg-slate-200 rounded"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ),
+      },
+    ],
+    midea: [
+      {
+        title: '音频解析',
+        description: ['语音转文字识别', '多语言语音支持', '音频内容智能分析'],
+        link: '/pro-services/data-service/media-process',
+        demoContent: (
+          <div className="w-[160px] h-[120px] flex items-center justify-center relative">
+            {/* 操作流程：音频文件 → AI识别 → 文字转录 */}
+            <div className="flex items-center gap-2">
+              {/* 输入：音频文件 */}
+              <div
+                className="w-9 h-11 rounded-md shadow-md flex flex-col items-center justify-center"
+                style={{
+                  background:
+                    'linear-gradient(145deg, #8b5cf6 0%, #a78bfa 100%)',
+                }}
+              >
+                <div className="text-white text-[0.4rem] font-bold mb-1">
+                  音频文件
+                </div>
+                <div className="w-7 h-6 flex items-center justify-center">
+                  {/* 音频波形图标 */}
+                  <div className="flex items-end gap-[1px] h-4">
+                    <div className="w-[2px] h-2 bg-white/90 rounded-full"></div>
+                    <div className="w-[2px] h-4 bg-white/90 rounded-full"></div>
+                    <div className="w-[2px] h-3 bg-white/90 rounded-full"></div>
+                    <div className="w-[2px] h-4 bg-white/90 rounded-full"></div>
+                    <div className="w-[2px] h-2.5 bg-white/90 rounded-full"></div>
+                    <div className="w-[2px] h-4 bg-white/90 rounded-full"></div>
+                    <div className="w-[2px] h-1.5 bg-white/90 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 处理过程 */}
+              <div className="flex flex-col items-center gap-1">
+                <div className="text-[#666] text-sm font-bold">→</div>
+                <div className="w-5 h-5 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center shadow-md">
+                  <span className="text-white text-[0.5rem] font-bold">AI</span>
+                </div>
+                <div className="text-[#666] text-sm font-bold">→</div>
+              </div>
+
+              {/* 输出：转录文本 */}
+              <div className="w-12 h-11 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg shadow-md flex flex-col items-center justify-center border border-purple-300">
+                <div className="text-[0.4rem] text-purple-700 font-bold mb-1">
+                  语音转录
+                </div>
+                <div className="w-9 h-6 bg-white rounded border border-purple-200 flex flex-col gap-0.5 p-0.5">
+                  <div className="w-full h-0.5 bg-purple-200 rounded text-[0.2rem] flex items-center justify-center text-purple-700">
+                    转录文本
+                  </div>
+                  <div className="w-full h-0.5 bg-purple-100 rounded"></div>
+                  <div className="w-4/5 h-0.5 bg-purple-100 rounded"></div>
+                  <div className="w-full h-0.5 bg-purple-100 rounded"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ),
+      },
+      {
+        title: '视频解析',
+        description: ['视频内容分析', '关键帧提取', '视频转文字描述'],
+        link: '/in-coming',
+        demoContent: (
+          <div className="w-[160px] h-[120px] flex items-center justify-center relative">
+            {/* 操作流程：视频文件 → AI分析 → 内容摘要 */}
+            <div className="flex items-center gap-2">
+              {/* 输入：视频文件 */}
+              <div
+                className="w-9 h-11 rounded-md shadow-md flex flex-col items-center justify-center"
+                style={{
+                  background:
+                    'linear-gradient(145deg, #ef4444 0%, #f87171 100%)',
+                }}
+              >
+                <div className="text-white text-[0.4rem] font-bold mb-1">
+                  视频文件
+                </div>
+                <div className="w-7 h-6 bg-white/20 rounded flex items-center justify-center">
+                  {/* 播放按钮图标 */}
+                  <div className="w-0 h-0 border-l-[8px] border-l-white border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent ml-1"></div>
+                </div>
+              </div>
+
+              {/* 处理过程 */}
+              <div className="flex flex-col items-center gap-1">
+                <div className="text-[#666] text-sm font-bold">→</div>
+                <div className="w-5 h-5 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center shadow-md">
+                  <span className="text-white text-[0.5rem] font-bold">AI</span>
+                </div>
+                <div className="text-[#666] text-sm font-bold">→</div>
+              </div>
+
+              {/* 输出：视频分析结果 */}
+              <div className="w-12 h-11 bg-gradient-to-br from-red-50 to-red-100 rounded-lg shadow-md flex flex-col items-center justify-center border border-red-300">
+                <div className="text-[0.4rem] text-red-700 font-bold mb-1">
+                  内容分析
+                </div>
+                <div className="w-9 h-6 bg-white rounded border border-red-200 flex flex-col gap-0.5 p-0.5">
+                  <div className="w-full h-0.5 bg-red-200 rounded text-[0.2rem] flex items-center justify-center text-red-700">
+                    关键帧
+                  </div>
+                  <div className="w-full h-0.5 bg-red-100 rounded"></div>
+                  <div className="w-3/4 h-0.5 bg-red-100 rounded"></div>
+                  <div className="w-4/5 h-0.5 bg-red-100 rounded"></div>
                 </div>
               </div>
             </div>

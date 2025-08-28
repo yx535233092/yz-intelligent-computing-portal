@@ -4,9 +4,5 @@ const PdfViewer = dynamic(() => import('./PdfViewer'), {
 });
 
 export default function FilePreview({ file }: { file: File | string }) {
-  return (
-    <div className="">
-      <PdfViewer pdfUrl={file}></PdfViewer>
-    </div>
-  );
+  return <PdfViewer pdfUrl={file}></PdfViewer>;
 }

@@ -13,7 +13,7 @@ interface TranslateRes {
 export const translateAPI = (data: TranslateAPI): Promise<TranslateRes> => {
   return api({
     method: 'POST',
-    url: '/v1/chinese_to_vietnamese/',
+    url: '/chinese_to_vietnamese/',
     params: {
       chinese_text: data.chinese_text,
     },
@@ -39,7 +39,7 @@ interface GetOcrPicRes {
 export const getOcrPicAPI = (data: OcrPicReq): Promise<GetOcrPicRes> => {
   return api({
     method: 'POST',
-    url: '/v1/vietnamese_id_card_parse_get_image_only/',
+    url: '/vietnamese_id_card_parse_get_image_only/',
     params: data,
   });
 };
@@ -61,7 +61,7 @@ interface OcrFileRes {
 export const ocrFileAPI = (data: OcrPicReq): Promise<OcrFileRes> => {
   return api({
     method: 'POST',
-    url: '/v1/vietnamese_id_card_parse/',
+    url: '/vietnamese_id_card_parse/',
     params: data,
   });
 };

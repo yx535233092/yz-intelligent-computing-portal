@@ -11,3 +11,11 @@ export const loginAPI = (data: LoginData): Promise<LoginRes> => {
     data,
   });
 };
+
+// 获取用户信息
+export const getUserInfoAPI = (): Promise<UserInfoData> => {
+  return api({
+    method: 'GET',
+    url: '/users/own_info',
+  });
+};

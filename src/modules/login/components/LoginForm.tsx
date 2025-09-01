@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useState, useContext } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useContext, useEffect } from 'react';
 import { message } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import Logo from '@/components/common/Logo';
@@ -14,9 +14,22 @@ function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const { toggleLoading } = useContext(LoadingContext);
   const [messageApi, contextHolder] = message.useMessage();
+
+  // 检查URL参数并显示相应提示
+  useEffect(() => {
+    const messageParam = searchParams.get('message');
+    if (messageParam === 'token_expired') {
+      messageApi.warning('登录已过期，请重新登录');
+    } else if (messageParam === 'token_invalid') {
+      messageApi.error('登录状态无效，请重新登录');
+    } else if (messageParam === 'no_token') {
+      messageApi.info('请先登录');
+    }
+  }, [searchParams, messageApi]);
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     // 1.阻止默认事件

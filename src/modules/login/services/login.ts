@@ -1,4 +1,4 @@
-import { loginAPI } from '../api/login';
+import { loginAPI, getUserInfoAPI } from '../api/login';
 import { setToken, removeToken, getToken } from '@/lib/utils/cookies';
 
 // 权限模块业务逻辑
@@ -22,7 +22,9 @@ export const authService = {
   },
 
   // 验证本地是否存在token
-  verifyToken() {
+  async verifyToken() {
+    const userInfo = await getUserInfoAPI();
+    console.log(userInfo);
     return getToken();
   },
 };

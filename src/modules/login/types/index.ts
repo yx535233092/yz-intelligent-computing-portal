@@ -8,3 +8,12 @@ interface LoginRes {
   expires_in: number;
   token_type: string;
 }
+
+// 用户信息接口返回对象类型
+interface UserInfoData {
+  id: number;
+  username: string;
+  group_name: string;
+  denied_access_apps: string[];
+  denied_click_apps: string[];
+}

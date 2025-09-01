@@ -1,9 +1,21 @@
+// src/components/ReduxProvider.tsx
+'use client';
+
 import { Provider } from 'react-redux';
-import store from '@/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import store, { persistor } from '@/lib/store'; // 导入 store 和 persistor
 
-// 确保ReduxProvider只包裹客户端渲染的组件
-const ReduxProvider = ({ children }: { children: React.ReactNode }) => {
-  return <Provider store={store}>{children}</Provider>;
-};
-
-export default ReduxProvider;
+export default function ReduxProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <Provider store={store}>
+      {/* PersistGate 会等待数据恢复后再渲染子组件 */}
+      <PersistGate loading={null} persistor={persistor}>
+        {children}
+      </PersistGate>
+    </Provider>
+  );
+}

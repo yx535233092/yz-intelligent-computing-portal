@@ -22,7 +22,7 @@ const applications = [
   },
   {
     type: 'self',
-    name: '智能文本翻译',
+    name: '小语种翻译',
     description: '实时翻译中文文本为越南语，支持输入即翻译',
     route: '/text-translate',
     url: '',

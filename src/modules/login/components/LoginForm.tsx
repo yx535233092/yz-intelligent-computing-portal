@@ -9,7 +9,7 @@ import Logo from '@/components/common/Logo';
 import LoadingContext from '@/components/common/LoadingContext';
 import { authService } from '../services/login';
 import styles from '../styles/login.module.css';
-import { setUserInfo } from '@/store/features/userInfoSlice';
+import { setUserInfo } from '@/lib/store/features/userInfoSlice';
 import { useDispatch } from 'react-redux';
 
 function LoginForm() {
@@ -33,7 +33,7 @@ function LoginForm() {
     } else if (messageParam === 'no_token') {
       messageApi.info('请先登录');
     }
-  }, [searchParams, messageApi]);
+  }, [searchParams]);
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     // 1.阻止默认事件

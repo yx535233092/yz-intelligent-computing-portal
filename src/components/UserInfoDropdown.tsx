@@ -17,7 +17,16 @@ const items: MenuProps['items'] = [
     type: 'divider',
   },
   {
-    label: <span onClick={() => authService.logout()}>退出登录</span>,
+    label: (
+      <a
+        onClick={(e) => {
+          e.preventDefault();
+          authService.logout();
+        }}
+      >
+        退出登录
+      </a>
+    ),
     key: '1',
   },
 ];

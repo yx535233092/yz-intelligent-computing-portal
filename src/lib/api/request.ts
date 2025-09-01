@@ -37,13 +37,14 @@ api.interceptors.response.use(
     return response.data;
   },
   (error: AxiosError) => {
+    const message = error.response?.data;
     // 清除token
     removeToken();
     // 重定向到登录页
     if (location.pathname !== '/login') {
       location.href = location.origin + '/login';
     }
-    return Promise.reject(error);
+    return Promise.reject(message);
   }
 );
 

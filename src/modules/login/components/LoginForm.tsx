@@ -1,35 +1,42 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState, useContext } from 'react';
 import { message } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import Logo from '@/components/common/Logo';
 import LoadingContext from '@/components/common/LoadingContext';
-import { login } from '../services/login';
+import { authService } from '../services/login';
 import styles from '../styles/login.module.css';
 
 function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
-  const { toggleLoading, isLoading } = useContext(LoadingContext);
+  const { toggleLoading } = useContext(LoadingContext);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const handleLogin = () => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    // 1.阻止默认事件
+    e.preventDefault();
+    // 2.切换加载状态为true
     toggleLoading(true);
+    // 3.登录请求,默认延迟300ms防止闪入
     setTimeout(async () => {
       try {
-        login({
+        await authService.login({
           username,
           password,
         });
-        location.href = location.origin;
+        // 4.登录成功跳转至首页
+        router.push('/');
       } catch (error) {
-        messageApi.error('用户名或密码错误，登录失败！');
-        console.error('登录失败', error);
+        // 5.登录失败，显示错误信息
+        messageApi.error((error as { detail: string }).detail);
       } finally {
+        // 6.切换加载状态为false
         toggleLoading(false);
       }
     }, 300);
@@ -51,11 +58,12 @@ function LoginForm() {
         </span>
         <form
           className="flex flex-col gap-6 w-full px-30"
-          action="post"
+          onSubmit={(e) => handleLogin(e)}
           onKeyDown={(e) => {
+            // 监听enter键
             if (e.key === 'Enter') {
-              e.preventDefault();
-              handleLogin();
+              // 执行登录
+              handleLogin(e);
             }
           }}
         >
@@ -100,8 +108,7 @@ function LoginForm() {
           {/* 登录 */}
           <button
             className="cursor-pointer rounded-[50px] bg-brand text-white text-lg py-2 px-8 tracking-wider bg-gradient-to-r from-orange-800 to-brand transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg hover:scale-105"
-            onClick={handleLogin}
-            type="button"
+            type="submit"
           >
             登录平台
           </button>

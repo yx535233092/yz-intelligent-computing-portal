@@ -70,7 +70,7 @@ export default function Nav() {
   };
 
   return (
-    <nav className="ml-auto">
+    <nav>
       <ConfigProvider
         theme={{
           components: {

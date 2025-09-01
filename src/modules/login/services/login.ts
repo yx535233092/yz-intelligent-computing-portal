@@ -1,5 +1,5 @@
-import { loginAPI, getUserInfoAPI } from '../api/login';
-import { setToken, removeToken, getToken } from '@/lib/utils/cookies';
+import { loginAPI, getUserInfoAPI, logoutAPI } from '../api/login';
+import { setToken, removeToken } from '@/lib/utils/cookies';
 
 // 权限模块业务逻辑
 export const authService = {
@@ -11,20 +11,23 @@ export const authService = {
 
     // 存储token
     setToken(token);
+    // 存储用户信息在redux内做状态管理
+    const userInfo = await this.getUserInfo();
     // 返回结果
-    return res;
+    return userInfo;
   },
 
   // 登出
-  logout() {
-    // 移除cookie中的token，退出登录
+  async logout() {
+    // 登出请求发送，移除cookie中的token，刷新页面
+    await logoutAPI();
     removeToken();
+    location.reload();
   },
 
-  // 验证本地是否存在token
-  async verifyToken() {
-    const userInfo = await getUserInfoAPI();
-    console.log(userInfo);
-    return getToken();
+  // 获取用户信息
+  async getUserInfo() {
+    const res = await getUserInfoAPI();
+    return res;
   },
 };

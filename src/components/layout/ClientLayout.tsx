@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { Spin } from 'antd';
 import { useState } from 'react';
 import LoadingContext from '../common/LoadingContext';
+import ReduxProvider from '../ReduxProvider';
 
 function PageContent({
   children,
@@ -123,8 +124,10 @@ export default function ClientLayout({
   };
 
   return (
-    <LoadingContext.Provider value={contextValue}>
-      <PageContent isLoading={isLoading}>{children}</PageContent>
-    </LoadingContext.Provider>
+    <ReduxProvider>
+      <LoadingContext.Provider value={contextValue}>
+        <PageContent isLoading={isLoading}>{children}</PageContent>
+      </LoadingContext.Provider>
+    </ReduxProvider>
   );
 }

@@ -9,6 +9,8 @@ import Logo from '@/components/common/Logo';
 import LoadingContext from '@/components/common/LoadingContext';
 import { authService } from '../services/login';
 import styles from '../styles/login.module.css';
+import { setUserInfo } from '@/store/features/userInfoSlice';
+import { useDispatch } from 'react-redux';
 
 function LoginForm() {
   const [username, setUsername] = useState('');
@@ -18,6 +20,8 @@ function LoginForm() {
 
   const { toggleLoading } = useContext(LoadingContext);
   const [messageApi, contextHolder] = message.useMessage();
+
+  const dispatch = useDispatch();
 
   // 检查URL参数并显示相应提示
   useEffect(() => {
@@ -39,10 +43,13 @@ function LoginForm() {
     // 3.登录请求,默认延迟300ms防止闪入
     setTimeout(async () => {
       try {
-        await authService.login({
+        const userInfo = await authService.login({
           username,
           password,
         });
+        // 存储用户信息至redux中
+        dispatch(setUserInfo(userInfo));
+
         // 4.登录成功跳转至首页
         router.push('/');
       } catch (error) {

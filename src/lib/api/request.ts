@@ -41,8 +41,8 @@ api.interceptors.response.use(
     // 清除token
     removeToken();
     // 重定向到登录页
-    if (location.pathname !== '/login') {
-      location.href = location.origin + '/login';
+    if (location.pathname !== '/auth/login') {
+      location.href = location.origin + '/auth/login';
     }
     return Promise.reject(message);
   }

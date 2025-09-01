@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Logo from '@/components/common/Logo';
 import Nav from '@/components/features/nav/Nav';
-import UserInfoDropdown from '@/components/UserInfoDropdown';
+import UserInfoDropdown from '@/components/common/UserInfoDropdown';
 
 export default function Header() {
   return (

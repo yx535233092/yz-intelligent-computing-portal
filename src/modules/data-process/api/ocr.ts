@@ -1,29 +1,5 @@
 import api from '@/lib/api/request';
 
-interface TranslateAPI {
-  from: string;
-  to: string;
-  chinese_text: string;
-}
-
-interface TranslateRes {
-  out_text: string;
-}
-
-export const translateAPI = (data: TranslateAPI): Promise<TranslateRes> => {
-  return api({
-    method: 'POST',
-    url: '/v1/chinese_to_vietnamese/',
-    params: {
-      chinese_text: data.chinese_text,
-    },
-    data: {
-      from: data.from,
-      to: data.to,
-    },
-  });
-};
-
 interface OcrPicReq {
   input_path_1: string;
   input_path_2: string;
@@ -36,10 +12,10 @@ interface GetOcrPicRes {
   [key: string]: string | number | boolean;
 }
 
-export const getOcrPicAPI = (data: OcrPicReq): Promise<GetOcrPicRes> => {
+const getOcrPicAPI = (data: OcrPicReq): Promise<GetOcrPicRes> => {
   return api({
     method: 'POST',
-    url: '/v1/vietnamese_id_card_parse_get_image_only/',
+    url: '/vietnamese_id_card_parse_get_image_only/',
     params: data,
   });
 };
@@ -58,10 +34,12 @@ interface OcrFileRes {
   qr_data: string;
 }
 
-export const ocrFileAPI = (data: OcrPicReq): Promise<OcrFileRes> => {
+const ocrFileAPI = (data: OcrPicReq): Promise<OcrFileRes> => {
   return api({
     method: 'POST',
-    url: '/v1/vietnamese_id_card_parse/',
+    url: '/vietnamese_id_card_parse/',
     params: data,
   });
 };
+
+export { ocrFileAPI, getOcrPicAPI };

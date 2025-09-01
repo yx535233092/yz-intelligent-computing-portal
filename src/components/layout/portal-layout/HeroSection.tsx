@@ -14,13 +14,13 @@ interface PageConfig {
 
 // 页面配置映射
 const pageConfigs: Record<string, PageConfig> = {
-  '/contact-us': {
+  '/portal/contact-us': {
     title: '联系我们',
     subtitle: 'Contact Us',
     backgroundImage: '/11.webp',
     breadcrumb: [{ title: '首页' }, { title: '联系我们' }],
   },
-  '/industry-cases': {
+  '/portal/industry-cases': {
     title: '行业案例',
     subtitle: 'Industry Case',
     backgroundImage: '/10.webp',

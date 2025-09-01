@@ -1,4 +1,3 @@
-// src/lib/redux/store.ts
 import { configureStore } from '@reduxjs/toolkit';
 import {
   persistStore,
@@ -11,7 +10,6 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // 默认使用 localStorage
-
 import rootReducer from './combineReducers'; // 导入组合后的 reducer
 
 // 1. 配置持久化

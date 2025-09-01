@@ -12,7 +12,7 @@ export async function middleware(req: NextRequest) {
 
   // 不存在token，重定向到登陆页
   if (!token) {
-    const loginUrl = new URL('/login', url);
+    const loginUrl = new URL('/auth/login', url);
     loginUrl.searchParams.set('message', 'no_token');
     return NextResponse.redirect(loginUrl);
   }
@@ -33,14 +33,14 @@ export async function middleware(req: NextRequest) {
       return NextResponse.next();
     } else {
       // 添加状态参数，提示用户重新登录
-      const loginUrl = new URL('/login', url);
+      const loginUrl = new URL('/auth/login', url);
       loginUrl.searchParams.set('message', 'token_expired');
       return NextResponse.redirect(loginUrl);
     }
   } catch (error) {
     // 验证失败重定向至登陆页
     console.error('Token验证出错:', error);
-    const loginUrl = new URL('/login', url);
+    const loginUrl = new URL('/auth/login', url);
     loginUrl.searchParams.set('message', 'token_invalid');
     return NextResponse.redirect(loginUrl);
   }
@@ -50,14 +50,10 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * 匹配所有请求路径，除了以下开头的路径：
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - *.webp (webp file)
-     * - login (login page)
+     * 匹配门户页面和后台页面
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.webp$|login).*)',
+    '/',
+    '/manage/:path*',
+    '/portal/:path*',
   ],
 };

@@ -6,8 +6,8 @@ import HeroSection from './HeroSection';
 import { usePathname } from 'next/navigation';
 import { Spin } from 'antd';
 import { useState } from 'react';
-import LoadingContext from '../common/LoadingContext';
-import ReduxProvider from '../ReduxProvider';
+import LoadingContext from '../../common/LoadingContext';
+import ReduxProvider from '../../common/ReduxProvider';
 
 function PageContent({
   children,
@@ -31,57 +31,52 @@ function PageContent({
 
   // 路由页面配置
   const pageConfig: Record<string, PageConfig> = {
-    '/login': {
-      isHideHeader: true,
-      isHideHero: true,
-      isHideFooter: true,
-    },
-    '/contact-us': {
+    '/portal/contact-us': {
       isHideHeader: false,
       isHideHero: false,
       isHideFooter: false,
     },
-    '/industry-cases': {
+    '/portal/industry-cases': {
       isHideHeader: false,
       isHideHero: false,
       isHideFooter: false,
     },
-    '/document-process': {
+    '/portal/document-process': {
       isHideHeader: false,
       isHideHero: true,
       isHideFooter: true,
     },
-    '/excel-process': {
+    '/portal/excel-process': {
       isHideHeader: false,
       isHideHero: true,
       isHideFooter: true,
     },
-    '/hj-platform': {
+    '/portal/hj-platform': {
       isHideHeader: false,
       isHideHero: true,
       isHideFooter: true,
     },
-    '/ocr-recognize': {
+    '/portal/ocr-recognize': {
       isHideHeader: false,
       isHideHero: true,
       isHideFooter: true,
     },
-    '/text-translate': {
+    '/portal/text-translate': {
       isHideHeader: false,
       isHideHero: true,
       isHideFooter: true,
     },
-    '/pro-services/app-service/app-detail': {
+    '/portal/pro-services/app-service/app-detail': {
       isHideHeader: false,
       isHideHero: true,
       isHideFooter: true,
     },
-    '/pro-services/data-service/data-process': {
+    '/portal/pro-services/data-service/data-process': {
       isHideHeader: true,
       isHideHero: true,
       isHideFooter: true,
     },
-    '/pro-services/data-service/media-process': {
+    '/portal/pro-services/data-service/media-process': {
       isHideHeader: true,
       isHideHero: true,
       isHideFooter: true,

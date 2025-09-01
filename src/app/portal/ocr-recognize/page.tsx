@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import type { TabsProps } from 'antd';
 import * as XLSX from 'xlsx';
-import { getOcrPicAPI, ocrFileAPI } from '@/apis/features';
+import { getOcrPicAPI, ocrFileAPI } from '@/modules/data-process/api/ocr';
 
 // API响应类型定义
 

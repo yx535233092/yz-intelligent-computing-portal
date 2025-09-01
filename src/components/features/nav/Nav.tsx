@@ -12,27 +12,27 @@ type MenuItem = Required<MenuProps>['items'][number];
 const items: MenuItem[] = [
   {
     label: '首页',
-    key: '/',
+    key: '/portal/home',
   },
   {
     label: '专业服务',
-    key: '/pro-services',
+    key: '/portal/pro-services',
     children: [
       {
         label: '模型工程服务',
-        key: '/pro-services/model-service',
+        key: '/portal/pro-services/model-service',
       },
       {
         label: '数据工程服务',
-        key: '/pro-services/data-service',
+        key: '/portal/pro-services/data-service',
       },
       {
         label: '应用工程服务',
-        key: '/pro-services/app-service',
+        key: '/portal/pro-services/app-service',
       },
       {
         label: '技术支撑服务',
-        key: '/pro-services/consult-service',
+        key: '/portal/pro-services/consult-service',
       },
       // {
       //   label: '开源软件服务',
@@ -42,12 +42,12 @@ const items: MenuItem[] = [
   },
   {
     label: '行业案例',
-    key: '/industry-cases',
+    key: '/portal/industry-cases',
   },
 
   {
     label: '联系我们',
-    key: '/contact-us',
+    key: '/portal/contact-us',
   },
 ];
 

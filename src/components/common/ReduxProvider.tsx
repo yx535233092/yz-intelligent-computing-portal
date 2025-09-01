@@ -1,10 +1,10 @@
-// src/components/ReduxProvider.tsx
 'use client';
 
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import store, { persistor } from '@/lib/store'; // 导入 store 和 persistor
 
+// 为了保证redux-persist在客户端渲染时生效，需要将ReduxProvider包裹在客户端渲染的组件中
 export default function ReduxProvider({
   children,
 }: {

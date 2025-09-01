@@ -49,7 +49,6 @@ function LoginForm() {
         });
         // 存储用户信息至redux中
         dispatch(setUserInfo(userInfo));
-
         // 4.登录成功跳转至首页
         router.push('/');
       } catch (error) {

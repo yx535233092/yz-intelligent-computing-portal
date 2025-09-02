@@ -10,7 +10,16 @@ import { RootState } from '@/lib/store';
 
 const items: MenuProps['items'] = [
   {
-    label: '个人中心',
+    label: (
+      <a
+        onClick={(e) => {
+          e.preventDefault();
+          location.href = location.origin + '/manage/profile';
+        }}
+      >
+        个人中心
+      </a>
+    ),
     key: '0',
   },
   {

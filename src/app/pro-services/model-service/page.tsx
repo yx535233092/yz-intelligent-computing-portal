@@ -385,7 +385,7 @@ export default function ModelService() {
                 <div className="bg-white rounded-xl p-4 shadow-sm">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-semibold text-gray-800">
-                      昆仑芯 P800PCLE/P800 OAM
+                      昆仑芯 P800 PCLE/P800 OAM
                     </span>
                     <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
                       昆仑芯

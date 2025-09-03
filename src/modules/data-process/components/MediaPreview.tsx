@@ -1,11 +1,11 @@
-function MediaPreview() {
-  return (
-    <div className="bg-white h-full w-3/4 rounded-xl flex flex-col">
-      <div className="h-[80px]  flex items-center text-black text-xl p-6 font-bold justify-between">
-        <span>任务详情</span>
-      </div>
-    </div>
-  );
+import AudioTranscriptionPreview from './AudioTranscriptionPreview';
+
+interface MediaPreviewProps {
+  selectedTask: TaskItem | null;
+}
+
+function MediaPreview({ selectedTask }: MediaPreviewProps) {
+  return <AudioTranscriptionPreview task={selectedTask} />;
 }
 
 export default MediaPreview;

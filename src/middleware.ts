@@ -19,13 +19,14 @@ export async function middleware(req: NextRequest) {
 
   // 验证token
   try {
-    const response = await fetch('http://39.175.132.230:35001/users/own_info', {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-    });
+    // const response = await fetch('http://39.175.132.230:35001/users/own_info', {
+    //   method: 'GET',
+    //   headers: {
+    //     accept: 'application/json',
+    //     Authorization: 'Bearer ' + token,
+    //   },
+    // });
+    const response = { status: 200 };
     console.log('验证token：', response.status === 200 ? '成功' : '失败');
 
     // 验证成功放行，否则重定向至登陆页

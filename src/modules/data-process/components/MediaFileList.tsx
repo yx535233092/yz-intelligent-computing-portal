@@ -7,11 +7,14 @@ import {
 } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { Empty, Tooltip } from 'antd';
+import { getMediaTaskList } from '../services/media';
 
 function MediaFileList({
   handleCreateMediaTask,
+  onTaskSelect,
 }: {
   handleCreateMediaTask: () => void;
+  onTaskSelect: (task: TaskItem | null) => void;
 }) {
   const [taskList, setTaskList] = useState<TaskItem[]>([]);
   const [activeTask, setActiveTask] = useState<TaskItem | null>(null);
@@ -20,17 +23,184 @@ function MediaFileList({
     setTaskList([
       {
         id: '1',
-        name: '任务1',
-        status: 'processing',
-        createdAt: '2021-01-01',
+        name: '案例音频',
+        status: 'completed',
+        createdAt: '2025-09-01 10:30:00',
+        type: 'audio',
+        duration: 9,
+        fileUrl: '/audio.wav',
+        transcription: {
+          text: '联想控股2014年营业收入为2895亿元。',
+          language: '中文',
+          speaker: 'SPEAKER_00',
+          segments: [
+            {
+              word: '联',
+              start: 0.402,
+              end: 0.884,
+              score: 0.876,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '想',
+              start: 0.884,
+              end: 0.904,
+              score: 0.921,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '控',
+              start: 0.904,
+              end: 1.186,
+              score: 0.996,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '股',
+              start: 1.186,
+              end: 2.009,
+              score: 1,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '2',
+              start: 2.009,
+              end: 2.471,
+              score: 0.991,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '0',
+              start: 2.471,
+              end: 2.873,
+              score: 0.995,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '1',
+              start: 2.873,
+              end: 3.175,
+              score: 1,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '4',
+              start: 3.175,
+              end: 3.355,
+              score: 1,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '年',
+              start: 3.355,
+              end: 3.717,
+              score: 0.999,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '营',
+              start: 3.717,
+              end: 3.938,
+              score: 0.997,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '业',
+              start: 3.938,
+              end: 4.179,
+              score: 1,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '收',
+              start: 4.179,
+              end: 4.44,
+              score: 1,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '入',
+              start: 4.44,
+              end: 4.601,
+              score: 1,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '为',
+              start: 4.601,
+              end: 5.324,
+              score: 1,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '2',
+              start: 5.324,
+              end: 6.148,
+              score: 0.998,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '8',
+              start: 6.148,
+              end: 6.69,
+              score: 1,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '9',
+              start: 6.69,
+              end: 7.373,
+              score: 1,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '5',
+              start: 7.373,
+              end: 9.021,
+              score: 0.962,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '亿',
+              start: 9.021,
+              end: 9.041,
+              score: 0.045,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '元',
+              start: 9.041,
+              end: 9.262,
+              score: 0.995,
+              speaker: 'SPEAKER_00',
+            },
+            {
+              word: '。',
+              start: 9.262,
+              end: 9.282,
+              score: 0,
+            },
+          ],
+        },
       },
       {
         id: '2',
-        name: '任务2',
-        status: 'completed',
-        createdAt: '2021-01-02',
+        name: '会议录音',
+        status: 'processing',
+        createdAt: '2024-01-02 14:20:00',
+        type: 'audio',
+        duration: 3600,
+        fileUrl: '/meeting-audio.mp3',
       },
     ]);
+  }, []);
+
+  useEffect(() => {
+    async function getTaskList() {
+      const taskList = await getMediaTaskList();
+      console.log('taskList:', taskList);
+    }
+    getTaskList();
   }, []);
 
   return (
@@ -67,7 +237,10 @@ function MediaFileList({
                   activeTask?.name === task.name ? 'bg-red-100' : 'bg-white'
                 } ${activeTask?.name === task.name ? 'text-brand' : 'text-black'}`}
                 key={task.name}
-                onClick={() => setActiveTask(task)}
+                onClick={() => {
+                  setActiveTask(task);
+                  onTaskSelect(task);
+                }}
               >
                 <span className="truncate">{task.name}</span>
                 <span className="text-sm text-gray-500">

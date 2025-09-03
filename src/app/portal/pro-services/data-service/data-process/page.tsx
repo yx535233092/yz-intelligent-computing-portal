@@ -12,7 +12,12 @@ import CreateMediaTask from '@/modules/data-process/components/CreateMediaTask';
 export default function DataProcess() {
   const [activeMenu, setActiveMenu] = useState(0);
   const [activeFile, setActiveFile] = useState<FileItem | null>(null);
-  const [isCreatingMediaTask, setIsCreatingMediaTask] = useState(false);
+  const [selectedMediaTask, setSelectedMediaTask] = useState<TaskItem | null>(
+    null
+  );
+  // 新建任务弹窗状态
+  const [createMediaTaskOpenState, setCreateMediaTaskOpenState] =
+    useState(false);
 
   // 菜单列表
   const menus = [
@@ -73,8 +78,14 @@ export default function DataProcess() {
     setActiveFile(file);
   };
 
-  const handleCreateMediaTask = () => {
-    setIsCreatingMediaTask(true);
+  // 新建任务
+  const createMediaTask = () => {
+    setCreateMediaTaskOpenState(true);
+  };
+
+  // 选择任务
+  const handleTaskSelect = (task: TaskItem | null) => {
+    setSelectedMediaTask(task);
   };
 
   return (
@@ -108,13 +119,18 @@ export default function DataProcess() {
                 {menus.find((item) => item.key === activeMenu)?.type ===
                   'media' && (
                   <div className="flex gap-8 w-full">
+                    {/* 任务列表 */}
                     <MediaFileList
-                      handleCreateMediaTask={handleCreateMediaTask}
+                      handleCreateMediaTask={createMediaTask}
+                      onTaskSelect={handleTaskSelect}
                     ></MediaFileList>
-                    {isCreatingMediaTask ? (
-                      <CreateMediaTask />
+                    {/* 任务详情和新建任务 */}
+                    {createMediaTaskOpenState === true ? (
+                      <CreateMediaTask></CreateMediaTask>
                     ) : (
-                      <MediaPreview></MediaPreview>
+                      <MediaPreview
+                        selectedTask={selectedMediaTask}
+                      ></MediaPreview>
                     )}
                   </div>
                 )}

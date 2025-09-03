@@ -17,11 +17,19 @@ const createMediaTaskAPI = (
 };
 
 // 获取媒体任务列表
-const getMediaTaskListAPI = (): Promise<MediaListRes> => {
+const getMediaTaskListAPI = (): Promise<MediaTaskList> => {
   return api({
     method: 'GET',
     url: 'http://39.175.132.230:35034/task/all',
   });
 };
 
-export { createMediaTaskAPI, getMediaTaskListAPI };
+// 根据Id获取媒体任务详情
+const getMediaTaskDetailAPI = (id: string): Promise<MediaTaskDetail> => {
+  return api({
+    method: 'GET',
+    url: `http://39.175.132.230:35034/task/${id}`,
+  });
+};
+
+export { createMediaTaskAPI, getMediaTaskListAPI, getMediaTaskDetailAPI };

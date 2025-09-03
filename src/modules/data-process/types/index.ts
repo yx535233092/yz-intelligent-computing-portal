@@ -108,7 +108,8 @@ interface CreateMediaTaskRes {
   message: string;
 }
 
-interface MediaListItem {
+// 媒体任务
+interface MediaTask {
   identifier: string;
   status: 'completed' | 'failed' | 'processing';
   task_type: string;
@@ -120,7 +121,55 @@ interface MediaListItem {
   audio_duration: number | null;
   start_time: string;
   end_time: string | null;
+  name?: string;
 }
-interface MediaListRes {
-  tasks: MediaListItem[];
+
+// 媒体任务列表
+interface MediaTaskList {
+  tasks: MediaTask[];
+}
+
+// MediaFileList函数组件的Props
+interface MediaFileListProps {
+  handleCreateMediaTask: () => void;
+  onMediaTaskSelect: (task: MediaTask | null) => void;
+}
+
+// MediaPreview函数组件的pros
+interface MediaPreviewProps {
+  selectedMediaTask: MediaTask | null;
+}
+
+interface MediaTaskDetail {
+  status: 'completed' | 'failed' | 'processing';
+  result: MediaTaskDetailResult;
+  metadata: MediaTaskDetailMetadata;
+}
+
+interface MediaTaskDetailMetadata {
+  language: string;
+  start_time: string;
+  end_time: string;
+  file_name: string;
+  dutation: number;
+}
+
+interface MediaTaskDetailResult {
+  segments: MediaTaskDetailSegment[];
+}
+
+interface MediaTaskDetailSegment {
+  start: number;
+  end: number;
+  text: string;
+  words: MediaTaskDetailWord[];
+  speaker: string;
+}
+
+interface MediaTaskDetailWord {
+  word: string;
+  start: number;
+  end: number;
+  score: number;
+  speaker: number;
 }

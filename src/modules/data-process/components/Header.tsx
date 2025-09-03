@@ -20,7 +20,8 @@ function Header({
         {/* 返回上页 */}
         <RollbackOutlined
           onClick={() => {
-            router.back();
+            // router.back();
+            router.push('/portal/pro-services/data-service/');
           }}
           className="ml-6 text-xl font-bold"
           style={{

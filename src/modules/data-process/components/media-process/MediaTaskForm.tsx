@@ -13,7 +13,7 @@ import {
   message,
 } from 'antd';
 import MediaUpload from './MediaUpload';
-import { createMediaTask } from '../services/media';
+import { createMediaTask } from '../../services/media';
 
 const MediaTaskForm: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();

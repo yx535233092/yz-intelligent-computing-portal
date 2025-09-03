@@ -15,7 +15,7 @@ function Siderbar({
   onMenuChange: (menu: number) => void;
 }) {
   // 选中菜单
-  const [activeMenu, setActiveMenu] = useState(0);
+  const [activeMenu, setActiveMenu] = useState(8);
   // 是否折叠
   const [isClose, setIsClose] = useState(false);
 
@@ -29,7 +29,7 @@ function Siderbar({
   };
 
   return (
-    <div className={`flex flex-col ${isClose ? 'w-[80px]' : 'w-[320px]'}`}>
+    <div className={`flex flex-col ${isClose ? 'w-[80px]' : 'w-[320px]'} `}>
       {/* 菜单 */}
       <div className="flex-1 px-6 flex flex-col gap-4">
         {isClose ? (

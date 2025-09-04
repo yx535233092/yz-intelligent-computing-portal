@@ -6,9 +6,10 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
 } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Empty, Tooltip } from 'antd';
 import { getMediaTaskList } from '../../services/media';
+import ContextMenu from './ContextMenu';
 
 function MediaFileList({
   handleCreateMediaTask,
@@ -20,6 +21,8 @@ function MediaFileList({
   const [activeMediaTask, setActiveMediaTask] = useState<MediaTask | null>(
     null
   );
+  // 任务列表ref
+  const taskListRef = useRef<HTMLDivElement>(null);
 
   const getTaskList = async () => {
     const mediaTaskList = await getMediaTaskList(type);
@@ -36,15 +39,75 @@ function MediaFileList({
   }, [mediaTaskListRefresh, type]);
 
   useEffect(() => {
+    // 存储事件监听器引用以便清除
+    const eventListeners = new Map<
+      Node,
+      { contextmenu: EventListener; click: EventListener }
+    >();
+
     // 每隔1s获取一次媒体任务列表
     const getTaskListInterval = setInterval(async () => {
       // 获取任务列表
       const taskList = await getMediaTaskList(type);
       setTaskList(taskList);
+
+      // 清除之前的事件监听器
+      eventListeners.forEach((listeners, task) => {
+        task.removeEventListener('contextmenu', listeners.contextmenu);
+        document.body.removeEventListener('click', listeners.click);
+      });
+      eventListeners.clear();
+
+      // 右键菜单
+      const taskListNodes = taskListRef.current?.childNodes;
+      for (const task of taskListNodes || []) {
+        const contextMenu = document.querySelector(
+          '.context-menu'
+        ) as HTMLDivElement;
+
+        // 创建事件监听器函数
+        const contextmenuListener = (e: Event) => {
+          e.preventDefault();
+          if (contextMenu) {
+            const id = (task as HTMLElement).dataset.id;
+            contextMenu.dataset.id = id;
+            contextMenu.style.display = 'none';
+            contextMenu.style.position = 'absolute';
+            contextMenu.style.left = (e as MouseEvent).clientX + 'px';
+            contextMenu.style.top = (e as MouseEvent).clientY + 'px';
+            contextMenu.style.display = 'block';
+          }
+        };
+
+        // 点击页面其他地方关闭右键菜单
+        const clickListener = () => {
+          if (contextMenu) {
+            contextMenu.style.display = 'none';
+          }
+        };
+
+        // 添加事件监听器
+        task.addEventListener('contextmenu', contextmenuListener);
+        document.body.addEventListener('click', clickListener);
+
+        // 存储监听器引用
+        eventListeners.set(task, {
+          contextmenu: contextmenuListener,
+          click: clickListener,
+        });
+      }
     }, 1000);
+
     return () => {
-      // 组件销毁 清除定时器
+      // 组件销毁时清除定时器和所有事件监听器
       clearInterval(getTaskListInterval);
+
+      // 清除所有事件监听器
+      eventListeners.forEach((listeners, task) => {
+        task.removeEventListener('contextmenu', listeners.contextmenu);
+        document.body.removeEventListener('click', listeners.click);
+      });
+      eventListeners.clear();
     };
   }, [type]);
 
@@ -75,9 +138,10 @@ function MediaFileList({
             <Empty description="暂无任务" />
           </div>
         ) : (
-          <div className="flex-1 flex flex-col gap-2">
+          <div className="flex-1 flex flex-col gap-2" ref={taskListRef}>
             {taskList.map((mediaTask) => (
               <div
+                data-id={mediaTask.identifier}
                 className={`flex justify-between gap-4 items-center text-black h-[50px] text-lg px-4 rounded-xl min-w-0 cursor-pointer transition-all duration-300 ${
                   activeMediaTask?.name === mediaTask.name
                     ? 'bg-red-100'
@@ -89,9 +153,9 @@ function MediaFileList({
                   onMediaTaskSelect(mediaTask);
                 }}
               >
-                <Tooltip title={mediaTask.name} placement={'right'}>
-                  <span className="truncate">{mediaTask.name}</span>
-                </Tooltip>
+                {/* <Tooltip title={mediaTask.name} placement={'right'}> */}
+                <span className="truncate">{mediaTask.name}</span>
+                {/* </Tooltip> */}
                 <span className="text-sm text-gray-500">
                   {mediaTask.status === 'processing' ? (
                     <LoadingOutlined
@@ -112,6 +176,8 @@ function MediaFileList({
           </div>
         )}
       </div>
+      {/* 右键菜单 */}
+      <ContextMenu></ContextMenu>
     </div>
   );
 }

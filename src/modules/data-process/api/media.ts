@@ -32,4 +32,17 @@ const getMediaTaskDetailAPI = (id: string): Promise<MediaTaskDetail> => {
   });
 };
 
-export { createMediaTaskAPI, getMediaTaskListAPI, getMediaTaskDetailAPI };
+// 删除任务
+const deleteMediaTaskAPI = (id: string): Promise<void> => {
+  return api({
+    method: 'DELETE',
+    url: `http://39.175.132.230:35034/task/${id}/delete`,
+  });
+};
+
+export {
+  createMediaTaskAPI,
+  getMediaTaskListAPI,
+  getMediaTaskDetailAPI,
+  deleteMediaTaskAPI,
+};

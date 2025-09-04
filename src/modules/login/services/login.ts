@@ -1,4 +1,9 @@
-import { loginAPI, getUserInfoAPI, logoutAPI } from '../api/login';
+import {
+  loginAPI,
+  getUserInfoAPI,
+  logoutAPI,
+  getUserAppListAPI,
+} from '../api/login';
 import { setToken, removeToken } from '@/lib/utils/cookies';
 import { clearUserInfo } from '@/lib/store/features/userInfoSlice';
 import store from '@/lib/store';
@@ -34,6 +39,12 @@ export const authService = {
   // 获取用户信息
   async getUserInfo() {
     const res = await getUserInfoAPI();
+    return res;
+  },
+
+  // 获取用户应用列表
+  async getUserAppList() {
+    const res = await getUserAppListAPI();
     return res;
   },
 };

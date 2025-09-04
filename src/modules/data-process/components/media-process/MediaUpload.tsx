@@ -45,7 +45,13 @@ const MediaUpload: React.FC<MediaUploadProps> = ({ onFileUpload, type }) => {
   };
 
   return (
-    <Dragger {...props} accept={getAccept()}>
+    <Dragger
+      {...props}
+      accept={getAccept()}
+      style={{
+        width: '500px',
+      }}
+    >
       <p className="ant-upload-drag-icon">
         <InboxOutlined />
       </p>

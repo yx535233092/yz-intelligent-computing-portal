@@ -3,6 +3,7 @@ import {
   getMediaTaskDetailAPI,
   getMediaTaskListAPI,
 } from '../api/media';
+import formatTime from '@/lib/utils/formatTime';
 
 // 创建媒体任务
 async function createMediaTask(params: FieldType, formData: FormData) {
@@ -14,9 +15,10 @@ async function createMediaTask(params: FieldType, formData: FormData) {
 async function getMediaTaskList(type?: string) {
   // 给每个task添加name属性
   let { tasks: mediaTaskList } = await getMediaTaskListAPI();
-  for (const mediaTask of mediaTaskList) {
-    mediaTask['name'] = `${mediaTask.file_name} ( ${mediaTask.identifier} )`;
-  }
+  mediaTaskList.forEach((mediaTask, index) => {
+    mediaTask['name'] =
+      `任务${index + 1}（${formatTime(mediaTask.start_time, 'YYYY-MM-DD HH:mm:ss')}）`;
+  });
   mediaTaskList.reverse();
 
   // 如果传入type参数，则过滤任务类型

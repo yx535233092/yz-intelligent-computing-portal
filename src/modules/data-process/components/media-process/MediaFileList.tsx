@@ -49,7 +49,7 @@ function MediaFileList({
   }, [type]);
 
   return (
-    <div className="bg-white h-full overflow-y-auto rounded-xl flex flex-col  min-w-[320px] max-w-[400px]">
+    <div className="bg-white h-full overflow-y-auto rounded-xl flex flex-col  w-[400px] min-w-[400px]">
       {/* ----标题 */}
       <div className="h-[80px]  flex items-center text-black text-xl p-6 font-bold justify-between">
         <>

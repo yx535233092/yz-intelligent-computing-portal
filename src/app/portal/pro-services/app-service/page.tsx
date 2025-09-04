@@ -1,7 +1,7 @@
 // ai生成
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Row, Col, Card, Button, Space, Avatar, Badge } from 'antd';
 import {
   AppstoreOutlined,
@@ -23,7 +23,8 @@ import {
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useInView } from '@/hooks/useInView';
 import styles from './page.module.css';
-import applications from '@/lib/constants/applications';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/lib/store';
 
 // 图标映射
 const iconMap: { [key: string]: React.ReactNode } = {
@@ -41,6 +42,22 @@ const iconMap: { [key: string]: React.ReactNode } = {
 export default function AppService() {
   useScrollToTop();
   const [activeCategory, setActiveCategory] = useState('全部');
+
+  // 获取用户应用列表
+  const applications: UserAppListData[] = useSelector((state: RootState) => {
+    return state.userInfo.value.userAppList;
+  });
+
+  useEffect(() => {
+    // 修改应用的route地址
+    for (const app of applications) {
+      if (app.route.includes('/portal')) {
+        continue;
+      } else {
+        app.route = '/portal' + app.route;
+      }
+    }
+  }, []);
 
   // 动画相关的hooks
   const [heroRef, isHeroInView] = useInView({ threshold: 0.3 });

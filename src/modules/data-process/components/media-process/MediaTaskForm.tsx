@@ -97,6 +97,7 @@ function MediaTaskForm({
         <Col span={12}>
           <Form.Item<FieldType>
             label="转录语言"
+            hidden
             name="language"
             rules={[{ required: true, message: '请选择转录语言!' }]}
           >
@@ -113,6 +114,7 @@ function MediaTaskForm({
         <Col span={12}>
           <Form.Item<FieldType>
             label="任务类型"
+            hidden
             name="task"
             rules={[{ required: true, message: '请选择任务类型!' }]}
           >
@@ -168,12 +170,12 @@ function MediaTaskForm({
 
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item<FieldType> label="设备索引" name="device_index">
+          <Form.Item<FieldType> label="设备索引" name="device_index" hidden>
             <InputNumber min={0} style={{ width: '100%' }} />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item<FieldType> label="线程数" name="threads">
+          <Form.Item<FieldType> label="线程数" name="threads" hidden>
             <InputNumber min={0} style={{ width: '100%' }} />
           </Form.Item>
         </Col>
@@ -186,7 +188,7 @@ function MediaTaskForm({
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item<FieldType> label="分块大小" name="chunk_size">
+          <Form.Item<FieldType> label="分块大小" name="chunk_size" hidden>
             <InputNumber min={1} max={100} style={{ width: '100%' }} />
           </Form.Item>
         </Col>
@@ -194,7 +196,7 @@ function MediaTaskForm({
 
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item<FieldType> label="计算类型" name="compute_type">
+          <Form.Item<FieldType> label="计算类型" name="compute_type" hidden>
             <Select
               options={[
                 { label: 'float16', value: 'float16' },
@@ -205,7 +207,11 @@ function MediaTaskForm({
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item<FieldType> label="插值方法" name="interpolate_method">
+          <Form.Item<FieldType>
+            label="插值方法"
+            name="interpolate_method"
+            hidden
+          >
             <Select
               options={[
                 { label: 'nearest', value: 'nearest' },
@@ -223,16 +229,8 @@ function MediaTaskForm({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item<FieldType>
-            label="返回字符对齐"
-            name="return_char_alignments"
-            valuePropName="checked"
-          >
-            <Checkbox />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item<FieldType>
             label="抑制数字"
+            hidden
             name="suppress_numerals"
             valuePropName="checked"
           >
@@ -243,12 +241,12 @@ function MediaTaskForm({
 
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item<FieldType> label="束搜索大小" name="beam_size">
+          <Form.Item<FieldType> label="束搜索大小" name="beam_size" hidden>
             <InputNumber min={1} max={10} style={{ width: '100%' }} />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item<FieldType> label="最佳候选数" name="best_of">
+          <Form.Item<FieldType> label="最佳候选数" name="best_of" hidden>
             <InputNumber min={1} max={10} style={{ width: '100%' }} />
           </Form.Item>
         </Col>
@@ -256,12 +254,12 @@ function MediaTaskForm({
 
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item<FieldType> label="耐心值" name="patience">
+          <Form.Item<FieldType> label="耐心值" name="patience" hidden>
             <InputNumber min={0} max={10} style={{ width: '100%' }} />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item<FieldType> label="长度惩罚" name="length_penalty">
+          <Form.Item<FieldType> label="长度惩罚" name="length_penalty" hidden>
             <InputNumber
               min={0}
               max={10}
@@ -279,7 +277,16 @@ function MediaTaskForm({
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item<FieldType> label="抑制标记" name="suppress_tokens">
+          <Form.Item<FieldType>
+            label="返回字符对齐"
+            name="return_char_alignments"
+            valuePropName="checked"
+          >
+            <Checkbox />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item<FieldType> label="抑制标记" name="suppress_tokens" hidden>
             <Input placeholder="例如: -1 或 1,2,3" />
           </Form.Item>
         </Col>
@@ -292,6 +299,7 @@ function MediaTaskForm({
         <Col span={12}>
           <Form.Item<FieldType>
             label="压缩比阈值"
+            hidden
             name="compression_ratio_threshold"
           >
             <InputNumber
@@ -303,7 +311,11 @@ function MediaTaskForm({
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item<FieldType> label="对数概率阈值" name="log_prob_threshold">
+          <Form.Item<FieldType>
+            label="对数概率阈值"
+            name="log_prob_threshold"
+            hidden
+          >
             <InputNumber
               min={-10}
               max={0}
@@ -316,7 +328,11 @@ function MediaTaskForm({
 
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item<FieldType> label="无语音阈值" name="no_speech_threshold">
+          <Form.Item<FieldType>
+            label="无语音阈值"
+            name="no_speech_threshold"
+            hidden
+          >
             <InputNumber min={0} max={1} step={0.1} style={{ width: '100%' }} />
           </Form.Item>
         </Col>

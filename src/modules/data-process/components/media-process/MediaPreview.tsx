@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, Suspense } from 'react';
 import { Card, Tag, Spin } from 'antd';
 import {
   PlayCircleOutlined,
@@ -96,50 +96,51 @@ function MediaPreview({ selectedMediaTask }: MediaPreviewProps) {
   };
 
   return (
-    <div className="bg-white  h-full  rounded-xl flex flex-col flex-1 ">
-      {/* 标题栏 */}
-      <header className="h-[80px] flex items-center justify-between text-black text-xl p-6 font-bold border-b border-gray-100">
-        <div className="flex items-center gap-3">
-          <span>任务详情</span>
-        </div>
-      </header>
-
-      {/* 内容区域 */}
-      <main className="flex-1 p-6 overflow-y-auto mb-4">
-        {mediaTaskDetail?.status === 'processing' ? (
-          // 处理中状态
-          <div className="h-full flex flex-col items-center justify-center">
-            <Spin size="large" />
-            <p className="mt-4 text-lg text-gray-600">正在转录中...</p>
-            <p className="text-sm text-gray-500">
-              这可能需要几分钟时间，请耐心等待
-            </p>
+    <Suspense fallback={<div>加载中...</div>}>
+      <div className="bg-white  h-full  rounded-xl flex flex-col flex-1 ">
+        {/* 标题栏 */}
+        <header className="h-[80px] flex items-center justify-between text-black text-xl p-6 font-bold border-b border-gray-100">
+          <div className="flex items-center gap-3">
+            <span>任务详情</span>
           </div>
-        ) : (
-          // 完成状态或其他状态
-          <div className="h-full flex flex-col gap-6">
-            {/* 任务信息卡片 */}
-            <Card size="small">
-              <div className="flex items-center justify-between">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {mediaTaskDetail?.metadata.file_name}
-                    </h3>
-                    {getStatusTag(mediaTaskDetail!.status)}
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <span className="flex items-center gap-1">
-                      <ClockCircleOutlined />
-                      创建时间: {formattedCreateTime}
-                    </span>
-                    {mediaTaskDetail?.metadata.dutation && (
+        </header>
+
+        {/* 内容区域 */}
+        <main className="flex-1 p-6 overflow-y-auto mb-4">
+          {mediaTaskDetail?.status === 'processing' ? (
+            // 处理中状态
+            <div className="h-full flex flex-col items-center justify-center">
+              <Spin size="large" />
+              <p className="mt-4 text-lg text-gray-600">正在转录中...</p>
+              <p className="text-sm text-gray-500">
+                这可能需要几分钟时间，请耐心等待
+              </p>
+            </div>
+          ) : (
+            // 完成状态或其他状态
+            <div className="h-full flex flex-col gap-6">
+              {/* 任务信息卡片 */}
+              <Card size="small">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        {mediaTaskDetail?.metadata.file_name}
+                      </h3>
+                      {getStatusTag(mediaTaskDetail!.status)}
+                    </div>
+                    <div className="flex items-center gap-4 text-sm text-gray-600">
                       <span className="flex items-center gap-1">
-                        <PlayCircleOutlined />
-                        时长: {mediaTaskDetail!.metadata.dutation}
+                        <ClockCircleOutlined />
+                        创建时间: {formattedCreateTime}
                       </span>
-                    )}
-                    {/* {mediaTaskDetail?.metadata.language && (
+                      {mediaTaskDetail?.metadata.dutation && (
+                        <span className="flex items-center gap-1">
+                          <PlayCircleOutlined />
+                          时长: {mediaTaskDetail!.metadata.dutation}
+                        </span>
+                      )}
+                      {/* {mediaTaskDetail?.metadata.language && (
                       <span className="flex items-center gap-1">
                         <FileTextOutlined />
                         类型:{' '}
@@ -148,21 +149,22 @@ function MediaPreview({ selectedMediaTask }: MediaPreviewProps) {
                           : '视频'}
                       </span>
                     )} */}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Card>
+              </Card>
 
-            {/* 转录结果显示 */}
-            <TranscriptionDisplay
-              transcription={mediaTaskDetail?.result}
-              currentTime={currentTime}
-              onSegmentClick={handleSegmentClick}
-            />
-          </div>
-        )}
-      </main>
-    </div>
+              {/* 转录结果显示 */}
+              <TranscriptionDisplay
+                transcription={mediaTaskDetail?.result}
+                currentTime={currentTime}
+                onSegmentClick={handleSegmentClick}
+              />
+            </div>
+          )}
+        </main>
+      </div>
+    </Suspense>
   );
 }
 

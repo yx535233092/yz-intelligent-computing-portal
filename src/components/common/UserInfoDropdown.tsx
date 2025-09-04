@@ -45,7 +45,9 @@ interface UserInfoDropdownProps {
 }
 
 const UserInfoDropdown: React.FC<UserInfoDropdownProps> = ({ style }) => {
-  const userInfo = useSelector((state: RootState) => state.userInfo.value);
+  const userInfo = useSelector(
+    (state: RootState) => state.userInfo.value.userInfo
+  );
 
   return (
     <Dropdown menu={{ items }} trigger={['click']}>

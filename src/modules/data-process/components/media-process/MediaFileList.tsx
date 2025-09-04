@@ -32,6 +32,9 @@ function MediaFileList({
       onMediaTaskSelect(mediaTaskList[0]);
     }
   };
+  useEffect(() => {
+    console.log(activeMediaTask);
+  }, [activeMediaTask]);
 
   useEffect(() => {
     // 获取媒体任务列表，立即执行
@@ -118,7 +121,10 @@ function MediaFileList({
         <>
           <span>任务列表 ({taskList.length})</span>
           <div className="flex gap-4">
-            <Tooltip title="新建任务">
+            <Tooltip
+              title="新建任务"
+              className="hover:scale-110 transition-all duration-300"
+            >
               <PlusCircleOutlined
                 style={{
                   color: '#888',
@@ -143,10 +149,10 @@ function MediaFileList({
               <div
                 data-id={mediaTask.identifier}
                 className={`flex justify-between gap-4 items-center text-black h-[50px] text-lg px-4 rounded-xl min-w-0 cursor-pointer transition-all duration-300 ${
-                  activeMediaTask?.name === mediaTask.name
+                  activeMediaTask?.identifier === mediaTask.identifier
                     ? 'bg-red-100'
                     : 'bg-white'
-                } ${activeMediaTask?.name === mediaTask.name ? 'text-brand' : 'text-black'}`}
+                } ${activeMediaTask?.identifier === mediaTask.identifier ? 'text-brand' : 'text-black'}`}
                 key={mediaTask.identifier}
                 onClick={() => {
                   setActiveMediaTask(mediaTask);

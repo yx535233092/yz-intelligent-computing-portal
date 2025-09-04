@@ -29,7 +29,7 @@ function Siderbar({
 
   return (
     <div
-      className={`flex flex-col ${isClose ? 'min-w-[80px]' : 'min-w-[320px]'} `}
+      className={`flex flex-col ${isClose ? 'w-[80px]' : 'w-[320px]'} transition-all duration-300`}
     >
       {/* 菜单 */}
       <div className="flex-1 px-6 flex flex-col gap-4">
@@ -50,7 +50,7 @@ function Siderbar({
           </div>
         ) : (
           <div>
-            <div className="text-lg font-bold py-6 border-b border-gray-200 flex justify-between">
+            <div className="text-lg font-bold py-6 border-b border-gray-200 flex justify-between overflow-hidden transition-all duration-300 whitespace-nowrap">
               <h1>数据类型</h1>
               <Tooltip title="折叠">
                 <MenuFoldOutlined
@@ -68,7 +68,7 @@ function Siderbar({
             {menus.map((item) => {
               return (
                 <div
-                  className={`w-full h-[50px] rounded-xl flex items-center px-6 text-lg transition-all duration-300 cursor-pointer ${
+                  className={`whitespace-nowrap w-full h-[50px] rounded-xl flex items-center px-6 text-lg transition-all duration-300 cursor-pointer ${
                     activeMenu === item.key ? 'bg-red-700' : 'bg-white'
                   } ${activeMenu === item.key ? 'text-white' : 'text-black'}`}
                   key={item.key}

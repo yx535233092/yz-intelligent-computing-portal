@@ -210,7 +210,7 @@ export default function HomePage() {
             </p>
             <div className="flex gap-6">
               <button
-                onClick={() => router.push('/pro-services/app-service')}
+                onClick={() => router.push('/portal/pro-services/app-service')}
                 className="group relative bg-gradient-to-r from-brand to-red-700 hover:from-red-500 hover:to-brand text-white px-8 py-4 rounded-2xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-brand/30 flex items-center gap-3 overflow-hidden"
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
@@ -278,7 +278,7 @@ export default function HomePage() {
 
         <div className="text-center mt-12">
           <button
-            onClick={() => router.push('/pro-services/model-service')}
+            onClick={() => router.push('/portal/pro-services/model-service')}
             className="group bg-brand hover:bg-red-600 text-white px-8 py-4 rounded-xl text-lg font-medium transition-all duration-300 hover:scale-105 flex items-center gap-3 mx-auto"
           >
             了解详情
@@ -323,7 +323,7 @@ export default function HomePage() {
 
             <div className="mt-12">
               <button
-                onClick={() => router.push('/pro-services/data-service')}
+                onClick={() => router.push('/portal/pro-services/data-service')}
                 className="group bg-brand hover:bg-red-600 text-white px-8 py-4 rounded-xl text-lg font-medium transition-all duration-300 hover:scale-105 flex items-center gap-3"
               >
                 了解详情
@@ -431,7 +431,7 @@ export default function HomePage() {
 
         <div className="text-center mt-12">
           <button
-            onClick={() => router.push('/pro-services/app-service')}
+            onClick={() => router.push('/portal/pro-services/app-service')}
             className="group bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-xl text-lg font-medium transition-all duration-300 hover:scale-105 flex items-center gap-3 mx-auto"
           >
             查看全部应用
@@ -495,7 +495,9 @@ export default function HomePage() {
 
           <div className="text-center mt-16">
             <button
-              onClick={() => router.push('/pro-services/consult-service')}
+              onClick={() =>
+                router.push('/portal/pro-services/consult-service')
+              }
               className="group bg-gradient-to-r from-gray-900 to-gray-800 hover:from-brand hover:to-red-600 text-white px-10 py-4 rounded-2xl text-lg font-medium transition-all duration-500 hover:scale-105 hover:shadow-2xl flex items-center gap-3 mx-auto"
             >
               了解详情

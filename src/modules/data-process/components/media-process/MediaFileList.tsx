@@ -4,6 +4,7 @@ import {
   PlusCircleOutlined,
   LoadingOutlined,
   CheckCircleOutlined,
+  CloseCircleOutlined,
 } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { Empty, Tooltip } from 'antd';
@@ -12,26 +13,43 @@ import { getMediaTaskList } from '../../services/media';
 function MediaFileList({
   handleCreateMediaTask,
   onMediaTaskSelect,
+  mediaTaskListRefresh,
+  type,
 }: MediaFileListProps) {
   const [taskList, setTaskList] = useState<MediaTask[]>([]);
   const [activeMediaTask, setActiveMediaTask] = useState<MediaTask | null>(
     null
   );
 
+  const getTaskList = async () => {
+    const mediaTaskList = await getMediaTaskList(type);
+    setTaskList(mediaTaskList);
+    if (mediaTaskList.length > 0) {
+      setActiveMediaTask(mediaTaskList[0]);
+      onMediaTaskSelect(mediaTaskList[0]);
+    }
+  };
+
   useEffect(() => {
     // 获取媒体任务列表，立即执行
-    (async function getTaskList() {
-      const { tasks: mediaTaskList } = await getMediaTaskList();
-      // 为每个媒体任务添加name
-      for (const mediaTask of mediaTaskList) {
-        mediaTask['name'] = mediaTask.file_name + mediaTask.identifier;
-      }
-      setTaskList(mediaTaskList);
-    })();
-  }, []);
+    getTaskList();
+  }, [mediaTaskListRefresh, type]);
+
+  useEffect(() => {
+    // 每隔1s获取一次媒体任务列表
+    const getTaskListInterval = setInterval(async () => {
+      // 获取任务列表
+      const taskList = await getMediaTaskList(type);
+      setTaskList(taskList);
+    }, 1000);
+    return () => {
+      // 组件销毁 清除定时器
+      clearInterval(getTaskListInterval);
+    };
+  }, [type]);
 
   return (
-    <div className="bg-white h-full overflow-y-auto w-1/4 rounded-xl flex flex-col  w-1/4">
+    <div className="bg-white h-full overflow-y-auto rounded-xl flex flex-col  min-w-[320px] max-w-[400px]">
       {/* ----标题 */}
       <div className="h-[80px]  flex items-center text-black text-xl p-6 font-bold justify-between">
         <>
@@ -71,10 +89,16 @@ function MediaFileList({
                   onMediaTaskSelect(mediaTask);
                 }}
               >
-                <span className="truncate">{mediaTask.name}</span>
+                <Tooltip title={mediaTask.name} placement={'right'}>
+                  <span className="truncate">{mediaTask.name}</span>
+                </Tooltip>
                 <span className="text-sm text-gray-500">
                   {mediaTask.status === 'processing' ? (
                     <LoadingOutlined
+                      style={{ color: '#d32d26', fontSize: '20px' }}
+                    />
+                  ) : mediaTask.status === 'failed' ? (
+                    <CloseCircleOutlined
                       style={{ color: '#d32d26', fontSize: '20px' }}
                     />
                   ) : (

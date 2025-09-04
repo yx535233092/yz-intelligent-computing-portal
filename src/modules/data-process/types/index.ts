@@ -133,6 +133,8 @@ interface MediaTaskList {
 interface MediaFileListProps {
   handleCreateMediaTask: () => void;
   onMediaTaskSelect: (task: MediaTask | null) => void;
+  mediaTaskListRefresh: boolean;
+  type: 'audio' | 'video';
 }
 
 // MediaPreview函数组件的pros

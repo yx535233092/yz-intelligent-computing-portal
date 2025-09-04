@@ -1229,7 +1229,7 @@ export default function DataService() {
       {
         title: '音频解析',
         description: ['语音转文字识别', '多语言语音支持', '音频内容智能分析'],
-        link: '/portal/pro-services/data-service/media-process',
+        link: '/portal/pro-services/data-service/data-process?type=audio',
         demoContent: (
           <div className="w-[160px] h-[120px] flex items-center justify-center relative">
             {/* 操作流程：音频文件 → AI识别 → 文字转录 */}
@@ -1289,7 +1289,7 @@ export default function DataService() {
       {
         title: '视频解析',
         description: ['视频内容分析', '关键帧提取', '视频转文字描述'],
-        link: '/portal/in-coming',
+        link: '/portal/pro-services/data-service/data-process?type=video',
         demoContent: (
           <div className="w-[160px] h-[120px] flex items-center justify-center relative">
             {/* 操作流程：视频文件 → AI分析 → 内容摘要 */}

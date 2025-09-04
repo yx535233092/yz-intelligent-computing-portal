@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import type { FormProps } from 'antd';
 import {
   Button,
@@ -15,7 +15,13 @@ import {
 import MediaUpload from './MediaUpload';
 import { createMediaTask } from '../../services/media';
 
-const MediaTaskForm: React.FC = () => {
+function MediaTaskForm({
+  onTaskCreate,
+  type,
+}: {
+  onTaskCreate: () => void;
+  type: 'audio' | 'video';
+}) {
   const [messageApi, contextHolder] = message.useMessage();
 
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
@@ -27,6 +33,7 @@ const MediaTaskForm: React.FC = () => {
     const res = await createMediaTask(params, formData);
     console.log('res:', res);
     messageApi.success('创建任务成功');
+    onTaskCreate();
   };
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (
@@ -38,10 +45,13 @@ const MediaTaskForm: React.FC = () => {
 
   const [form] = Form.useForm<FieldType>();
 
-  const handleFileUpload = (file: File) => {
-    // 将文件设置到表单中
-    form.setFieldValue('file', file);
-  };
+  const handleFileUpload = useCallback(
+    (file: File) => {
+      // 将文件设置到表单中
+      form.setFieldValue('file', file);
+    },
+    [form]
+  );
 
   return (
     <Form
@@ -49,7 +59,7 @@ const MediaTaskForm: React.FC = () => {
       name="mediaTaskForm"
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 800 }}
+      style={{ maxWidth: '100%', padding: '0 80px' }}
       initialValues={{
         language: 'zh',
         task: 'transcribe',
@@ -338,7 +348,7 @@ const MediaTaskForm: React.FC = () => {
           marginLeft: '140px',
         }}
       >
-        <MediaUpload onFileUpload={handleFileUpload} />
+        <MediaUpload onFileUpload={handleFileUpload} type={type} />
       </Form.Item>
 
       <Form.Item
@@ -351,6 +361,6 @@ const MediaTaskForm: React.FC = () => {
       </Form.Item>
     </Form>
   );
-};
+}
 
 export default MediaTaskForm;

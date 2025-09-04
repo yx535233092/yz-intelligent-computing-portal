@@ -85,7 +85,7 @@ function TranscriptionDisplay({
           <SoundOutlined />
           完整转录文本
         </h4>
-        <div className="bg-gray-50 p-3 rounded border text-sm leading-relaxed border-gray-300">
+        <div className="bg-gray-50 p-3 rounded border text-sm leading-relaxed border-gray-300 max-h-[24vh] overflow-y-auto">
           {fullText}
         </div>
       </div>

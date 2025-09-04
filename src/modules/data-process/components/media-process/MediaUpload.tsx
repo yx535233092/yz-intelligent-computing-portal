@@ -7,9 +7,10 @@ const { Dragger } = Upload;
 
 interface MediaUploadProps {
   onFileUpload?: (file: File) => void;
+  type: 'audio' | 'video';
 }
 
-const MediaUpload: React.FC<MediaUploadProps> = ({ onFileUpload }) => {
+const MediaUpload: React.FC<MediaUploadProps> = ({ onFileUpload, type }) => {
   const props: UploadProps = {
     name: 'file',
     multiple: false,
@@ -35,13 +36,21 @@ const MediaUpload: React.FC<MediaUploadProps> = ({ onFileUpload }) => {
     },
   };
 
+  const getAccept = () => {
+    if (type === 'audio') {
+      return '.aac,.mp3,.awb,.oga,.wma,.amr,.ogg,.wav,.m4a';
+    } else if (type === 'video') {
+      return '.mp4,.avi,.mov,.flv,.wmv,.mkv,.webm';
+    }
+  };
+
   return (
-    <Dragger {...props}>
+    <Dragger {...props} accept={getAccept()}>
       <p className="ant-upload-drag-icon">
         <InboxOutlined />
       </p>
       <p className="ant-upload-text">点击或拖拽媒体文件至此区域进行上传</p>
-      <p className="ant-upload-hint">支持格式：MP3, WAV, MP4, AVI, MOV 等</p>
+      <p className="ant-upload-hint">支持格式：{getAccept()}</p>
     </Dragger>
   );
 };

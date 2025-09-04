@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Card, Tag, Spin } from 'antd';
 import {
   PlayCircleOutlined,
@@ -16,17 +16,53 @@ function MediaPreview({ selectedMediaTask }: MediaPreviewProps) {
   const [mediaTaskDetail, setMediaTaskDetail] =
     useState<MediaTaskDetail | null>(null);
 
+  // 使用 useMemo 缓存格式化后的创建时间，避免重复计算
+  const formattedCreateTime = useMemo(() => {
+    if (!mediaTaskDetail?.metadata.start_time) return '';
+    return formatTime(
+      mediaTaskDetail.metadata.start_time,
+      'YYYY-MM-DD HH:mm:ss'
+    );
+  }, [mediaTaskDetail?.metadata.start_time]);
+
   useEffect(() => {
+    // 清空任务详情
+    setMediaTaskDetail(null);
+
+    let getMediaTaskDetailInterval: NodeJS.Timeout | null = null;
+
     // 获取媒体任务详情
-    (async function () {
+    const fetchTaskDetail = async () => {
       // 防止首次进入预览页面没有选择任务时，报错
       if (selectedMediaTask?.identifier) {
+        // 获取任务详情
         const mediaTaskDetail = await getMediaTaskDetail(
           selectedMediaTask!.identifier
         );
         setMediaTaskDetail(mediaTaskDetail);
+
+        // 只在处理中状态时设置定时器，避免已完成任务的不必要刷新
+        if (mediaTaskDetail?.status === 'processing') {
+          // 每1s获取任务详情
+          getMediaTaskDetailInterval = setInterval(async () => {
+            const mediaTaskDetail = await getMediaTaskDetail(
+              selectedMediaTask!.identifier
+            );
+            setMediaTaskDetail(mediaTaskDetail);
+          }, 1000);
+        }
       }
-    })();
+    };
+
+    fetchTaskDetail();
+
+    // 清理函数：组件卸载或依赖项变化时清理定时器
+    return () => {
+      if (getMediaTaskDetailInterval) {
+        clearInterval(getMediaTaskDetailInterval);
+        getMediaTaskDetailInterval = null;
+      }
+    };
   }, [selectedMediaTask]);
 
   if (!selectedMediaTask || !mediaTaskDetail) {
@@ -60,7 +96,7 @@ function MediaPreview({ selectedMediaTask }: MediaPreviewProps) {
   };
 
   return (
-    <div className="bg-white  h-full  w-3/4 rounded-xl flex flex-col">
+    <div className="bg-white  h-full  rounded-xl flex flex-col flex-1 ">
       {/* 标题栏 */}
       <header className="h-[80px] flex items-center justify-between text-black text-xl p-6 font-bold border-b border-gray-100">
         <div className="flex items-center gap-3">
@@ -95,11 +131,7 @@ function MediaPreview({ selectedMediaTask }: MediaPreviewProps) {
                   <div className="flex items-center gap-4 text-sm text-gray-600">
                     <span className="flex items-center gap-1">
                       <ClockCircleOutlined />
-                      创建时间:{' '}
-                      {formatTime(
-                        mediaTaskDetail?.metadata.start_time,
-                        'YYYY-MM-DD HH:mm:ss'
-                      )}
+                      创建时间: {formattedCreateTime}
                     </span>
                     {mediaTaskDetail?.metadata.dutation && (
                       <span className="flex items-center gap-1">

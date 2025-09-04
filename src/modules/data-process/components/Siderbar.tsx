@@ -6,16 +6,16 @@ import { Tooltip } from 'antd';
 
 function Siderbar({
   menus,
+  activeMenu,
   onMenuChange,
 }: {
   menus: {
     label: string;
     key: number;
   }[];
+  activeMenu: number;
   onMenuChange: (menu: number) => void;
 }) {
-  // 选中菜单
-  const [activeMenu, setActiveMenu] = useState(8);
   // 是否折叠
   const [isClose, setIsClose] = useState(false);
 
@@ -24,12 +24,13 @@ function Siderbar({
     if (activeMenu === item.key) {
       return;
     }
-    setActiveMenu(item.key);
     onMenuChange(item.key);
   };
 
   return (
-    <div className={`flex flex-col ${isClose ? 'w-[80px]' : 'w-[320px]'} `}>
+    <div
+      className={`flex flex-col ${isClose ? 'min-w-[80px]' : 'min-w-[320px]'} `}
+    >
       {/* 菜单 */}
       <div className="flex-1 px-6 flex flex-col gap-4">
         {isClose ? (

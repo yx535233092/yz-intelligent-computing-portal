@@ -3,12 +3,20 @@
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useInView } from '@/hooks/useInView';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/lib/store';
+import axios from 'axios';
 
 export default function ContactUs() {
   useScrollToTop();
 
   // 动画相关的hooks
   const [formRef, isFormInView] = useInView({ threshold: 0.2 });
+
+  // 获取登录用户
+  const loginUser = useSelector(
+    (state: RootState) => state.userInfo.value.userInfo
+  );
 
   // 表单状态
   const [formData, setFormData] = useState({
@@ -18,6 +26,7 @@ export default function ContactUs() {
     phone: '',
     service: '',
     message: '',
+    loginUser: (loginUser as UserInfoData).username,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,24 +59,31 @@ export default function ContactUs() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // 模拟表单提交
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitMessage('感谢您的留言！我们将在24小时内联系您。');
-      setFormData({
-        name: '',
-        company: '',
-        email: '',
-        phone: '',
-        service: '',
-        message: '',
+    axios
+      .post('/api/submitContact', formData)
+      .then(({ data }) => {
+        setIsSubmitting(false);
+        setSubmitMessage('感谢您的留言！我们将在24小时内联系您。');
+        setFormData({
+          name: '',
+          company: '',
+          email: '',
+          phone: '',
+          service: '',
+          message: '',
+          loginUser: '',
+        });
+      })
+      .catch((err) => {
+        setIsSubmitting(false);
+        setSubmitMessage('提交失败，请重试。');
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+        setTimeout(() => {
+          setSubmitMessage('');
+        }, 3000);
       });
-
-      // 3秒后清除提示信息
-      setTimeout(() => {
-        setSubmitMessage('');
-      }, 3000);
-    }, 1500);
   };
 
   return (

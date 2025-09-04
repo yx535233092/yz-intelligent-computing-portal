@@ -90,7 +90,7 @@ function LoginForm() {
           {/* 用户名 */}
           <div className="relative">
             <input
-              className="text-lg border-2 border-gray-300 rounded-[50px] py-2 pl-12 pr-8 focus:outline-none focus:border-brand  transition-all duration-300"
+              className="text-md border-2 border-gray-300 rounded-[50px] py-2 pl-12 pr-8 focus:outline-none focus:border-brand  transition-all duration-300"
               style={{
                 width: '300px',
               }}
@@ -110,7 +110,7 @@ function LoginForm() {
           {/* 密码 */}
           <div className="relative flex">
             <input
-              className="text-lg border-2 border-gray-300 rounded-[50px] py-2 pl-12 pr-8 focus:outline-none focus:border-brand transition-all duration-300"
+              className="text-md border-2 border-gray-300 rounded-[50px] py-2 pl-12 pr-8 focus:outline-none focus:border-brand transition-all duration-300"
               type="password"
               style={{
                 width: '300px',

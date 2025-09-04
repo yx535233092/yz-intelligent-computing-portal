@@ -25,22 +25,25 @@ export default function Footer() {
           <h1 className="text-xl font-bold">专业服务</h1>
           <ul className="flex flex-col gap-2 text-secondary-text">
             <li>
-              <Link className="link" href="/pro-services/model-service">
+              <Link className="link" href="/portal/pro-services/model-service">
                 模型服务
               </Link>
             </li>
             <li>
-              <Link className="link" href="/pro-services/data-service">
+              <Link className="link" href="/portal/pro-services/data-service">
                 数据服务
               </Link>
             </li>
             <li>
-              <Link className="link" href="/pro-services/app-service">
+              <Link className="link" href="/portal/pro-services/app-service">
                 应用服务
               </Link>
             </li>
             <li>
-              <Link className="link" href="/pro-services/consult-service">
+              <Link
+                className="link"
+                href="/portal/pro-services/consult-service"
+              >
                 技术支撑服务
               </Link>
             </li>

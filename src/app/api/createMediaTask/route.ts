@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 function POST(req: NextRequest) {
   console.log('return data ', req.body);
   const searchParams = req.nextUrl.searchParams;
-  const 
   return NextResponse.json({
     message: 'success',
   });

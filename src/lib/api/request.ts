@@ -42,7 +42,7 @@ api.interceptors.response.use(
     // removeToken();
     // 重定向到登录页
     if (location.pathname !== '/auth/login') {
-      // location.href = location.origin + '/auth/login';
+      location.href = location.origin + '/auth/login';
     }
     return Promise.reject(message);
   }

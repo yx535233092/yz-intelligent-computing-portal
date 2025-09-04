@@ -50,7 +50,8 @@ function LoginForm() {
         // 存储用户信息至redux中
         dispatch(setUserInfo(userInfo));
         // 4.登录成功跳转至首页
-        router.push('/');
+        location.href = '/';
+        // router.push('/');
       } catch (error) {
         // 5.登录失败，显示错误信息
         messageApi.error((error as { detail: string }).detail);

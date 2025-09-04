@@ -2,7 +2,6 @@ import '@/styles/globals.css';
 import type { Metadata, Viewport } from 'next';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { App } from 'antd';
-import ClientLayout from '@/components/layout/ClientLayout';
 
 /**
  * 元数据配置
@@ -45,9 +44,7 @@ export default function RootLayout({
 
       <body>
         <AntdRegistry>
-          <App>
-            <ClientLayout>{children}</ClientLayout>
-          </App>
+          <App>{children}</App>
         </AntdRegistry>
       </body>
     </html>

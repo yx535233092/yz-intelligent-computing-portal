@@ -16,8 +16,6 @@ export default function PdfViewer({ pdfUrl }) {
 
     loadingTask.promise
       .then((pdf) => {
-        console.log(pdf);
-
         return pdf.getPage(1);
       })
       .then((page) => {

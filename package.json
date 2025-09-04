@@ -32,6 +32,7 @@
     "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",
     "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0",
     "x-data-spreadsheet": "^1.1.9",
     "xlsx": "^0.18.5"
   },
@@ -40,6 +41,7 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/antd": "^1.0.4",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.19.11",
     "@types/react": "^19",

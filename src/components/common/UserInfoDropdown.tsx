@@ -22,9 +22,9 @@ const items: MenuProps['items'] = [
   //   ),
   //   key: '0',
   // },
-  {
-    type: 'divider',
-  },
+  // {
+  //   type: 'divider',
+  // },
   {
     label: (
       <a

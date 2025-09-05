@@ -42,16 +42,26 @@ export async function POST(request: NextRequest) {
       fs.writeFileSync(savePath, JSON.stringify([data], null, 2), 'utf-8');
     }
   } else {
-    return NextResponse.json({
-      message: 'file not found',
-      clientIp: clientIp,
-      userAgent: userAgent,
-    });
+    return NextResponse.json(
+      {
+        message: 'file not found',
+        clientIp: clientIp,
+        userAgent: userAgent,
+      },
+      {
+        status: 404,
+      }
+    );
   }
 
-  return NextResponse.json({
-    message: 'success',
-    clientIp: clientIp,
-    userAgent: userAgent,
-  });
+  return NextResponse.json(
+    {
+      message: 'success',
+      clientIp: clientIp,
+      userAgent: userAgent,
+    },
+    {
+      status: 200,
+    }
+  );
 }

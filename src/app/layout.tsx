@@ -7,7 +7,8 @@ import { App } from 'antd';
  * 元数据配置
  */
 export const metadata: Metadata = {
-  title: '新华三 - 智算门户',
+  title:
+    process.env.NODE_ENV === 'production' ? '新华三 - 智算门户' : '开发环境',
 };
 
 /**

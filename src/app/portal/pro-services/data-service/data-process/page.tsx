@@ -41,7 +41,7 @@ const menus = [
   //   key: 5,
   // },
   // {
-  //   label: '古籍解析',
+  //   label: '书籍解析',
   //   type: 'document',
   //   key: 6,
   // },

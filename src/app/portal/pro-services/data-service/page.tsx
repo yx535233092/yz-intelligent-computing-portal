@@ -1230,14 +1230,14 @@ export default function DataService() {
     ],
     image: [
       {
-        title: '古籍解析',
-        description: ['古代文献识别', '繁体字、古文字', '专业文史处理'],
-        link: '/portal/document-process?title=古籍解析',
+        title: '书籍解析',
+        description: ['古代文献识别', '繁体字、古文字', '专业书籍处理'],
+        link: '/portal/document-process?title=书籍解析',
         demoContent: (
           <div className="w-[160px] h-[120px] flex items-center justify-center relative">
-            {/* 操作流程：古籍图片 → AI识别 → 繁体文本 */}
+            {/* 操作流程：书籍图片 → AI识别 → 繁体文本 */}
             <div className="flex items-center gap-2">
-              {/* 输入：古籍图片 */}
+              {/* 输入：书籍图片 */}
               <div
                 className="w-9 h-11 rounded-md shadow-md flex flex-col items-center justify-center"
                 style={{
@@ -1246,10 +1246,10 @@ export default function DataService() {
                 }}
               >
                 <div className="text-white text-[0.4rem] font-bold mb-1">
-                  古籍图片
+                  书籍图片
                 </div>
                 <div className="w-7 h-6 bg-amber-100 rounded border border-amber-300 flex items-center justify-center">
-                  <div className="text-amber-800 text-base font-bold">古</div>
+                  <div className="text-amber-800 text-base font-bold">书</div>
                 </div>
               </div>
 

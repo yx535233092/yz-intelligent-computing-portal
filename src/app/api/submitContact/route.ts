@@ -26,12 +26,21 @@ export async function POST(request: NextRequest) {
   data.createTime = new Date().toISOString();
 
   // 文件保存地址
-  const savePath = '/private/workspace-yx/contact.json';
+  const savePath = path.resolve(process.cwd(), '..', 'contact.json');
   //写入文件
   if (fs.existsSync(savePath)) {
-    const existData = JSON.parse(fs.readFileSync(savePath, 'utf-8'));
-    existData.push(data);
-    fs.writeFileSync(savePath, JSON.stringify(existData, null, 2), 'utf-8');
+    const existData = fs.readFileSync(savePath, 'utf-8');
+    if (existData) {
+      const existDataJson = JSON.parse(existData);
+      existDataJson.push(data);
+      fs.writeFileSync(
+        savePath,
+        JSON.stringify(existDataJson, null, 2),
+        'utf-8'
+      );
+    } else {
+      fs.writeFileSync(savePath, JSON.stringify([data], null, 2), 'utf-8');
+    }
   } else {
     return NextResponse.json({
       message: 'file not found',

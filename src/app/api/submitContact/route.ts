@@ -26,14 +26,18 @@ export async function POST(request: NextRequest) {
   data.createTime = new Date().toISOString();
 
   // 文件保存地址
-  const savePath = path.resolve(process.cwd(), 'public', 'contact.json');
+  const savePath = '/private/workspace-yx/contact.json';
   //写入文件
   if (fs.existsSync(savePath)) {
     const existData = JSON.parse(fs.readFileSync(savePath, 'utf-8'));
     existData.push(data);
     fs.writeFileSync(savePath, JSON.stringify(existData, null, 2), 'utf-8');
   } else {
-    fs.writeFileSync(savePath, JSON.stringify([data], null, 2), 'utf-8');
+    return NextResponse.json({
+      message: 'file not found',
+      clientIp: clientIp,
+      userAgent: userAgent,
+    });
   }
 
   return NextResponse.json({

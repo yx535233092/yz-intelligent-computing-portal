@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
 
   // 文件保存地址
   const savePath = path.resolve(process.cwd(), 'public', 'contact.json');
+
   //写入文件
   if (fs.existsSync(savePath)) {
     const existData = JSON.parse(fs.readFileSync(savePath, 'utf-8'));

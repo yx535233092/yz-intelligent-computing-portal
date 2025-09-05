@@ -33,10 +33,11 @@ function ExcelProcessContent() {
     const loadDefaultFile = async () => {
       let defaultFilePath = '';
 
-      if (title === '多区域表格解析') {
-        defaultFilePath = '/多区域表格.xlsx';
-      } else if (title === '复杂表头解析(合并场景)') {
-        defaultFilePath = '/表格合并.xlsx';
+      if (title === '复杂表头解析(合并场景)') {
+        defaultFilePath =
+          '/【内部核算】先天云服务器云平台项目配置清单20250512_20250514.xlsx';
+      } else if (title === '多区域表格解析') {
+        defaultFilePath = '/（冷板）液冷系统配置组合规格表.xlsx';
       }
 
       if (defaultFilePath) {

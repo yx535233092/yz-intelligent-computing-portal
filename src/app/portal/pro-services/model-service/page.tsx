@@ -3,6 +3,7 @@
 import React from 'react';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useInView } from '@/hooks/useInView';
+import Image from 'next/image';
 
 export default function ModelService() {
   useScrollToTop();
@@ -140,7 +141,14 @@ export default function ModelService() {
               <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
                 {/* 视频播放区域 */}
                 <div className="aspect-video bg-black">
-                  <video
+                  <Image
+                    src="/微调.gif"
+                    alt="微调视频"
+                    className="w-full h-full object-contain"
+                    width={1000}
+                    height={1000}
+                  />
+                  {/* <video
                     className="w-full h-full object-contain"
                     controls
                     preload="metadata"
@@ -148,7 +156,7 @@ export default function ModelService() {
                     <source src="/微调视频.mov" type="video/quicktime" />
                     <source src="/微调视频.mov" type="video/mp4" />
                     您的浏览器不支持视频播放。
-                  </video>
+                  </video> */}
                 </div>
                 {/* 控制栏 */}
                 <div className="bg-gray-800 px-4 py-3 flex items-center justify-between">

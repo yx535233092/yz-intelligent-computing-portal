@@ -9,22 +9,22 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/lib/store';
 
 const items: MenuProps['items'] = [
-  // {
-  //   label: (
-  //     <a
-  //       onClick={(e) => {
-  //         e.preventDefault();
-  //         location.href = location.origin + '/manage/profile';
-  //       }}
-  //     >
-  //       个人中心
-  //     </a>
-  //   ),
-  //   key: '0',
-  // },
-  // {
-  //   type: 'divider',
-  // },
+  {
+    label: (
+      <a
+        onClick={(e) => {
+          e.preventDefault();
+          location.href = location.origin + '/manage/profile';
+        }}
+      >
+        个人中心
+      </a>
+    ),
+    key: '0',
+  },
+  {
+    type: 'divider',
+  },
   {
     label: (
       <a

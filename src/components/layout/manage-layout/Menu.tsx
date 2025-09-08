@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Button, Menu } from 'antd';
+import React from 'react';
+import { AppstoreOutlined, UserOutlined } from '@ant-design/icons';
+import { MenuProps } from 'antd';
+import { Menu } from 'antd';
+import { useRouter } from 'next/navigation';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
+// 菜单列表
 const items: MenuItem[] = [
-  { key: '1', icon: <UserOutlined />, label: '个人信息' },
+  { key: '1', icon: <AppstoreOutlined />, label: '门户页面' },
+  { key: '2', icon: <UserOutlined />, label: '个人信息' },
   // { key: '2', icon: <DesktopOutlined />, label: 'Option 2' },
   // { key: '3', icon: <ContainerOutlined />, label: 'Option 3' },
   // {
@@ -43,25 +42,30 @@ const items: MenuItem[] = [
   // },
 ];
 
-const App: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
+const ManageMenu = function ({ isCollapsed }: { isCollapsed: boolean }) {
+  const router = useRouter();
 
-  const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
+  const handleMenuClick = (e: { key: string }) => {
+    if (e.key === '1') {
+      router.push('/');
+    } else if (e.key === '2') {
+      router.push('/manage/profile');
+    }
   };
 
   return (
-    <div style={{ width: 240 }}>
+    <div>
       <Menu
-        defaultSelectedKeys={['1']}
+        defaultSelectedKeys={['2']}
         defaultOpenKeys={['sub1']}
         mode="inline"
         theme="dark"
-        inlineCollapsed={collapsed}
+        inlineCollapsed={isCollapsed}
         items={items}
+        onClick={handleMenuClick}
       />
     </div>
   );
 };
 
-export default App;
+export default ManageMenu;

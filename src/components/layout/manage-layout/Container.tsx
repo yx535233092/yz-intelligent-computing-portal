@@ -1,10 +1,6 @@
-function Container() {
+function Container({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-full h-full bg-white rounded-md p-4">
-      <header className="text-black font-bold text-2xl py-2 flex items-center justify-center h-[70vh]">
-        开发中...
-      </header>
-    </div>
+    <div className="w-full h-full bg-white rounded-md p-4">{children}</div>
   );
 }
 export default Container;

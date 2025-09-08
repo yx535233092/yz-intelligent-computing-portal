@@ -2,6 +2,7 @@ import '@/styles/globals.css';
 import type { Metadata, Viewport } from 'next';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { App } from 'antd';
+import RouterSetter from '@/components/common/RouterSetter';
 
 /**
  * 元数据配置
@@ -44,6 +45,7 @@ export default function RootLayout({
       </head>
 
       <body>
+        <RouterSetter />
         <AntdRegistry>
           <App>{children}</App>
         </AntdRegistry>

@@ -1,15 +1,21 @@
 import ManageMenu from './Menu';
 
-function SiderBar() {
+function SiderBar({ isCollapsed }: { isCollapsed: boolean }) {
   return (
-    <div className="h-screen bg-[#041428] w-[240px] flex flex-col">
+    <div
+      className={`h-screen bg-[#041428] flex flex-col transition-all duration-300 ease-in-out ${
+        isCollapsed ? 'w-[80px]' : 'w-[260px]'
+      }`}
+    >
       {/* 标题栏 */}
       <div className="flex justify-center items-center h-[72px] border-b-1 border-gray-800">
-        <h1 className="text-white text-lg font-bold">管理后台</h1>
+        <h1 className="text-white text-lg font-bold">
+          {isCollapsed ? '后台' : '管理后台'}
+        </h1>
       </div>
       {/* 菜单栏 */}
       <div className="flex-1 py-4">
-        <ManageMenu></ManageMenu>
+        <ManageMenu isCollapsed={isCollapsed}></ManageMenu>
       </div>
     </div>
   );

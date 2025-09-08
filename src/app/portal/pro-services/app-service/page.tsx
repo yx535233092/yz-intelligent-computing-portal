@@ -25,6 +25,7 @@ import { useInView } from '@/hooks/useInView';
 import styles from './page.module.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/lib/store';
+import applications from '@/lib/constants/applications';
 
 // 图标映射
 const iconMap: { [key: string]: React.ReactNode } = {
@@ -44,20 +45,20 @@ export default function AppService() {
   const [activeCategory, setActiveCategory] = useState('全部');
 
   // 获取用户应用列表
-  const applications: UserAppListData[] = useSelector((state: RootState) => {
-    return state.userInfo.value.userAppList;
-  });
+  // const applications: UserAppListData[] = useSelector((state: RootState) => {
+  //   return state.userInfo.value.userAppList;
+  // });
 
-  useEffect(() => {
-    // 修改应用的route地址
-    for (const app of applications) {
-      if (app.route.includes('/portal')) {
-        continue;
-      } else {
-        app.route = '/portal' + app.route;
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   // 修改应用的route地址
+  //   for (const app of applications) {
+  //     if (app.route.includes('/portal')) {
+  //       continue;
+  //     } else {
+  //       app.route = '/portal' + app.route;
+  //     }
+  //   }
+  // }, []);
 
   // 动画相关的hooks
   const [heroRef, isHeroInView] = useInView({ threshold: 0.3 });
@@ -80,7 +81,7 @@ export default function AppService() {
     { key: '智能文档', label: '智能文档', icon: <FileTextOutlined /> },
     { key: '智能问数', label: '智能问数', icon: <DatabaseOutlined /> },
     { key: '智能办公', label: '智能办公', icon: <BuildOutlined /> },
-    { key: '智能客服', label: '智能客服', icon: <CustomerServiceOutlined /> },
+    // { key: '智能客服', label: '智能客服', icon: <CustomerServiceOutlined /> },
   ];
 
   const handleAppClick = (url: string) => {

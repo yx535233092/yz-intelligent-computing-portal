@@ -184,7 +184,7 @@ export default function IndustryCasesPage() {
 
   const router = useRouter();
   const handleContactUs = () => {
-    router.push('/contact-us');
+    router.push('/portal/contact-us');
   };
 
   return (

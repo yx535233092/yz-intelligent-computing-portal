@@ -224,8 +224,8 @@ export default function DataService() {
   // 优势数据
   const features = [
     {
-      title: '表格识别准确',
-      description: '支持常见表格格式识别，包括合并单元格和跨页表格处理。',
+      title: '内容识别准确',
+      description: '支持常见表格格式识别，包括文字、表格、图片处理。',
     },
     {
       title: '支持多种文件格式',
@@ -1521,6 +1521,175 @@ export default function DataService() {
               delay={0.6 + index * 0.1}
             />
           ))}
+        </div>
+      </section>
+
+      {/* TODO:数据处理效果对比视图框 */}
+      <section className="mx-auto my-[100px] max-w-[1400px] perspective-[1000px] hidden">
+        <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-[30px] shadow-[0_20px_40px_rgba(0,0,0,0.15)] p-12 relative overflow-hidden">
+          {/* 背景装饰 */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-[30px]"></div>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#d32d26] to-[#e53935] rounded-t-[30px]"></div>
+          {/* 标题 */}
+          <div className="text-center mb-12 relative z-10">
+            <h2 className="text-4xl font-bold text-gray-800 mb-4 drop-shadow-sm">
+              数据处理效果对比
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* 左侧：其他工具处理结果 */}
+            <div className="relative">
+              <div className="bg-white rounded-[20px] shadow-[0_15px_30px_rgba(0,0,0,0.1)] transform hover:scale-[1.02] transition-all duration-300 overflow-hidden border-t-4 border-orange-400">
+                <div className="bg-gradient-to-r from-orange-400 to-orange-500 text-white p-6">
+                  <h3 className="text-xl font-bold">其他数据处理工具</h3>
+                </div>
+
+                <div className="p-8 space-y-6">
+                  {/* 原文档 */}
+                  <div className="relative">
+                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-[15px] p-6 shadow-[inset_0_2px_4px_rgba(0,0,0,0.06)] border border-gray-200">
+                      <div className="flex items-center mb-4">
+                        <div className="w-8 h-8 bg-gradient-to-br from-gray-400 to-gray-500 rounded-lg flex items-center justify-center shadow-md mr-3">
+                          <svg
+                            className="w-4 h-4 text-white"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                            />
+                          </svg>
+                        </div>
+                        <span className="text-lg font-semibold text-gray-700">
+                          原文档
+                        </span>
+                      </div>
+                      <div className="h-40 bg-white rounded-[10px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.08)] border-2 border-dashed border-gray-300 flex items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-transparent to-gray-50/50"></div>
+                        <span className="text-gray-500 text-lg font-medium relative z-10">
+                          待处理的原始文档
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 处理结果 */}
+                  <div className="relative">
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-[15px] p-6 shadow-[inset_0_2px_4px_rgba(234,88,12,0.1)] border border-orange-200">
+                      <div className="flex items-center mb-4">
+                        <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-orange-500 rounded-lg flex items-center justify-center shadow-md mr-3">
+                          <svg
+                            className="w-4 h-4 text-white"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                            />
+                          </svg>
+                        </div>
+                        <span className="text-lg font-semibold text-orange-700">
+                          处理结果
+                        </span>
+                      </div>
+                      <div className="h-40 bg-white rounded-[10px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.08)] border border-orange-200 flex items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-transparent to-orange-50/50"></div>
+                        <div className="text-center relative z-10">
+                          <span className="text-orange-600 text-lg font-medium block mb-4">
+                            基础解析结果
+                          </span>
+                          <div className="space-y-2">
+                            <div className="h-2 bg-gradient-to-r from-orange-300 to-orange-400 rounded-full w-32 mx-auto shadow-sm"></div>
+                            <div className="h-2 bg-gradient-to-r from-orange-200 to-orange-300 rounded-full w-28 mx-auto shadow-sm"></div>
+                            <div className="h-2 bg-gradient-to-r from-orange-200 to-orange-300 rounded-full w-24 mx-auto shadow-sm"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 右侧：我们的工具处理结果 */}
+            <div className="relative">
+              <div className="bg-white rounded-[20px] shadow-[0_15px_30px_rgba(211,45,38,0.15)] transform hover:scale-[1.02] transition-all duration-300 overflow-hidden border-t-4 border-[#d32d26]">
+                <div className="bg-gradient-to-r from-[#d32d26] to-[#e53935] text-white p-6">
+                  <h3 className="text-xl font-bold">我们的智能处理工具</h3>
+                </div>
+
+                <div className="p-8 space-y-6">
+                  {/* 原文档 */}
+                  <div className="relative">
+                    <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-[15px] p-6 shadow-[inset_0_2px_4px_rgba(239,68,68,0.1)] border border-red-200">
+                      <div className="flex items-center mb-4">
+                        <div className="w-8 h-8 bg-gradient-to-br from-red-400 to-red-500 rounded-lg flex items-center justify-center shadow-md mr-3">
+                          <svg
+                            className="w-4 h-4 text-white"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                            />
+                          </svg>
+                        </div>
+                        <span className="text-lg font-semibold text-red-700">
+                          原文档
+                        </span>
+                      </div>
+                      <div className="h-40 bg-white rounded-[10px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.08)] border-2 border-dashed border-red-300 flex items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-transparent to-red-50/50"></div>
+                        <span className="text-red-500 text-lg font-medium relative z-10">
+                          相同的原始文档
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 处理结果 */}
+                  <div className="relative">
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-[15px] p-6 shadow-[inset_0_2px_4px_rgba(34,197,94,0.1)] border border-green-200">
+                      <div className="flex items-center mb-4">
+                        <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-500 rounded-lg flex items-center justify-center shadow-md mr-3">
+                          <svg
+                            className="w-4 h-4 text-white"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            />
+                          </svg>
+                        </div>
+                        <span className="text-lg font-semibold text-green-700">
+                          智能处理结果
+                        </span>
+                      </div>
+                      <div className="h-40 bg-white rounded-[10px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.08)] border border-green-200 flex items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-transparent to-green-50/50"></div>
+                        <div className="text-center relative z-10">
+                          <span className="text-green-600 text-lg font-medium block mb-4">
+                            高精度智能解析
+                          </span>
+                          <div className="space-y-2">
+                            <div className="h-3 bg-gradient-to-r from-green-400 to-green-500 rounded-full w-40 mx-auto shadow-md"></div>
+                            <div className="h-2.5 bg-gradient-to-r from-green-300 to-green-400 rounded-full w-36 mx-auto shadow-md"></div>
+                            <div className="h-2.5 bg-gradient-to-r from-green-300 to-green-400 rounded-full w-32 mx-auto shadow-md"></div>
+                            <div className="h-2 bg-gradient-to-r from-green-200 to-green-300 rounded-full w-28 mx-auto shadow-sm"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

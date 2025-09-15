@@ -159,6 +159,7 @@ function MediaPreview({ selectedMediaTask }: MediaPreviewProps) {
                 transcription={mediaTaskDetail?.result}
                 currentTime={currentTime}
                 onSegmentClick={handleSegmentClick}
+                mediaTaskDetail={mediaTaskDetail}
               />
             </div>
           )}

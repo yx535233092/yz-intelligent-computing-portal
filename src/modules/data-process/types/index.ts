@@ -154,6 +154,7 @@ interface MediaTaskDetailMetadata {
   end_time: string;
   file_name: string;
   dutation: number;
+  url: string;
 }
 
 interface MediaTaskDetailResult {

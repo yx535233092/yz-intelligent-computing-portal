@@ -528,7 +528,9 @@ export default function HomePage() {
           {industryCases.map((caseItem, index) => (
             <div
               key={index}
-              onClick={() => router.push(`/industry-cases/${caseItem.id}`)}
+              onClick={() =>
+                router.push(`/portal/industry-cases/${caseItem.id}`)
+              }
               className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer"
               style={{
                 animationDelay: `${index * 0.2}s`,

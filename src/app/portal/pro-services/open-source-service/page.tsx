@@ -482,6 +482,15 @@ export default function OpenSourceService() {
                     支持各类业务逻辑工作流开发：医疗问诊流程、交通车辆质检、OA办公、企业贷款评估报告生成等
                   </p>
                 </div>
+
+                <div className="bg-indigo-50 rounded-xl p-4 shadow-sm">
+                  <h4 className="font-semibold text-gray-800 mb-2">
+                    跨境智能体开发
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    支持小语种实时翻译、越南身份证识别
+                  </p>
+                </div>
               </div>
             </div>
           </div>

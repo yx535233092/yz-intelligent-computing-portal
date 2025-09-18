@@ -1,18 +1,30 @@
 'use client';
 
 import { Card, Divider, Tag, Empty } from 'antd';
-import { SoundOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import {
+  SoundOutlined,
+  ClockCircleOutlined,
+  FontSizeOutlined,
+} from '@ant-design/icons';
+import judgementMediaType from '@/lib/utils/judgementMediaType';
 
 interface TranscriptionDisplayProps {
   transcription?: MediaTaskDetailResult;
   currentTime: number;
   onSegmentClick?: (startTime: number) => void;
+  mediaTaskDetail?: MediaTaskDetail;
 }
 
 function TranscriptionDisplay({
   transcription,
   onSegmentClick,
+  mediaTaskDetail,
 }: TranscriptionDisplayProps) {
+  const baseUrl = 'http://39.175.132.230:35034';
+
+  // 获取媒体类型
+  const mediaType = judgementMediaType(mediaTaskDetail?.metadata.url || '');
+
   // 拼接完整文本
   let fullText = '';
   if (transcription) {
@@ -73,16 +85,39 @@ function TranscriptionDisplay({
       title={
         <div className="flex items-center justify-between">
           <span>转录结果</span>
-          <div className="flex items-center gap-2">
-            {/* <Tag color="blue">中文</Tag> */}
-          </div>
         </div>
       }
     >
-      {/* 整体转录文本 */}
+      {/* 原始媒体文件 */}
       <div className="mb-4">
         <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
           <SoundOutlined />
+          原始媒体文件
+        </h4>
+        <div className="bg-gray-50 p-3 rounded border text-sm leading-relaxed border-gray-300  overflow-y-auto">
+          {mediaType === 'audio' ? (
+            <audio
+              src={`${baseUrl}${mediaTaskDetail?.metadata.url}`}
+              className="w-full"
+              controls
+            ></audio>
+          ) : (
+            <video
+              src={`${baseUrl}${mediaTaskDetail?.metadata.url}`}
+              className="w-full h-[400px]"
+              controls
+            ></video>
+          )}
+        </div>
+      </div>
+
+      <Divider />
+
+      {/* 整体转录文本 */}
+      <div className="mb-4">
+        <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+          {/* <SoundOutlined /> */}
+          <FontSizeOutlined />
           完整转录文本
         </h4>
         <div className="bg-gray-50 p-3 rounded border text-sm leading-relaxed border-gray-300 max-h-[24vh] overflow-y-auto">

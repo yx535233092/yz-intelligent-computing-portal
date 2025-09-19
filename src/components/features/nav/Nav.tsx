@@ -34,10 +34,6 @@ const items: MenuItem[] = [
         label: '技术支撑服务',
         key: '/portal/pro-services/consult-service',
       },
-      {
-        label: '开源软件服务',
-        key: '/portal/pro-services/open-source-service',
-      },
     ],
   },
   {

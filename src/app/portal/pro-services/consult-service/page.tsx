@@ -15,6 +15,7 @@ import {
 export default function ConsultServicePage() {
   const [heroRef, heroInView] = useInView();
   const [consultRef, consultInView] = useInView();
+  const [customRef, customInView] = useInView();
   const [trainingRef, trainingInView] = useInView();
 
   return (
@@ -99,6 +100,196 @@ export default function ConsultServicePage() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 基于开源平台的定制服务（新增模块） */}
+      <section
+        ref={customRef}
+        className={`px-60 py-20 bg-gradient-to-br from-blue-50 to-purple-50 transition-all duration-1000 ease-out delay-300 ${
+          customInView
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-10'
+        }`}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              基于开源平台的定制服务
+            </h2>
+            <p className="text-lg text-gray-600">
+              支持各类主流开源RAG/Agent平台服务定制，包括Dify、RagFlow、MaxKB、FastGPT
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              {['Dify', 'RagFlow', 'MaxKB', 'FastGPT'].map((t) => (
+                <span
+                  key={t}
+                  className="px-3 py-1 rounded-full bg-white/80 border border-gray-200 text-gray-700 text-sm shadow-sm"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+            <div className="mt-8 w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
+          </div>
+
+          <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+              {/* 左栏：架构优化 */}
+              <div className="group h-full flex flex-col rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
+                <div className="flex items-center mb-5">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 text-white flex items-center justify-center mr-4 shadow-md">
+                    <span className="text-xl">
+                      <BuildOutlined />
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-semibold text-gray-900">
+                      架构优化
+                    </h3>
+                    <p className="text-sm text-gray-500">性能与网络协同优化</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="bg-blue-50/70 border border-blue-100 rounded-xl p-4 hover:bg-blue-50 transition-colors">
+                    <h4 className="font-semibold text-gray-800 mb-2">
+                      1. 系统优化
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-1 text-gray-600 text-sm">
+                      <li>
+                        在知识库高并发场景下，对 Dify 或 RagFlow
+                        的底层向量数据库进行改造与优化。
+                      </li>
+                      <li>
+                        内部组件性能参数优化，包括数据库连接池、并发请求数量等关键配置。
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-blue-50/70 border border-blue-100 rounded-xl p-4 hover:bg-blue-50 transition-colors">
+                    <h4 className="font-semibold text-gray-800 mb-2">
+                      2. 网络优化
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-1 text-gray-600 text-sm">
+                      <li>
+                        多组件容器化环境下，重新划分 Docker 的虚拟
+                        VLAN，实现多系统无缝通信。
+                      </li>
+                      <li>
+                        在 Dify Sandbox 沙箱环境下自定义 MySQL
+                        访问链路，重新编译源码镜像。
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* 中栏：源码修改 */}
+              <div className="group h-full flex flex-col rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
+                <div className="flex items-center mb-5">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-500 text-white flex items-center justify-center mr-4 shadow-md">
+                    <span className="text-xl">
+                      <CodeOutlined />
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-semibold text-gray-900">
+                      源码修改
+                    </h3>
+                    <p className="text-sm text-gray-500">修复增强与信创兼容</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="bg-purple-50/70 border border-purple-100 rounded-xl p-4 hover:bg-purple-50 transition-colors">
+                    <h4 className="font-semibold text-gray-800 mb-1">
+                      1. 漏洞修复
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      基于 Dify 开源社区最新技术方案，定向修复线上老版本的功能
+                      BUG。
+                    </p>
+                  </div>
+
+                  <div className="bg-purple-50/70 border border-purple-100 rounded-xl p-4 hover:bg-purple-50 transition-colors">
+                    <h4 className="font-semibold text-gray-800 mb-1">
+                      2. 功能定制
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      修改部署版本的工作流相关代码，实现返回引用的完整文件功能，同时修复文件名符号编码问题，提升文件下载体验。
+                    </p>
+                  </div>
+
+                  <div className="bg-purple-50/70 border border-purple-100 rounded-xl p-4 hover:bg-purple-50 transition-colors">
+                    <h4 className="font-semibold text-gray-800 mb-1">
+                      3. 系统增强
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      重构沙盒镜像代码，以满足客户在完全离线环境下使用各类第三方代码库的需求。
+                    </p>
+                  </div>
+
+                  <div className="bg-purple-50/70 border border-purple-100 rounded-xl p-4 hover:bg-purple-50 transition-colors">
+                    <h4 className="font-semibold text-gray-800 mb-1">
+                      4. 信创支持
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      Dify 源码定制兼容客户侧奇安信等老版本信创浏览器。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* 右栏：应用开发 */}
+              <div className="group h-full flex flex-col rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
+                <div className="flex items-center mb-5">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 text-white flex items-center justify-center mr-4 shadow-md">
+                    <span className="text-xl">
+                      <BulbOutlined />
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-semibold text-gray-900">
+                      应用开发
+                    </h3>
+                    <p className="text-sm text-gray-500">知识库与智能体</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="bg-orange-50/70 border border-orange-100 rounded-xl p-4 hover:bg-orange-50 transition-colors">
+                    <h4 className="font-semibold text-gray-800 mb-1">
+                      1. 知识库
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-1 text-gray-600 text-sm">
+                      <li>
+                        支持多模态文档预处理，支持自定义文档切片规则，支持最新高性能
+                        Embedding 模型（Qwen3）。
+                      </li>
+                      <li>支持 5000+ 文档存储，支持高并发处理性能优化。</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-orange-50/70 border border-orange-100 rounded-xl p-4 hover:bg-orange-50 transition-colors">
+                    <h4 className="font-semibold text-gray-800 mb-1">
+                      2. 智能体
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-1 text-gray-600 text-sm">
+                      <li>
+                        支持智能问数开源方案开发，包括意图识别、场景预置、名称转义等功能，并支持
+                        Chart 可视化图表集成展示。
+                      </li>
+                      <li>
+                        支持各类业务逻辑工作流开发，包括医疗问诊流程开发、交通车辆质检、OA
+                        办公、企业贷款评估报告生成等。
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

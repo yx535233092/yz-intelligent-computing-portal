@@ -9,7 +9,7 @@ import RouterSetter from '@/components/common/RouterSetter';
  */
 export const metadata: Metadata = {
   title:
-    process.env.NODE_ENV === 'production' ? '新华三 - 智算门户' : '开发环境',
+    process.env.NODE_ENV === 'production' ? '天津移动智算服务平台' : '开发环境',
 };
 
 /**

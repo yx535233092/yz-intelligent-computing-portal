@@ -83,14 +83,16 @@ const ProductCard = ({
           target="_blank"
           className={commonStyles.linkStyle}
           style={{
-            background: 'linear-gradient(135deg, #d32d26, #b71c1c)',
+            pointerEvents: 'none',
+            background:
+              'linear-gradient(135deg,rgb(109, 109, 109),rgb(205, 205, 205))',
             color: 'white',
             padding: '0px 16px',
             borderRadius: '25px',
             textDecoration: 'none',
             fontSize: '14px',
             fontWeight: '600',
-            boxShadow: '0 4px 15px rgba(211, 45, 38, 0.3)',
+            boxShadow: '0 4px 15px rgba(255, 255, 255, 0.3)',
             border: '2px solid transparent',
             transition: 'all 0.3s ease',
             display: 'inline-block',

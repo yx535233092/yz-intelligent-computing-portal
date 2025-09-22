@@ -15,7 +15,7 @@ export default function Footer() {
 
           {/* 内容 */}
           <p className="max-w-md text-secondary-text">
-            新华三集团智算专业服务团队，致力于为客户提供全方位的人工智能解决方案，
+            天津移动智算专业服务团队，致力于为客户提供全方位的人工智能解决方案，
             包括模型服务、数据服务、应用服务、运维服务和咨询培训服务。
           </p>
         </div>
@@ -52,7 +52,7 @@ export default function Footer() {
 
         {/* 右侧 */}
         <div className="flex flex-col gap-4">
-          <h1 className="text-xl font-bold">友情链接</h1>
+          {/* <h1 className="text-xl font-bold">友情链接</h1>
           <ul className="flex flex-col gap-2 text-secondary-text">
             <li className="flex gap-2">
               <Link
@@ -90,7 +90,7 @@ export default function Footer() {
                 灵犀AI助手
               </Link>
             </li>
-          </ul>
+          </ul> */}
         </div>
       </div>
     </footer>

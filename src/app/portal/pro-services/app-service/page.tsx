@@ -85,6 +85,7 @@ export default function AppService() {
   ];
 
   const handleAppClick = (url: string) => {
+    return;
     window.open(url, '_blank');
   };
 
@@ -302,6 +303,9 @@ export default function AppService() {
                   hoverable
                   onClick={() => handleAppClick(app.route)}
                   className={styles['app-card']}
+                  style={{
+                    cursor: 'not-allowed',
+                  }}
                 >
                   {/* 主题色竖条 */}
                   <div className={styles['app-theme-bar']} />

@@ -26,7 +26,11 @@ export async function POST(request: NextRequest) {
   data.createTime = new Date().toISOString();
 
   // 文件保存地址
-  const savePath = path.resolve(process.cwd(), '..', 'contact.json');
+  const savePath = path.resolve(
+    process.cwd(),
+    '..',
+    'tianjingyidong-contact.json'
+  );
   //写入文件
   if (fs.existsSync(savePath)) {
     const existData = fs.readFileSync(savePath, 'utf-8');

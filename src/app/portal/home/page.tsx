@@ -105,11 +105,11 @@ export default function HomePage() {
       desc: '基于AI大模型训练平台，形成辅助合成研判能力',
     },
     {
-      id: 'operator',
-      title: '某省联通智能受理',
-      industry: '运营商',
-      image: '/运营商1.webp',
-      desc: '通过大模型实现智能受理',
+      id: 'goverment',
+      title: '某省应急局处置方案生成',
+      industry: '政府',
+      image: '/某省应急局处置方案生成.webp',
+      desc: '实现专项预案数字化，把专项预案处置流程、各岗位职责通过文档解析的方式实现应急预案的结构化生成，辅助应急期间开展应急处置工作。提升应急响应效率，确保突发事件处置的专业性和时效性。',
     },
     {
       id: 'enterprise',
@@ -520,7 +520,7 @@ export default function HomePage() {
             行业成功案例
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            协助众多企业完成智能化数字化转型，覆盖政府、运营商、企业、教育等多个行业
+            协助众多企业完成智能化数字化转型，覆盖政府、企业、教育等多个行业
           </p>
         </div>
 

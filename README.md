@@ -3,7 +3,7 @@
 ## 项目架构
 
 ⎋ 前端框架：Nextjs  
-css 框架：TailwindCss
+css 框架：TailwindCss + Ant-D
 
 ## 项目脚本
 
@@ -17,18 +17,18 @@ npm run dev
 
 ## 技术亮点（后续相继实现）
 
-- 微前端架构
-- 性能优化，包大小控制
-- 复杂状态管理
-- ssr 加快首屏
+- 微前端架构 ❌
+- 性能优化，包大小控制 ❌
+- 复杂状态管理 ❌
+- ssr 加快首屏 ✅
 
-- pm2 自动化部署
-- docker 部署
-- axios 封装
-- antd css-in-js 解决
-- shell 脚本自动化部署
-- 多仓库关联(gitee,github)
-- cwebp将所有jpg与png批量转换webp，减少体积
+- pm2 自动化部署 ✅
+- docker 部署 ❌
+- axios 封装 ✅
+- antd css-in-js 解决 ✅
+- shell 脚本自动化部署 ✅
+- 多仓库关联(gitee,github) ✅
+- cwebp将所有jpg与png批量转换webp，减少体积 ✅
 
 ## 代码规范
 

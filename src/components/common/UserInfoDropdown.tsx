@@ -30,13 +30,29 @@ const items: MenuProps['items'] = [
       <a
         onClick={(e) => {
           e.preventDefault();
+          location.href = location.origin + '/manage';
+        }}
+      >
+        系统设置
+      </a>
+    ),
+    key: '1',
+  },
+  {
+    type: 'divider',
+  },
+  {
+    label: (
+      <a
+        onClick={(e) => {
+          e.preventDefault();
           authService.logout();
         }}
       >
         退出登录
       </a>
     ),
-    key: '1',
+    key: '2',
   },
 ];
 

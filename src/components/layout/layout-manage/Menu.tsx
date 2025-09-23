@@ -9,7 +9,9 @@ type MenuItem = Required<MenuProps>['items'][number];
 // 菜单列表
 const items: MenuItem[] = [
   { key: '1', icon: <AppstoreOutlined />, label: '门户页面' },
-  { key: '2', icon: <UserOutlined />, label: '个人信息' },
+  { key: '2', icon: <AppstoreOutlined />, label: '仪表台' },
+  { key: '3', icon: <UserOutlined />, label: '个人信息' },
+  { key: '4', icon: <UserOutlined />, label: '主题配置' },
   // { key: '2', icon: <DesktopOutlined />, label: 'Option 2' },
   // { key: '3', icon: <ContainerOutlined />, label: 'Option 3' },
   // {
@@ -49,7 +51,11 @@ const ManageMenu = function ({ isCollapsed }: { isCollapsed: boolean }) {
     if (e.key === '1') {
       router.push('/');
     } else if (e.key === '2') {
+      router.push('/manage/dashborad');
+    } else if (e.key === '3') {
       router.push('/manage/profile');
+    } else if (e.key === '4') {
+      router.push('/manage/theme-config');
     }
   };
 

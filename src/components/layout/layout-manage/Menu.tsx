@@ -12,6 +12,7 @@ const items: MenuItem[] = [
   { key: '2', icon: <AppstoreOutlined />, label: '仪表台' },
   { key: '3', icon: <UserOutlined />, label: '个人信息' },
   { key: '4', icon: <UserOutlined />, label: '主题配置' },
+  { key: '5', icon: <UserOutlined />, label: '权限管理' },
   // { key: '2', icon: <DesktopOutlined />, label: 'Option 2' },
   // { key: '3', icon: <ContainerOutlined />, label: 'Option 3' },
   // {
@@ -56,6 +57,8 @@ const ManageMenu = function ({ isCollapsed }: { isCollapsed: boolean }) {
       router.push('/manage/profile');
     } else if (e.key === '4') {
       router.push('/manage/theme-config');
+    } else if (e.key === '5') {
+      router.push('/manage/permission');
     }
   };
 

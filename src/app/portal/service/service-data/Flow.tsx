@@ -250,8 +250,8 @@ export default function Flow({ onProcessClick }: FlowProps) {
                   数据加工
                 </text>
                 <text
-                  x="1140"
-                  y="350"
+                  x="1110"
+                  y="260"
                   textAnchor="middle"
                   fontSize="18"
                   fill="#1f2a54"
@@ -260,14 +260,26 @@ export default function Flow({ onProcessClick }: FlowProps) {
                   微调数据集
                 </text>
                 <text
-                  x="1140"
-                  y="610"
+                  x="1110"
+                  y="660"
                   textAnchor="middle"
                   fontSize="18"
                   style={{ cursor: 'pointer' }}
                   fill="#1f2a54"
                 >
                   知识库数据集
+                </text>
+
+                {/* 新增输出分支标题 */}
+                <text
+                  x="1110"
+                  y="460"
+                  textAnchor="middle"
+                  fontSize="18"
+                  fill="#1f2a54"
+                  style={{ cursor: 'pointer' }}
+                >
+                  xxxx
                 </text>
 
                 {/* 图片放置 */}
@@ -292,18 +304,29 @@ export default function Flow({ onProcessClick }: FlowProps) {
                 <image
                   href="/data1.png"
                   x="980"
-                  y="100"
-                  width="320"
-                  height="220"
+                  y="60"
+                  width="260"
+                  height="180"
                   preserveAspectRatio="xMidYMid meet"
                   className="floating-fast"
                 />
                 <image
                   href="/data5.png"
                   x="980"
-                  y="360"
-                  width="320"
-                  height="220"
+                  y="460"
+                  width="260"
+                  height="180"
+                  preserveAspectRatio="xMidYMid meet"
+                  className="floating-fast"
+                />
+
+                {/* 新增输出分支图片 */}
+                <image
+                  href="/data6.png"
+                  x="980"
+                  y="260"
+                  width="260"
+                  height="180"
                   preserveAspectRatio="xMidYMid meet"
                   className="floating-fast"
                 />
@@ -357,22 +380,31 @@ export default function Flow({ onProcessClick }: FlowProps) {
                   <path d="M900 320 H 930" className="lane-3" />
                 </g>
 
-                {/* 上支路：折线路径到 (980,210) */}
+                {/* 上支路：折线路径到 (980,150) */}
                 <g>
-                  <path d="M930 320 V 210 H 980" className="pipe-base" />
-                  <path d="M930 320 V 210 H 980" className="lane-1" />
-                  <path d="M930 320 V 210 H 980" className="lane-2" />
-                  <path d="M930 320 V 210 H 980" className="lane-3" />
-                  <polygon points="980,210 972,206 972,214" fill="#6366f1" />
+                  <path d="M930 320 V 150 H 980" className="pipe-base" />
+                  <path d="M930 320 V 150 H 980" className="lane-1" />
+                  <path d="M930 320 V 150 H 980" className="lane-2" />
+                  <path d="M930 320 V 150 H 980" className="lane-3" />
+                  <polygon points="980,150 972,146 972,154" fill="#6366f1" />
                 </g>
 
-                {/* 下支路：折线路径到 (980,470) */}
+                {/* 下支路：折线路径到 (980,550) */}
                 <g>
-                  <path d="M930 320 V 470 H 980" className="pipe-base" />
-                  <path d="M930 320 V 470 H 980" className="lane-1" />
-                  <path d="M930 320 V 470 H 980" className="lane-2" />
-                  <path d="M930 320 V 470 H 980" className="lane-3" />
-                  <polygon points="980,470 972,466 972,474" fill="#6366f1" />
+                  <path d="M930 320 V 550 H 980" className="pipe-base" />
+                  <path d="M930 320 V 550 H 980" className="lane-1" />
+                  <path d="M930 320 V 550 H 980" className="lane-2" />
+                  <path d="M930 320 V 550 H 980" className="lane-3" />
+                  <polygon points="980,550 972,546 972,554" fill="#6366f1" />
+                </g>
+
+                {/* 中支路：折线路径到 (980,350) */}
+                <g>
+                  <path d="M930 320 V 350 H 980" className="pipe-base" />
+                  <path d="M930 320 V 350 H 980" className="lane-1" />
+                  <path d="M930 320 V 350 H 980" className="lane-2" />
+                  <path d="M930 320 V 350 H 980" className="lane-3" />
+                  <polygon points="980,350 972,346 972,354" fill="#6366f1" />
                 </g>
               </g>
 

@@ -12,7 +12,7 @@ const applications = [
   },
   {
     type: 'self',
-    name: '身份证识别',
+    name: '越南身份证识别',
     description: '根据身份证图片，进行识别',
     route: '/portal/ocr-recognize',
     url: '',
@@ -42,7 +42,7 @@ const applications = [
   // },
   {
     type: 'hj',
-    name: '消防法律助手',
+    name: '消防法律问答',
     description: '支持消防法律知识智能问答',
     route: '/portal/pro-services/app-service/app-detail?appName=消防法律助手',
     url: 'https://www.hjlingxi.com/BOTE/#/driver/bot?tenantId=1270197558062084096&botId=1270309229271183360&modeType=single&token=5018310373404f4e8ed2199c9f156b94',

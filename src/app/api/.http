@@ -1,0 +1,36 @@
+POST http://localhost:3000/api/user
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin1!",
+  "tenantId": 1
+}
+
+###
+GET http://localhost:3000/api/user
+
+###
+PUT http://localhost:3000/api/user
+Content-Type: application/json
+{
+  "username": "1",
+  "password": "2"
+}
+
+### 
+DELETE http://localhost:3000/api/user
+Content-Type: application/json
+
+{
+  "username": "2"
+}
+
+### 
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin1!"
+}

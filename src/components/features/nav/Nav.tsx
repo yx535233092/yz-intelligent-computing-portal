@@ -45,10 +45,10 @@ const items: MenuItem[] = [
     key: '/portal/industry-cases',
   },
 
-  {
-    label: '联系我们',
-    key: '/portal/contact-us',
-  },
+  // {
+  //   label: '联系我们',
+  //   key: '/portal/contact-us',
+  // },
 ];
 
 export default function Nav() {

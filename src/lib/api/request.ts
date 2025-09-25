@@ -7,7 +7,7 @@ import { getToken, removeToken } from '@/lib/utils/cookies';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 // 请求地址(后端地址)
-const BASE_URL = 'http://39.175.132.230:35001/';
+const BASE_URL = 'http://39.175.132.230:35040/';
 let appRouter: AppRouterInstance | null = null;
 let messageApi: {
   success: (msg: string) => void;

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@/generated/prisma/client';
 import jwt from 'jsonwebtoken';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/api/prisma';
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,13 +13,20 @@ export async function POST(req: NextRequest) {
       },
     });
     if (!user) {
-      return NextResponse.json({ message: '用户不存在' }, { status: 401 });
+      return NextResponse.json(
+        { message: '用户名或密码错误' },
+        { status: 401 }
+      );
     }
     // 生成token
-    const token = jwt.sign({ userId: user.id }, 'secret');
-
-    return NextResponse.json({ token, message: '登录成功' }, { status: 200 });
+    const token = jwt.sign({ userId: user.id }, 'secret', { expiresIn: '24h' });
+    const { password: _, ...userInfo } = user;
+    return NextResponse.json(
+      { token, userInfo, message: '登录成功' },
+      { status: 200 }
+    );
   } catch (error) {
-    return NextResponse.json({ message: '登录失败' }, { status: 500 });
+    console.log(error);
+    return NextResponse.json({ error, message: '登录失败' }, { status: 500 });
   }
 }

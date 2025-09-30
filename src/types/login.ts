@@ -4,18 +4,17 @@ interface LoginData {
 }
 
 interface LoginRes {
-  access_token: string;
-  expires_in: number;
-  token_type: string;
+  token: string;
+  userInfo: UserInfoData;
 }
 
 // 用户信息接口返回对象类型
 interface UserInfoData {
+  createdAt: string;
   id: number;
+  isActive: boolean;
+  updatedAt: string;
   username: string;
-  group_name: string;
-  denied_access_apps: string[];
-  denied_click_apps: string[];
 }
 
 // 用户应用列表接口返回对象类型

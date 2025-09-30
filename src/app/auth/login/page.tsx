@@ -1,5 +1,5 @@
-import CanvasBackground from '@/modules/login/components/CanvasBackground';
-import LoginForm from '@/modules/login/components/LoginForm';
+import CanvasBackground from './CanvasBackground';
+import LoginForm from './LoginForm';
 
 export default function Login() {
   return (

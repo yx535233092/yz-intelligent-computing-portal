@@ -1,0 +1,20 @@
+### 获取角色
+GET http://localhost:3000/api/auth/role
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc1ODg1NDE1N30.RS7CbjC6pjuzrdI4o_HZiruew_eTBPDxwUMjK4NMjgA
+
+### 创建角色
+POST http://localhost:3000/api/auth/role
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc1ODg1NDE1N30.RS7CbjC6pjuzrdI4o_HZiruew_eTBPDxwUMjK4NMjgA
+
+{
+  "name": "admin123",
+  "description": "管理员"
+}
+
+### 删除角色
+DELETE http://localhost:3000/api/auth/role
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc1ODg1NDE1N30.RS7CbjC6pjuzrdI4o_HZiruew_eTBPDxwUMjK4NMjgA
+
+{
+  "id": 3
+}

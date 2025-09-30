@@ -5,7 +5,6 @@ const userInfoSlice = createSlice({
   initialState: {
     value: {
       userInfo: {},
-      userAppList: [],
     },
   },
   reducers: {
@@ -17,16 +16,10 @@ const userInfoSlice = createSlice({
     clearUserInfo: (state) => {
       state.value = {
         userInfo: {},
-        userAppList: [],
       };
-    },
-    // 设置用户应用列表
-    setUserAppList: (state, action) => {
-      state.value.userAppList = action.payload;
     },
   },
 });
 
-export const { setUserInfo, clearUserInfo, setUserAppList } =
-  userInfoSlice.actions;
+export const { setUserInfo, clearUserInfo } = userInfoSlice.actions;
 export default userInfoSlice.reducer;

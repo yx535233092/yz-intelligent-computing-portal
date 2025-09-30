@@ -4,10 +4,7 @@ import api from '@/lib/api/request';
 export const loginAPI = (data: LoginData): Promise<LoginRes> => {
   return api({
     method: 'POST',
-    url: '/users/token',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
+    url: '/api/auth/login',
     data,
   });
 };
@@ -24,7 +21,7 @@ export const logoutAPI = (): Promise<void> => {
 export const getUserInfoAPI = (): Promise<UserInfoData> => {
   return api({
     method: 'GET',
-    url: '/users/own_info',
+    url: '/auth/userInfo',
   });
 };
 

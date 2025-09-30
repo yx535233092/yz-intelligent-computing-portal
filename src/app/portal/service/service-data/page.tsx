@@ -5,7 +5,8 @@ import { useInView } from '@/hooks/useInView';
 import Image from 'next/image';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import Flow from './Flow';
+// import Flow from './Flow';
+import DataProcess from './data-process/page';
 
 export default function DataService() {
   useScrollToTop();
@@ -45,11 +46,12 @@ export default function DataService() {
         </div>
       </section>
 
-      <Flow
+      {/* <Flow
         onProcessClick={() =>
           router.push('/portal/service/service-data/data-process')
         }
-      />
+      /> */}
+      <DataProcess />
 
       {/* data-service-common 内容移动到 /portal/pro-services/data-service/process */}
 

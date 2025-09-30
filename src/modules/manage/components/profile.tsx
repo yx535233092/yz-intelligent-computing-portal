@@ -12,7 +12,7 @@ import {
   notification,
 } from 'antd';
 import profileService from '../services/profile';
-import { authService } from '@/modules/login/services/login';
+import { authService } from '@/services/login';
 
 const { Title } = Typography;
 

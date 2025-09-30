@@ -5,12 +5,9 @@ import { useState, useContext } from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import Logo from '@/components/common/Logo';
 import LoadingContext from '@/components/common/LoadingContext';
-import { authService } from '../services/login';
-import styles from '../styles/login.module.css';
-import {
-  setUserInfo,
-  setUserAppList,
-} from '@/lib/store/features/userInfoSlice';
+import { authService } from '@/services/login';
+import styles from './loginForm.module.css';
+import { setUserInfo } from '@/lib/store/features/userInfoSlice';
 import { useDispatch } from 'react-redux';
 
 function LoginForm() {
@@ -29,15 +26,15 @@ function LoginForm() {
     // 3.登录请求,默认延迟300ms防止闪入
     setTimeout(async () => {
       try {
-        // 存储用户信息至redux中
         const userInfo = await authService.login({
           username,
           password,
         });
+        // 存储用户信息至redux中
         dispatch(setUserInfo(userInfo));
         // 存储用户应用列表至redux中
-        const userAppList = await authService.getUserAppList();
-        dispatch(setUserAppList(userAppList));
+        // const userAppList = await authService.getUserAppList();
+        // dispatch(setUserAppList(userAppList));
         // 4.登录成功跳转至首页
         location.href = '/';
       } catch (error) {

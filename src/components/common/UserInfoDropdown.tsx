@@ -4,7 +4,7 @@ import React from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Dropdown, Space } from 'antd';
-import { authService } from '@/modules/login/services/login';
+import { authService } from '@/services/login';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/lib/store';
 

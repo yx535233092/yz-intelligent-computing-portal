@@ -1,17 +1,31 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Button, Table, Tabs, Spin, Skeleton, App } from 'antd';
+import {
+  Button,
+  Table,
+  Tabs,
+  Spin,
+  Skeleton,
+  App,
+  Upload,
+  Checkbox,
+} from 'antd';
 import {
   PlayCircleOutlined,
   DownloadOutlined,
   FileTextOutlined,
   IdcardOutlined,
   EyeOutlined,
+  InboxOutlined,
 } from '@ant-design/icons';
 import type { TabsProps } from 'antd';
 import * as XLSX from 'xlsx';
-import { getOcrPicAPI, ocrFileAPI } from '@/modules/data-process/api/ocr';
+import {
+  getOcrPicAPI,
+  ocrFileAPI,
+  ocrUploadAPI,
+} from '@/modules/data-process/api/ocr';
 
 // API响应类型定义
 
@@ -91,6 +105,16 @@ export default function OCRRecognizePage() {
   const [activeTab, setActiveTab] = useState('fields');
   const [loadingFileIds, setLoadingFileIds] = useState<Set<number>>(new Set());
   const [ocrResults, setOcrResults] = useState<Record<number, OCRResult>>({});
+  // 本地上传（正反面）
+  const [uploadFrontFile, setUploadFrontFile] = useState<File | null>(null);
+  const [uploadBackFile, setUploadBackFile] = useState<File | null>(null);
+  const [uploadFrontPreview, setUploadFrontPreview] = useState<string | null>(
+    null
+  );
+  const [uploadBackPreview, setUploadBackPreview] = useState<string | null>(
+    null
+  );
+  const Dragger = Upload.Dragger;
 
   // 获取身份证图片
   const fetchIDCardImages = useCallback(
@@ -187,10 +211,12 @@ export default function OCRRecognizePage() {
     });
   };
 
-  // 开始识别（批量）
+  // 开始识别（统一：本地上传 + 示例文件）
   const handleStartRecognition = useCallback(async () => {
-    if (selectedFiles.length === 0) {
-      message.warning('请先选择要识别的文件');
+    const hasLocal = !!(uploadFrontFile && uploadBackFile);
+    const totalCount = selectedFiles.length + (hasLocal ? 1 : 0);
+    if (totalCount === 0) {
+      message.warning('请先选择示例文件或上传正反面图片');
       return;
     }
 
@@ -202,9 +228,25 @@ export default function OCRRecognizePage() {
     let failCount = 0;
 
     try {
-      message.info(`开始识别 ${selectedFiles.length} 个文件...`);
+      message.info(`开始识别 ${totalCount} 个文件...`);
 
-      // 批量识别所选文件
+      // 先识别本地上传
+      if (hasLocal) {
+        try {
+          console.log('开始OCR识别：本地上传');
+          const localData = await ocrUploadAPI(
+            uploadFrontFile as File,
+            uploadBackFile as File
+          );
+          newResults[0] = localData;
+          successCount++;
+        } catch (error) {
+          console.error('本地上传OCR识别失败:', error);
+          failCount++;
+        }
+      }
+
+      // 再批量识别所选示例文件
       for (const file of selectedFiles) {
         try {
           console.log(`开始OCR识别，文件ID: ${file.id}`);
@@ -228,6 +270,7 @@ export default function OCRRecognizePage() {
 
       setOcrResults(newResults);
       setHasRecognized(true);
+      setActiveTab('fields');
 
       if (successCount > 0 && failCount === 0) {
         message.success(`全部 ${successCount} 个文件识别完成！`);
@@ -244,7 +287,63 @@ export default function OCRRecognizePage() {
     } finally {
       setIsRecognizing(false);
     }
-  }, [selectedFiles, message]);
+  }, [selectedFiles, uploadFrontFile, uploadBackFile, message]);
+
+  // 本地上传仅用于选择与预览，识别统一走 handleStartRecognition
+
+  // 选择本地文件并预览
+  const handleFrontChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0] || null;
+      setUploadFrontFile(file);
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => setUploadFrontPreview(reader.result as string);
+        reader.readAsDataURL(file);
+      } else {
+        setUploadFrontPreview(null);
+      }
+    },
+    []
+  );
+
+  const handleBackChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0] || null;
+      setUploadBackFile(file);
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => setUploadBackPreview(reader.result as string);
+        reader.readAsDataURL(file);
+      } else {
+        setUploadBackPreview(null);
+      }
+    },
+    []
+  );
+
+  // 清除本地文件选择
+  const handleClearLocal = useCallback(() => {
+    setUploadFrontFile(null);
+    setUploadBackFile(null);
+    setUploadFrontPreview(null);
+    setUploadBackPreview(null);
+    setOcrResults((prev) => {
+      const entries = Object.entries(prev).filter(([k]) => k !== '0');
+      return Object.fromEntries(entries) as Record<number, OCRResult>;
+    });
+  }, []);
+
+  // 预览区取消选择示例文件
+  const handleDeselectSample = useCallback((fileId: number) => {
+    setSelectedFiles((prev) => prev.filter((f) => f.id !== fileId));
+    setOcrResults((prev) => {
+      const entries = Object.entries(prev).filter(
+        ([k]) => parseInt(k) !== fileId
+      );
+      return Object.fromEntries(entries) as Record<number, OCRResult>;
+    });
+  }, []);
 
   // 导出结果为Excel（支持多个文件）
   const handleExport = () => {
@@ -259,8 +358,10 @@ export default function OCRRecognizePage() {
       // 为每个识别结果创建一行数据
       Object.entries(ocrResults).forEach(([fileId, ocrResult]) => {
         const fileName =
-          sampleFiles.find((f) => f.id === parseInt(fileId))?.name ||
-          `文件${fileId}`;
+          fileId === '0'
+            ? '本地文件'
+            : sampleFiles.find((f) => f.id === parseInt(fileId))?.name ||
+              `文件${fileId}`;
 
         const baseExcelData: Record<string, string> = {
           文件名: fileName,
@@ -399,8 +500,10 @@ export default function OCRRecognizePage() {
                     items={Object.entries(ocrResults).map(
                       ([fileId, result]) => {
                         const fileName =
-                          sampleFiles.find((f) => f.id === parseInt(fileId))
-                            ?.name || `文件${fileId}`;
+                          fileId === '0'
+                            ? '本地文件'
+                            : sampleFiles.find((f) => f.id === parseInt(fileId))
+                                ?.name || `文件${fileId}`;
                         return {
                           key: fileId,
                           label: (
@@ -462,6 +565,83 @@ export default function OCRRecognizePage() {
                 )}
               </div>
 
+              {/* 本地上传 */}
+              <div className="mb-6 p-3 border border-gray-200 rounded-lg">
+                <h3 className="text-sm font-medium text-gray-700 mb-3">
+                  本地上传
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <div className="text-xs text-gray-600 mb-2">正面图片</div>
+                    <Dragger
+                      multiple={false}
+                      accept="image/*"
+                      showUploadList={false}
+                      beforeUpload={(file) => {
+                        const f = file as File;
+                        setUploadFrontFile(f);
+                        const reader = new FileReader();
+                        reader.onload = () =>
+                          setUploadFrontPreview(reader.result as string);
+                        reader.readAsDataURL(f);
+                        return false;
+                      }}
+                    >
+                      <p className="ant-upload-drag-icon">
+                        <InboxOutlined />
+                      </p>
+                      <p className="ant-upload-text">拖拽图片到此或点击选择</p>
+                      <p className="ant-upload-hint text-xs">
+                        支持 JPG/PNG/JPEG/WebP
+                      </p>
+                    </Dragger>
+                    <div className="text-xs text-gray-500 mt-2">
+                      {uploadFrontFile
+                        ? `已选：${uploadFrontFile.name}`
+                        : '未选择'}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-600 mb-2">背面图片</div>
+                    <Dragger
+                      multiple={false}
+                      accept="image/*"
+                      showUploadList={false}
+                      beforeUpload={(file) => {
+                        const f = file as File;
+                        setUploadBackFile(f);
+                        const reader = new FileReader();
+                        reader.onload = () =>
+                          setUploadBackPreview(reader.result as string);
+                        reader.readAsDataURL(f);
+                        return false;
+                      }}
+                    >
+                      <p className="ant-upload-drag-icon">
+                        <InboxOutlined />
+                      </p>
+                      <p className="ant-upload-text">拖拽图片到此或点击选择</p>
+                      <p className="ant-upload-hint text-xs">
+                        支持 JPG/PNG/JPEG/WebP
+                      </p>
+                    </Dragger>
+                    <div className="text-xs text-gray-500 mt-2">
+                      {uploadBackFile
+                        ? `已选：${uploadBackFile.name}`
+                        : '未选择'}
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <span>需同时选择正反面图片</span>
+                    {(uploadFrontFile || uploadBackFile) && (
+                      <Button size="small" onClick={handleClearLocal}>
+                        清除本地文件
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               {/* 示例文件列表 */}
               <div className="space-y-2 mb-6">
                 {sampleFiles.map((file) => {
@@ -469,28 +649,29 @@ export default function OCRRecognizePage() {
                     (f) => f.id === file.id
                   );
                   return (
-                    <div key={file.id}>
-                      <div
-                        onClick={() => handleFileSelect(file)}
-                        className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 ${
-                          isSelected
-                            ? 'border-[#d32d26] bg-red-50'
-                            : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <div className="relative">
-                            <IdcardOutlined className="text-gray-500" />
-                            {isSelected && (
-                              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
-                                <span className="text-white text-xs">✓</span>
-                              </div>
-                            )}
-                          </div>
-                          <span className="text-xs md:text-sm text-gray-700 truncate flex-1">
-                            {file.name}
-                          </span>
-                        </div>
+                    <div
+                      key={file.id}
+                      className={`p-3 rounded-lg border ${
+                        isSelected
+                          ? 'border-[#d32d26] bg-red-50'
+                          : 'border-gray-200'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Checkbox
+                          checked={isSelected}
+                          onChange={() => handleFileSelect(file)}
+                        />
+                        <IdcardOutlined className="text-gray-500" />
+                        <span className="text-xs md:text-sm text-gray-700 truncate flex-1">
+                          {file.name}
+                        </span>
+                        <Button
+                          size="small"
+                          onClick={() => handleFileSelect(file)}
+                        >
+                          {isSelected ? '取消' : '选择'}
+                        </Button>
                       </div>
                     </div>
                   );
@@ -504,13 +685,16 @@ export default function OCRRecognizePage() {
                   icon={<PlayCircleOutlined />}
                   onClick={handleStartRecognition}
                   loading={isRecognizing}
-                  disabled={selectedFiles.length === 0}
+                  disabled={
+                    selectedFiles.length === 0 &&
+                    !(uploadFrontFile && uploadBackFile)
+                  }
                   size="large"
                   className="w-full h-10 md:h-12 text-sm md:text-base font-medium"
                 >
                   {isRecognizing
-                    ? `识别中(${selectedFiles.length}个)...`
-                    : `开始识别${selectedFiles.length > 0 ? `(${selectedFiles.length}个)` : ''}`}
+                    ? `识别中(${selectedFiles.length + (uploadFrontFile && uploadBackFile ? 1 : 0)}个)...`
+                    : `开始识别${selectedFiles.length + (uploadFrontFile && uploadBackFile ? 1 : 0) > 0 ? `(${selectedFiles.length + (uploadFrontFile && uploadBackFile ? 1 : 0)}个)` : ''}`}
                 </Button>
 
                 <Button
@@ -544,7 +728,161 @@ export default function OCRRecognizePage() {
               </div>
 
               <div className="flex-1 overflow-y-auto">
-                {selectedFiles.length > 0 ? (
+                {uploadFrontPreview || uploadBackPreview ? (
+                  <div className="space-y-4">
+                    <div className="border border-gray-200 rounded-lg p-3">
+                      <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2 justify-between">
+                        <span className="flex items-center gap-2">
+                          <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs">
+                            本地
+                          </span>
+                          本地上传
+                        </span>
+                        <Button size="small" onClick={handleClearLocal}>
+                          清除
+                        </Button>
+                      </h3>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <h4 className="text-xs font-medium text-gray-600 mb-2">
+                            正面
+                          </h4>
+                          <div className="aspect-[1.6/1] bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
+                            {uploadFrontPreview ? (
+                              <img
+                                src={uploadFrontPreview}
+                                alt="本地 正面"
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="text-center px-2">
+                                <IdcardOutlined className="text-xl text-gray-400 mb-1" />
+                                <p className="text-xs text-gray-500">正面</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-medium text-gray-600 mb-2">
+                            背面
+                          </h4>
+                          <div className="aspect-[1.6/1] bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
+                            {uploadBackPreview ? (
+                              <img
+                                src={uploadBackPreview}
+                                alt="本地 背面"
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="text-center px-2">
+                                <IdcardOutlined className="text-xl text-gray-400 mb-1" />
+                                <p className="text-xs text-gray-500">背面</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {selectedFiles.length > 0 && (
+                      <div className="space-y-4">
+                        {selectedFiles.map((file, index) => (
+                          <div
+                            key={file.id}
+                            className="border border-gray-200 rounded-lg p-3"
+                          >
+                            <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2 justify-between">
+                              <span className="flex items-center gap-2">
+                                <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs">
+                                  {index + 1}
+                                </span>
+                                {file.name}
+                              </span>
+                              <Button
+                                size="small"
+                                onClick={() => handleDeselectSample(file.id)}
+                              >
+                                取消选择
+                              </Button>
+                            </h3>
+
+                            {/* 正反面左右布局 */}
+                            <div className="grid grid-cols-2 gap-3">
+                              {/* 正面 */}
+                              <div>
+                                <h4 className="text-xs font-medium text-gray-600 mb-2">
+                                  正面
+                                </h4>
+                                <div className="aspect-[1.6/1] bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
+                                  {loadingFileIds.has(file.id) ? (
+                                    <div className="text-center">
+                                      <Spin size="small" />
+                                      <p className="text-xs text-gray-500 mt-1">
+                                        加载中...
+                                      </p>
+                                    </div>
+                                  ) : file.frontImage ? (
+                                    <img
+                                      src={`data:image/jpeg;base64,${file.frontImage}`}
+                                      alt={`${file.name} 正面`}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  ) : (
+                                    <div className="text-center px-2">
+                                      <IdcardOutlined className="text-xl text-gray-400 mb-1" />
+                                      <p className="text-xs text-gray-500">
+                                        正面
+                                      </p>
+                                      {file.id <= 3 && (
+                                        <p className="text-xs text-red-500 mt-1">
+                                          加载失败
+                                        </p>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* 背面 */}
+                              <div>
+                                <h4 className="text-xs font-medium text-gray-600 mb-2">
+                                  背面
+                                </h4>
+                                <div className="aspect-[1.6/1] bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
+                                  {loadingFileIds.has(file.id) ? (
+                                    <div className="text-center">
+                                      <Spin size="small" />
+                                      <p className="text-xs text-gray-500 mt-1">
+                                        加载中...
+                                      </p>
+                                    </div>
+                                  ) : file.backImage ? (
+                                    <img
+                                      src={`data:image/jpeg;base64,${file.backImage}`}
+                                      alt={`${file.name} 背面`}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  ) : (
+                                    <div className="text-center px-2">
+                                      <IdcardOutlined className="text-xl text-gray-400 mb-1" />
+                                      <p className="text-xs text-gray-500">
+                                        背面
+                                      </p>
+                                      {file.id <= 3 && (
+                                        <p className="text-xs text-red-500 mt-1">
+                                          加载失败
+                                        </p>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : selectedFiles.length > 0 ? (
                   <div className="space-y-4">
                     {selectedFiles.map((file, index) => (
                       <div

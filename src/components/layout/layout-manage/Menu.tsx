@@ -1,5 +1,10 @@
 import React from 'react';
-import { AppstoreOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  AppstoreOutlined,
+  UserOutlined,
+  SafetyOutlined,
+  TeamOutlined,
+} from '@ant-design/icons';
 import { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import { useRouter } from 'next/navigation';
@@ -10,9 +15,10 @@ type MenuItem = Required<MenuProps>['items'][number];
 const items: MenuItem[] = [
   { key: '1', icon: <AppstoreOutlined />, label: '门户页面' },
   { key: '2', icon: <AppstoreOutlined />, label: '仪表台' },
-  { key: '3', icon: <UserOutlined />, label: '个人信息' },
-  { key: '4', icon: <UserOutlined />, label: '主题配置' },
-  { key: '5', icon: <UserOutlined />, label: '权限管理' },
+  // { key: '3', icon: <UserOutlined />, label: '个人信息' },
+  // { key: '4', icon: <UserOutlined />, label: '主题配置' },
+  { key: '5', icon: <SafetyOutlined />, label: '权限管理' },
+  { key: '6', icon: <TeamOutlined />, label: '角色管理' },
   // { key: '2', icon: <DesktopOutlined />, label: 'Option 2' },
   // { key: '3', icon: <ContainerOutlined />, label: 'Option 3' },
   // {
@@ -59,6 +65,8 @@ const ManageMenu = function ({ isCollapsed }: { isCollapsed: boolean }) {
       router.push('/manage/theme-config');
     } else if (e.key === '5') {
       router.push('/manage/permission');
+    } else if (e.key === '6') {
+      router.push('/manage/role');
     }
   };
 

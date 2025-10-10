@@ -24,7 +24,7 @@ export default function UniversityKnowledgePlatformPage() {
     subtitle: '基于通用大模型应用能力的统一知识聚合、检索和问答系统',
     description:
       '面向企业集团及其分子公司构建的统一知识聚合、检索和问答系统，实现超大规模组织、超大规模用户、超大规模知识、超大规模数据安全防护',
-    detailPicName: '某集团智能问答系统.webp',
+    detailPicName: '/assets/images/cases/enterprise/enterprise-group-qa.webp',
   };
 
   return (
@@ -76,7 +76,7 @@ export default function UniversityKnowledgePlatformPage() {
             <div className="relative">
               <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl bg-white p-4">
                 <Image
-                  src={`/${caseData.detailPicName}`}
+                  src={caseData.detailPicName}
                   alt={caseData.title}
                   width={600}
                   height={400}

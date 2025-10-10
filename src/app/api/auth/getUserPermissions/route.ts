@@ -15,6 +15,14 @@ export async function GET(req: NextRequest) {
   });
   // 获取角色id
   const roleIds = userRole.map((role) => role.roleId);
+  // 获取角色
+  const roles = await prisma.role.findMany({
+    where: {
+      id: {
+        in: roleIds,
+      },
+    },
+  });
   // 获取角色权限id数组
   const rolePermissions = await prisma.rolePermission.findMany({
     where: {
@@ -32,10 +40,12 @@ export async function GET(req: NextRequest) {
     },
   });
   const permissionNames = permissions.map((permission) => permission.name);
+  const roleNames = roles.map((role) => role.name);
 
   return NextResponse.json({
     data: {
       permissions: permissionNames,
+      roles: roleNames,
     },
   });
 }

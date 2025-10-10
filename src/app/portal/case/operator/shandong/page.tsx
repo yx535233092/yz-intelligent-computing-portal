@@ -29,7 +29,8 @@ export default function ShandongMobileTenderPage() {
     subtitle: '基于AI的智慧标书编制与审核系统',
     description:
       '基于历史积累的投标文件、相关政策法规、人员资料信息等材料构建标书知识库，并融合大小模型能力，打造智慧标书助手，加快标书制作审核效率，提升标书人员专业水平。',
-    detailPicName: '山东移动标书助手.webp',
+    detailPicName:
+      '/assets/images/cases/operator/operator-shandong-mobile.webp',
   };
 
   return (
@@ -81,7 +82,7 @@ export default function ShandongMobileTenderPage() {
             <div className="relative">
               <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl bg-white p-4">
                 <Image
-                  src={`/${caseData.detailPicName}`}
+                  src={caseData.detailPicName}
                   alt={caseData.title}
                   width={600}
                   height={400}

@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Siderbar from '@/modules/data-process/components/Siderbar';
-import FileList from '@/modules/data-process/components/FileList';
-import Preview from '@/modules/data-process/components/Preview';
-import Header from '@/modules/data-process/components/Header';
-import MediaProcess from '@/modules/data-process/components/media-process/MediaProcess';
+import Siderbar from '@/components/data-process/Siderbar';
+import FileList from '@/components/data-process/FileList';
+import Preview from '@/components/data-process/Preview';
+import Header from '@/components/data-process/Header';
+import MediaProcess from '@/components/data-process/media-process/MediaProcess';
 import { useSearchParams } from 'next/navigation';
+import type { FileItem } from '@/types/data-process';
 
 // 菜单列表
 const menus = [

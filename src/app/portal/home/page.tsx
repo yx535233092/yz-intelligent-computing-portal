@@ -98,31 +98,31 @@ export default function HomePage() {
   // 行业案例数据
   const industryCases = [
     {
-      id: 'goverment',
+      id: 'goverment/gongan',
       title: '某市公安情报分析以案搜案',
       industry: '政府',
-      image: '/某市公安情报分析以案搜案.webp',
+      image: '/assets/images/cases/government/government-public-security.webp',
       desc: '基于AI大模型训练平台，形成辅助合成研判能力',
     },
     {
-      id: 'operator',
+      id: 'operator/liantong',
       title: '某省联通智能受理',
       industry: '运营商',
-      image: '/运营商1.webp',
+      image: '/assets/images/cases/operator/operator-liantong.webp',
       desc: '通过大模型实现智能受理',
     },
     {
-      id: 'enterprise',
+      id: 'enterprise/jituan',
       title: '某集团智能问答系统',
       industry: '企业',
-      image: '/某集团智能问答系统.webp',
+      image: '/assets/images/cases/enterprise/enterprise-group-qa.webp',
       desc: '面向企业集团构建的统一知识聚合检索系统',
     },
     {
-      id: 'education',
+      id: 'education/gaoxiao',
       title: '某高职校AI+知识服务',
       industry: '教育',
-      image: '/某高职校DEEPSEEK-AI+知识服务应用.webp',
+      image: '/assets/images/cases/education/education-university-1.webp',
       desc: 'AI智能助手提升高校管理效率和决策支持',
     },
   ];
@@ -189,7 +189,7 @@ export default function HomePage() {
         }`}
       >
         {/* 背景装饰 */}
-        <div className="absolute inset-0 bg-[url('/12.webp')] bg-cover bg-center opacity-20"></div>
+        <div className="absolute inset-0 bg-[url('/assets/images/banners/12.webp')] bg-cover bg-center opacity-20"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 to-transparent"></div>
 
         {/* 浮动装饰元素 */}

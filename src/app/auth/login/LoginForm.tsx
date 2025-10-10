@@ -5,7 +5,7 @@ import { useState, useContext } from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import Logo from '@/components/common/Logo';
 import LoadingContext from '@/components/common/LoadingContext';
-import { authService } from '@/services/login';
+import { authService } from '@/apis/login';
 import styles from './loginForm.module.css';
 import { setUserInfo } from '@/lib/store/features/userInfoSlice';
 import { useDispatch } from 'react-redux';
@@ -35,7 +35,7 @@ function LoginForm() {
         // 存储用户应用列表至redux中
         // const userAppList = await authService.getUserAppList();
         // dispatch(setUserAppList(userAppList));
-        // 4.登录成功跳转至首页
+        // 4.登录成功重定向至首页
         location.href = '/';
       } catch (error) {
         console.log(error);
@@ -138,7 +138,7 @@ function LoginForm() {
           }}
           width={1920}
           height={1080}
-          src="/12.webp"
+          src="/assets/images/banners/12.webp"
           alt="login-bg"
           priority
         />

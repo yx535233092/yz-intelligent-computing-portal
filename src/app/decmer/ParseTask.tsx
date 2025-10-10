@@ -1,9 +1,21 @@
-import ChemicalEditor from '@/components/chemical/ChemicalEditor';
 import { cardBase, softBtn } from './className';
 import { useState } from 'react';
 import { LoadingOutlined } from '@ant-design/icons';
 import { chemicalParseAPI } from '@/apis/chemicalParse';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+const ChemicalEditor = dynamic(
+  () => import('@/components/chemical/ChemicalEditor'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-full">
+        加载编辑器中...
+      </div>
+    ),
+  }
+);
 
 export default function ParseTask({
   file,

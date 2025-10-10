@@ -23,8 +23,9 @@ export default function UniversityKnowledgePlatformPage() {
     title: '某市公安情报分析以案搜案',
     subtitle: '基于AI大模型训练平台，形成辅助合成研判能力',
     description:
-      '基于AI大模型训练平台的数据和计算资源，形成处置过程中辅助合成研判的“语音语义建模”能力，该阶段为AI智能客服的较高级阶段，在初级能力基础上训练AI进行语义识别，达到“以案搜人”、“以案搜案”等效果。',
-    detailPicName: '某市公安情报分析以案搜案.webp',
+      '基于AI大模型训练平台的数据和计算资源，形成处置过程中辅助合成研判的"语音语义建模"能力，该阶段为AI智能客服的较高级阶段，在初级能力基础上训练AI进行语义识别，达到"以案搜人"、"以案搜案"等效果。',
+    detailPicName:
+      '/assets/images/cases/government/government-public-security.webp',
   };
 
   return (
@@ -76,7 +77,7 @@ export default function UniversityKnowledgePlatformPage() {
             <div className="relative">
               <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl bg-white p-4">
                 <Image
-                  src={`/${caseData.detailPicName}`}
+                  src={caseData.detailPicName}
                   alt={caseData.title}
                   width={600}
                   height={400}

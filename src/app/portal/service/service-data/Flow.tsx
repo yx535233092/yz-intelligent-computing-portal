@@ -284,7 +284,7 @@ export default function Flow({ onProcessClick }: FlowProps) {
 
                 {/* 图片放置 */}
                 <image
-                  href="/data3.png"
+                  href="/assets/images/services/data3.png"
                   x="120"
                   y="170"
                   width="360"
@@ -293,7 +293,7 @@ export default function Flow({ onProcessClick }: FlowProps) {
                   className="floating-fast"
                 />
                 <image
-                  href="/data2.png"
+                  href="/assets/images/services/data2.png"
                   x="540"
                   y="170"
                   width="360"
@@ -302,7 +302,7 @@ export default function Flow({ onProcessClick }: FlowProps) {
                   className="floating-fast"
                 />
                 <image
-                  href="/data1.png"
+                  href="/assets/images/services/data1.png"
                   x="980"
                   y="60"
                   width="260"
@@ -311,7 +311,7 @@ export default function Flow({ onProcessClick }: FlowProps) {
                   className="floating-fast"
                 />
                 <image
-                  href="/data5.png"
+                  href="/assets/images/services/data5.png"
                   x="980"
                   y="460"
                   width="260"
@@ -322,7 +322,7 @@ export default function Flow({ onProcessClick }: FlowProps) {
 
                 {/* 新增输出分支图片 */}
                 <image
-                  href="/data6.png"
+                  href="/assets/images/services/data6.png"
                   x="980"
                   y="260"
                   width="260"

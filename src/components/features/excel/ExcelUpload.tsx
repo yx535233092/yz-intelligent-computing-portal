@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { FileItem } from './types';
+import type { FileItem } from '@/types/excel';
 
 interface ExcelUploadProps {
   fileList: FileItem[];

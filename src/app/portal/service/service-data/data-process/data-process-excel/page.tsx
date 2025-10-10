@@ -2,15 +2,11 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useState, useCallback, useEffect, Suspense } from 'react';
-import { getToken } from '@/lib/utils/cookies';
 import ExcelUpload from '@/components/features/excel/ExcelUpload';
 import ExcelPreview from '@/components/features/excel/ExcelPreview';
 import ExcelResult from '@/components/features/excel/ExcelResult';
-import {
-  FileItem,
-  UploadResult,
-  ExcelProcessState,
-} from '@/components/features/excel/types';
+import type { FileItem, UploadResult, ExcelProcessState } from '@/types/excel';
+import { excelParseAPI } from '@/apis/service-data/excelParse';
 
 function ExcelProcessContent() {
   const searchParams = useSearchParams();
@@ -35,9 +31,10 @@ function ExcelProcessContent() {
 
       if (title === '复杂表头解析(合并场景)') {
         defaultFilePath =
-          '/【内部核算】先天云服务器云平台项目配置清单20250512_20250514.xlsx';
+          '/documents/excel/【内部核算】先天云服务器云平台项目配置清单20250512_20250514.xlsx';
       } else if (title === '多区域表格解析') {
-        defaultFilePath = '/（冷板）液冷系统配置组合规格表.xlsx';
+        defaultFilePath =
+          '/documents/excel/（冷板）液冷系统配置组合规格表.xlsx';
       }
 
       if (defaultFilePath) {
@@ -145,22 +142,7 @@ function ExcelProcessContent() {
       const formData = new FormData();
       formData.append('file', selectedFile.file);
 
-      const response = await fetch(
-        `http://39.175.132.230:35001/parse_xlsx/?type=3`,
-        {
-          method: 'POST',
-          body: formData,
-          headers: {
-            Authorization: 'Bearer ' + getToken(),
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result: UploadResult = await response.json();
+      const result: UploadResult = await excelParseAPI(formData);
 
       // 更新文件处理结果
       setState((prev) => ({

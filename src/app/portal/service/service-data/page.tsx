@@ -27,7 +27,7 @@ export default function DataService() {
         }`}
       >
         <Image
-          src="/test.jpg"
+          src="/assets/images/services/test.jpg"
           alt=""
           fill
           priority

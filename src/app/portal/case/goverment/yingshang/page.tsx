@@ -28,7 +28,8 @@ export default function GovernmentPolicyMatchingPage() {
     subtitle: '以企业需求为导向，实现惠企政策精准匹配与智能推送',
     description:
       '针对惠企政策知晓难、理解难、办理难、费人力、获得感不强问题，以企业需求为导向，建立统一的政策服务入口，搭建政企沟通桥梁，实现惠企政策集中汇聚、精准查询、主动推送、高效兑现。',
-    detailPicName: '某市营商政策智能双向匹配.webp',
+    detailPicName:
+      '/assets/images/cases/government/government-business-policy.webp',
   };
 
   return (
@@ -80,7 +81,7 @@ export default function GovernmentPolicyMatchingPage() {
             <div className="relative">
               <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl bg-white p-4">
                 <Image
-                  src={`/${caseData.detailPicName}`}
+                  src={caseData.detailPicName}
                   alt={caseData.title}
                   width={600}
                   height={400}

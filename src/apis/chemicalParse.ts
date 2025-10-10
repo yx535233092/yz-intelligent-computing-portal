@@ -1,14 +1,7 @@
 import request from '@/lib/api/request';
+import type { ChemicalParseRes } from '@/types/chemical';
 
-export const chemicalParseAPI = (
-  data: FormData
-): Promise<{
-  SMILES: string;
-  mode_used: string;
-  original_filename: string;
-  status: string;
-  uploaded_file_url: string;
-}> => {
+export const chemicalParseAPI = (data: FormData): Promise<ChemicalParseRes> => {
   return request({
     method: 'POST',
     url: 'http://192.168.10.24:5000/predict_smiles',

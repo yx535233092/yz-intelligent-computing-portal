@@ -8,7 +8,7 @@ import {
   ClearOutlined,
   SwapOutlined,
 } from '@ant-design/icons';
-import { translateAPI } from '@/modules/data-process/api/translate';
+import { translateAPI } from '@/apis/data-process/translate';
 
 const { TextArea } = Input;
 const { Option } = Select;

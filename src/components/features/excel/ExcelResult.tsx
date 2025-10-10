@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UploadResult } from './types';
+import type { UploadResult } from '@/types/excel';
 
 interface ExcelResultProps {
   result?: UploadResult;

@@ -67,3 +67,20 @@ model RolePermission {
   // 联合主键，确保角色和权限的组合是唯一的
   @@id([roleId, permissionId])
 }
+
+// 应用列表
+model Application {
+  id        Int       @id @default(autoincrement())
+  type      String
+  name      String
+  description   String    @db.Text
+  route     String
+  url       String?   @db.Text
+  sceneCategory   String
+  industryTag      String
+  icon      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  permissionKey   String?  @unique
+}
+

@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useInView } from '@/hooks/useInView';
 import { products } from './productData';
+import { getUserPermissionsAPI } from '@/apis/applications';
+import { message } from 'antd';
 
 // 提取公共样式
 const commonStyles = {
@@ -41,6 +43,8 @@ const ProductCard = ({
   link,
   isInView,
   delay = 0,
+  hasPermission = true,
+  permissionKey,
 }: {
   title: string;
   description: string[];
@@ -48,6 +52,8 @@ const ProductCard = ({
   link: string;
   isInView: boolean;
   delay?: number;
+  hasPermission?: boolean;
+  permissionKey?: string;
 }) => (
   <div
     className={commonStyles.roundedCard}
@@ -55,8 +61,28 @@ const ProductCard = ({
       background: commonStyles.cardGradient,
       ...getAnimationStyle(isInView, delay),
       transition: 'all 0.3s ease',
+      opacity: hasPermission ? 1 : 0.6,
+      position: 'relative',
     }}
   >
+    {!hasPermission && (
+      <div
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          background: 'rgba(255, 152, 0, 0.9)',
+          color: 'white',
+          padding: '4px 12px',
+          borderRadius: '12px',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          zIndex: 10,
+        }}
+      >
+        🔒 需要权限
+      </div>
+    )}
     <div className="flex flex-col items-center text-center h-full">
       <div className={`mb-6 ${commonStyles.demoContainer}`}>{demoContent}</div>
       <div className="flex-1 flex flex-col justify-between items-center">
@@ -71,47 +97,76 @@ const ProductCard = ({
             ))}
           </p>
         </div>
-        <a
-          href={link}
-          target="_blank"
-          className={commonStyles.linkStyle}
-          style={{
-            background: 'linear-gradient(135deg, #d32d26, #b71c1c)',
-            color: 'white',
-            padding: '0px 16px',
-            borderRadius: '25px',
-            textDecoration: 'none',
-            fontSize: '14px',
-            fontWeight: '600',
-            boxShadow: '0 4px 15px rgba(211, 45, 38, 0.3)',
-            border: '2px solid transparent',
-            transition: 'all 0.3s ease',
-            display: 'inline-block',
-            transform: 'translateY(0)',
-            position: 'relative',
-            overflow: 'hidden',
-            width: '120px',
-            height: '40px',
-            lineHeight: '35px',
-            textAlign: 'center',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-2px) ';
-            e.currentTarget.style.boxShadow =
-              '0 8px 25px rgba(211, 45, 38, 0.4)';
-            e.currentTarget.style.background =
-              'linear-gradient(135deg, #b71c1c, #8b0000)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0) scale(1)';
-            e.currentTarget.style.boxShadow =
-              '0 4px 15px rgba(211, 45, 38, 0.3)';
-            e.currentTarget.style.background =
-              'linear-gradient(135deg, #d32d26, #b71c1c)';
-          }}
-        >
-          立即体验 {'>'}
-        </a>
+        {hasPermission ? (
+          <a
+            href={link}
+            target="_blank"
+            className={commonStyles.linkStyle}
+            style={{
+              background: 'linear-gradient(135deg, #d32d26, #b71c1c)',
+              color: 'white',
+              padding: '0px 16px',
+              borderRadius: '25px',
+              textDecoration: 'none',
+              fontSize: '14px',
+              fontWeight: '600',
+              boxShadow: '0 4px 15px rgba(211, 45, 38, 0.3)',
+              border: '2px solid transparent',
+              transition: 'all 0.3s ease',
+              display: 'inline-block',
+              transform: 'translateY(0)',
+              position: 'relative',
+              overflow: 'hidden',
+              width: '120px',
+              height: '40px',
+              lineHeight: '35px',
+              textAlign: 'center',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px) ';
+              e.currentTarget.style.boxShadow =
+                '0 8px 25px rgba(211, 45, 38, 0.4)';
+              e.currentTarget.style.background =
+                'linear-gradient(135deg, #b71c1c, #8b0000)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0) scale(1)';
+              e.currentTarget.style.boxShadow =
+                '0 4px 15px rgba(211, 45, 38, 0.3)';
+              e.currentTarget.style.background =
+                'linear-gradient(135deg, #d32d26, #b71c1c)';
+            }}
+          >
+            立即体验 {'>'}
+          </a>
+        ) : (
+          <button
+            onClick={() => {
+              message.warning('您没有访问此服务的权限，请联系管理员开通');
+            }}
+            className={commonStyles.linkStyle}
+            style={{
+              background: 'linear-gradient(135deg, #9e9e9e, #757575)',
+              color: 'white',
+              padding: '0px 16px',
+              borderRadius: '25px',
+              textDecoration: 'none',
+              fontSize: '14px',
+              fontWeight: '600',
+              boxShadow: '0 4px 15px rgba(158, 158, 158, 0.3)',
+              border: '2px solid transparent',
+              transition: 'all 0.3s ease',
+              display: 'inline-block',
+              width: '120px',
+              height: '40px',
+              lineHeight: '35px',
+              textAlign: 'center',
+              cursor: 'not-allowed',
+            }}
+          >
+            暂无权限
+          </button>
+        )}
       </div>
     </div>
   </div>
@@ -145,10 +200,39 @@ const TabButton = ({
 export default function IntelligentProcessSection() {
   const [activeTab, setActiveTab] = useState('text');
   const [productTitle, setProductTitle] = useState('智能文档处理');
+  const [userPermissions, setUserPermissions] = useState<string[]>([]);
+  const [permissionsLoaded, setPermissionsLoaded] = useState(false);
 
   const [intelligentProcessRef, isIntelligentProcessInView] = useInView({
     threshold: 0.1,
   });
+
+  // 获取用户权限
+  useEffect(() => {
+    const fetchUserPermissions = async () => {
+      try {
+        const res = await getUserPermissionsAPI();
+        setUserPermissions(res.data.permissions || []);
+      } catch (error) {
+        console.error('获取用户权限失败:', error);
+        setUserPermissions([]);
+      } finally {
+        setPermissionsLoaded(true);
+      }
+    };
+
+    fetchUserPermissions();
+  }, []);
+
+  // 检查是否有权限访问服务
+  const hasPermission = (permissionKey?: string) => {
+    // 如果服务没有设置权限key，表示不需要权限验证
+    if (!permissionKey) {
+      return true;
+    }
+    // 检查用户是否有该服务的权限
+    return userPermissions.includes(permissionKey);
+  };
 
   // 选项卡配置
   const tabs = [
@@ -216,16 +300,18 @@ export default function IntelligentProcessSection() {
 
       {/* 选项卡内容 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products[activeTab as keyof typeof products]?.map(
-          (product, index) => (
-            <ProductCard
-              key={index}
-              {...product}
-              isInView={isIntelligentProcessInView}
-              delay={index * 0.2}
-            />
-          )
-        )}
+        {permissionsLoaded &&
+          products[activeTab as keyof typeof products]?.map(
+            (product, index) => (
+              <ProductCard
+                key={index}
+                {...product}
+                isInView={isIntelligentProcessInView}
+                delay={index * 0.2}
+                hasPermission={hasPermission(product.permissionKey)}
+              />
+            )
+          )}
       </div>
     </section>
   );

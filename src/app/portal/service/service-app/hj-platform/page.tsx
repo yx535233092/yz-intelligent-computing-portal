@@ -2,33 +2,26 @@
 
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import { getHjAccessTokenAPI } from '@/apis/service-app/hj';
 
 export default function HjPlatform() {
   const [accessToken, setAccessToken] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   // 根据环境设置API地址
-  const getApiBaseUrl = () => {
-    return location.origin;
-  };
+  const baseUrl =
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:9000'
+      : 'http://39.175.132.230:30146';
 
   useEffect(() => {
     const fetchAccessToken = async () => {
       try {
-        const apiBaseUrl = getApiBaseUrl();
-        const response = await fetch(`${apiBaseUrl}/api/getAccessToken`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: 'h3c_yanshi',
-            password: 'H3c@12345!',
-          }),
+        const response = await getHjAccessTokenAPI({
+          username: 'h3c_yanshi',
+          password: 'H3c@12345!',
         });
-
-        const resData = await response.json();
-        const token = resData.accessToken;
+        const token = response.accessToken;
         setAccessToken(token);
         Cookies.set('access_token', token);
       } catch (error) {
@@ -77,7 +70,7 @@ export default function HjPlatform() {
   return (
     <div>
       <iframe
-        src={`${getApiBaseUrl()}/platform/docchain/chat`}
+        src={`${baseUrl}/platform/docchain/chat`}
         style={{
           height: 'calc(100vh - 64px)',
           width: '100%',

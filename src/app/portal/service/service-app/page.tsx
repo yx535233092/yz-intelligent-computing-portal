@@ -1,8 +1,8 @@
 // ai生成
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import { Row, Col, Card, Button, Space, Avatar, Badge } from 'antd';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Row, Col, Card, Button, Space, Avatar, Badge, Spin } from 'antd';
 import {
   AppstoreOutlined,
   FileTextOutlined,
@@ -22,7 +22,23 @@ import {
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useInView } from '@/hooks/useInView';
 import styles from './page.module.css';
-import applications from '@/lib/constants/applications';
+import { getApplicationsAPI, getUserPermissionsAPI } from '@/apis/applications';
+
+// 应用数据类型
+interface Application {
+  id: number;
+  type: string;
+  name: string;
+  description: string;
+  route: string;
+  url?: string;
+  sceneCategory: string;
+  industryTag: string;
+  icon: string;
+  createdAt: string;
+  updatedAt: string;
+  permissionKey?: string;
+}
 
 // 图标映射
 const iconMap: { [key: string]: React.ReactNode } = {
@@ -40,6 +56,9 @@ const iconMap: { [key: string]: React.ReactNode } = {
 export default function AppService() {
   useScrollToTop();
   const [activeCategory, setActiveCategory] = useState('全部');
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [userPermissions, setUserPermissions] = useState<string[]>([]);
 
   // 动画相关的hooks
   const [heroRef, isHeroInView] = useInView({ threshold: 0.3 });
@@ -47,13 +66,36 @@ export default function AppService() {
   const [categoryRef, isCategoryInView] = useInView({ threshold: 0.2 });
   const [appsRef, isAppsInView] = useInView({ threshold: 0.2 });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        // 并行获取应用列表和用户权限
+        const [appsRes, permissionsRes] = await Promise.all([
+          getApplicationsAPI(),
+          getUserPermissionsAPI().catch(() => ({
+            data: { permissions: [], roles: [] },
+          })),
+        ]);
+        setApplications(appsRes.applications);
+        setUserPermissions(permissionsRes.data.permissions);
+      } catch (error) {
+        console.error('获取数据失败:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   // 筛选应用
   const filteredApps = useMemo(() => {
     if (activeCategory === '全部') {
       return applications;
     }
     return applications.filter((app) => app.sceneCategory === activeCategory);
-  }, [activeCategory]);
+  }, [activeCategory, applications]);
 
   // 分类选项
   const categories = [
@@ -65,8 +107,22 @@ export default function AppService() {
     // { key: '智能客服', label: '智能客服', icon: <CustomerServiceOutlined /> },
   ];
 
-  const handleAppClick = (url: string) => {
-    window.open(url, '_blank');
+  // 检查应用是否有访问权限
+  const hasPermission = (app: Application) => {
+    // 如果应用没有设置 permissionKey，表示不需要权限验证，任何人都可以访问
+    if (!app.permissionKey) {
+      return true;
+    }
+    // 检查用户是否有该应用的权限
+    return userPermissions.includes(app.permissionKey);
+  };
+
+  const handleAppClick = (app: Application) => {
+    // 如果没有权限，不执行任何操作
+    if (!hasPermission(app)) {
+      return;
+    }
+    window.open(app.route, '_blank');
   };
 
   return (
@@ -276,64 +332,144 @@ export default function AppService() {
           }
           className={styles['apps-card']}
         >
-          <Row gutter={[20, 20]}>
-            {filteredApps.map((app, index) => (
-              <Col xs={24} sm={12} md={8} lg={6} xl={6} key={index}>
-                <Card
-                  hoverable
-                  onClick={() => handleAppClick(app.route)}
-                  className={styles['app-card']}
-                >
-                  {/* 主题色竖条 */}
-                  <div className={styles['app-theme-bar']} />
-
-                  {/* 应用图标和标题区域 */}
-                  <div className={styles['app-header']}>
-                    <div className={styles['app-icon-wrapper']}>
-                      <Avatar
-                        icon={iconMap[app.icon]}
-                        size={48}
-                        className={styles['app-avatar']}
-                      />
-                    </div>
-                    <div className={styles['app-info']}>
-                      <h4 className={styles['app-title']}>{app.name}</h4>
-                      <div className={styles['app-meta']}>
-                        <span className={styles['app-tag']}>
-                          {app.industryTag}
-                        </span>
-                        <span className={styles['app-category']}>
-                          {app.sceneCategory}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 应用描述 */}
-                  <div className={styles['app-description-wrapper']}>
-                    <p className={styles['app-description']}>
-                      {app.description}
-                    </p>
-                  </div>
-
-                  {/* 底部操作区域 */}
-                  <div className={styles['app-footer']}>
-                    <div className={styles['app-action']}>
-                      <span className={styles['app-action-text']}>
-                        立即使用
-                      </span>
-                      <RightOutlined className={styles['arrow-icon']} />
-                    </div>
-                  </div>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-          {filteredApps.length === 0 && (
-            <div className={styles['empty-state']}>
-              <AppstoreOutlined />
-              <p>暂无{activeCategory}类型的应用</p>
+          {loading ? (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '400px',
+              }}
+            >
+              <Spin size="large" tip="加载应用中..." />
             </div>
+          ) : (
+            <>
+              <Row gutter={[20, 20]}>
+                {filteredApps.map((app, index) => {
+                  const hasAccess = hasPermission(app);
+                  return (
+                    <Col
+                      xs={24}
+                      sm={12}
+                      md={8}
+                      lg={6}
+                      xl={6}
+                      key={app.id || index}
+                    >
+                      <Card
+                        hoverable={hasAccess}
+                        onClick={() => handleAppClick(app)}
+                        className={styles['app-card']}
+                        style={{
+                          opacity: hasAccess ? 1 : 0.5,
+                          cursor: hasAccess ? 'pointer' : 'not-allowed',
+                        }}
+                      >
+                        {/* 主题色竖条 */}
+                        <div
+                          className={styles['app-theme-bar']}
+                          style={{
+                            opacity: hasAccess ? 1 : 0.5,
+                          }}
+                        />
+
+                        {/* 应用图标和标题区域 */}
+                        <div className={styles['app-header']}>
+                          <div className={styles['app-icon-wrapper']}>
+                            <Avatar
+                              icon={iconMap[app.icon]}
+                              size={48}
+                              className={styles['app-avatar']}
+                              style={{
+                                opacity: hasAccess ? 1 : 0.6,
+                              }}
+                            />
+                          </div>
+                          <div className={styles['app-info']}>
+                            <h4
+                              className={styles['app-title']}
+                              style={{
+                                color: hasAccess ? undefined : '#999',
+                              }}
+                            >
+                              {app.name}
+                              {!hasAccess && (
+                                <span
+                                  style={{
+                                    marginLeft: '8px',
+                                    fontSize: '12px',
+                                    color: '#999',
+                                  }}
+                                >
+                                  (无权限)
+                                </span>
+                              )}
+                            </h4>
+                            <div className={styles['app-meta']}>
+                              <span
+                                className={styles['app-tag']}
+                                style={{
+                                  opacity: hasAccess ? 1 : 0.6,
+                                }}
+                              >
+                                {app.industryTag}
+                              </span>
+                              <span
+                                className={styles['app-category']}
+                                style={{
+                                  opacity: hasAccess ? 1 : 0.6,
+                                }}
+                              >
+                                {app.sceneCategory}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* 应用描述 */}
+                        <div className={styles['app-description-wrapper']}>
+                          <p
+                            className={styles['app-description']}
+                            style={{
+                              color: hasAccess ? undefined : '#999',
+                            }}
+                          >
+                            {app.description}
+                          </p>
+                        </div>
+
+                        {/* 底部操作区域 */}
+                        <div className={styles['app-footer']}>
+                          <div className={styles['app-action']}>
+                            <span
+                              className={styles['app-action-text']}
+                              style={{
+                                color: hasAccess ? undefined : '#999',
+                              }}
+                            >
+                              {hasAccess ? '立即使用' : '暂无权限'}
+                            </span>
+                            <RightOutlined
+                              className={styles['arrow-icon']}
+                              style={{
+                                opacity: hasAccess ? 1 : 0.5,
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </Card>
+                    </Col>
+                  );
+                })}
+              </Row>
+              {filteredApps.length === 0 && !loading && (
+                <div className={styles['empty-state']}>
+                  <AppstoreOutlined />
+                  <p>暂无{activeCategory}类型的应用</p>
+                </div>
+              )}
+            </>
           )}
         </Card>
       </div>

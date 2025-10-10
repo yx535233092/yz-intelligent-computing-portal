@@ -28,7 +28,8 @@ export default function JiangsuDataManagementPage() {
     subtitle: '基于大模型的自然语言数据查询分析平台',
     description:
       '借助大模型能力构建智能问数智能体，实现自然语言到SQL语句的转化，快速查询数据并生成图表，为江苏省数据管理提供高效的智能化数据分析服务。',
-    detailPicName: '江苏省大数据智能问数.webp',
+    detailPicName:
+      '/assets/images/cases/government/jiangsu-data-management.webp',
   };
 
   return (
@@ -80,7 +81,7 @@ export default function JiangsuDataManagementPage() {
             <div className="relative">
               <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl bg-white p-4">
                 <Image
-                  src={`/${caseData.detailPicName}`}
+                  src={caseData.detailPicName}
                   alt={caseData.title}
                   width={600}
                   height={400}
@@ -241,7 +242,7 @@ export default function JiangsuDataManagementPage() {
                 <div className="relative">
                   <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
                     <AntdImage
-                      src="/数据集成.webp"
+                      src="/assets/images/services/数据集成.webp"
                       alt="数据预处理流程图"
                       className="w-full h-full object-cover rounded-xl"
                       style={{ width: '100%', height: '100%' }}
@@ -363,7 +364,7 @@ export default function JiangsuDataManagementPage() {
                 <div className="relative">
                   <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
                     <AntdImage
-                      src="/案例.webp"
+                      src="/assets/images/banners/案例.webp"
                       alt="智能体优化架构图"
                       className="w-full h-full object-cover rounded-xl"
                       style={{ width: '100%', height: '100%' }}
@@ -395,7 +396,7 @@ export default function JiangsuDataManagementPage() {
                 <div className="relative">
                   <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
                     <AntdImage
-                      src="/约束.webp"
+                      src="/assets/images/banners/约束.webp"
                       alt="约束定制配置图"
                       className="w-full h-full object-cover rounded-xl"
                       style={{ width: '100%', height: '100%' }}

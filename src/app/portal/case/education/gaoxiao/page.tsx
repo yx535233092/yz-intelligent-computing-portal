@@ -24,7 +24,7 @@ export default function UniversityKnowledgePlatformPage() {
     subtitle: '领先一步的高校AI知识中枢解决方案',
     description:
       '这是一个能融合数据、能智能服务、能任务闭环、还能安全交付的高校知识平台。通过统一门户、知识治理平台、智能体支撑底座，全面服务教研、申报、评估、管理等核心业务场景，并具备支撑智能体构建的持续演进能力。',
-    detailPicName: '教育2.webp',
+    detailPicName: '/assets/images/cases/education/education-university-2.webp',
   };
 
   return (
@@ -76,7 +76,7 @@ export default function UniversityKnowledgePlatformPage() {
             <div className="relative">
               <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl bg-white p-4">
                 <Image
-                  src={`/${caseData.detailPicName}`}
+                  src={caseData.detailPicName}
                   alt={caseData.title}
                   width={600}
                   height={400}

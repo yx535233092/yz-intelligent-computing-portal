@@ -141,7 +141,7 @@ export default function ModelService() {
                 {/* 视频播放区域 */}
                 <div className="aspect-video bg-black">
                   {/* <Image
-                    src="/微调.gif"
+                    src="/assets/images/banners/微调.gif"
                     alt="微调视频"
                     className="w-full h-full object-contain"
                     width={1000}
@@ -152,8 +152,14 @@ export default function ModelService() {
                     controls
                     preload="metadata"
                   >
-                    <source src="/微调视频.mov" type="video/quicktime" />
-                    <source src="/微调视频.mov" type="video/mp4" />
+                    <source
+                      src="/assets/videos/微调视频.mov"
+                      type="video/quicktime"
+                    />
+                    <source
+                      src="/assets/videos/微调视频.mov"
+                      type="video/mp4"
+                    />
                     您的浏览器不支持视频播放。
                   </video>
                 </div>

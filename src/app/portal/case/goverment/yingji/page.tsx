@@ -29,7 +29,7 @@ export default function EmergencyResponsePage() {
     subtitle: '基于AI的应急预案数字化与智能处置方案生成系统',
     description:
       '实现专项预案数字化，把专项预案处置流程、各岗位职责通过文档解析的方式实现应急预案的结构化生成，辅助应急期间开展应急处置工作。',
-    detailPicName: '某省应急局处置方案生成.webp',
+    detailPicName: '/assets/images/cases/government/government-emergency.webp',
   };
 
   return (
@@ -81,7 +81,7 @@ export default function EmergencyResponsePage() {
             <div className="relative">
               <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl bg-white p-4">
                 <Image
-                  src={`/${caseData.detailPicName}`}
+                  src={caseData.detailPicName}
                   alt={caseData.title}
                   width={600}
                   height={400}

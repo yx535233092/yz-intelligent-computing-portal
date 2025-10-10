@@ -65,28 +65,28 @@ const tabItems = [
             title: '江苏大数据管理中心智能问数',
             description:
               '借助大模型能力构建智能问数智能体，实现自然语言到SQL语句的转化，快速查询数据并生成图表，为江苏省数据管理提供高效的智能化数据分析服务。',
-            picName: '江苏省大数据智能问数.webp',
+            picName: 'jiangsu-data-management.webp',
             routeAdress: `${BASE_URL}/goverment/jiangsu`,
           },
           {
             title: '某市公安情报分析以案搜案',
             description:
               '基于AI大模型训练平台的数据和计算资源，形成处置过程中辅助合成研判的"语音语义建模"能力，该阶段为AI智能客服的较高级阶段，在初级能力基础上训练AI进行语义识别，达到"以案搜人"、"以案搜案"等效果。',
-            picName: '某市公安情报分析以案搜案.webp',
+            picName: 'government-public-security.webp',
             routeAdress: `${BASE_URL}/goverment/gongan`,
           },
           {
             title: '某市营商政策智能双向匹配',
             description:
               '针对惠企政策知晓难、理解难、办理难、费人力、获得感不强问题，以企业需求为导向，建立统一的政策服务入口，搭建政企沟通桥梁，实现惠企政策集中汇聚、精准查询、主动推送、高效兑现。面向惠企服务场景，提供惠企政策大模型，以生成式理解与问答加强咨询过程中的意图识别和政务术语理解，通过人性化AI交互引导，完成政策和企业的智能匹配及推介，让政策找不到、不理解、办不好成为历史，高效改善营商环境。',
-            picName: '某市营商政策智能双向匹配.webp',
+            picName: 'government-business-policy.webp',
             routeAdress: `${BASE_URL}/goverment/yingshang`,
           },
           {
             title: '某省应急局处置方案生成',
             description:
               '实现专项预案数字化，把专项预案处置流程、各岗位职责通过文档解析的方式实现应急预案的结构化生成，辅助应急期间开展应急处置工作。提升应急响应效率，确保突发事件处置的专业性和时效性。',
-            picName: '某省应急局处置方案生成.webp',
+            picName: 'government-emergency.webp',
             routeAdress: `${BASE_URL}/goverment/yingji`,
           },
         ]}
@@ -110,21 +110,21 @@ const tabItems = [
             title: '某电信运营商智能问数',
             description:
               '通过多模态的自然语言对话式交互、自动数据分析和展现，实现零门槛的智能用数。',
-            picName: '电信运营商.webp',
+            picName: 'operator-telecom.webp',
             routeAdress: `${BASE_URL}/operator/wenshu`,
           },
           {
             title: '云南移动方案助手',
             description:
               '通过方案智能体的打标、推荐和编制，辅助一线进行优质方案的快速检索，促进方案编写效率提升40%，编写质量提升30%。',
-            picName: '云南移动方案助手.webp',
+            picName: 'operator-yunnan-mobile.webp',
             routeAdress: `${BASE_URL}/operator/yunnan`,
           },
           {
             title: '山东移动标书助手',
             description:
               '针对编写招标文件过程中缺少文档编写辅助系统，完全依赖人工编写各类招投标文档，标书支撑面临编制工作量大、审核耗时长、依赖个人经验、存量数据挖掘不足等痛点。基于历史积累的投标文件、相关政策法规、人员资料信息等材料构建标书知识库，并融合大小模型能力，打造智慧标书助手，加快标书制作审核效率，提升标书人员专业水平。',
-            picName: '山东移动标书助手.webp',
+            picName: 'operator-shandong-mobile.webp',
             routeAdress: `${BASE_URL}/operator/shandong`,
           },
         ]}
@@ -141,7 +141,7 @@ const tabItems = [
             title: '某集团智能问答系统',
             description:
               '企业智能问答系统，是基于通用大模型应用能力，面向企业集团及其分子公司构建的统一知识聚合、检索和问答系统，超大规模组织、超大规模用户、超大规模知识、超大规模数据安全防护',
-            picName: '某集团智能问答系统.webp',
+            picName: 'enterprise-group-qa.webp',
             routeAdress: `${BASE_URL}/enterprise/jituan`,
           },
           // {
@@ -172,7 +172,7 @@ const tabItems = [
             title: '某高职校DEEPSEEK-AI+知识服务应用',
             description:
               '这是一个能融合数据、能智能服务、能任务闭环、还能安全交付的高校知识平台。通过统一门户、知识治理平台、智能体支撑底座，全面服务教研、申报、评估、管理等核心业务场景，并具备支撑智能体构建的持续演进能力。',
-            picName: '教育1.webp',
+            picName: 'education-university-1.webp',
             routeAdress: `${BASE_URL}/education/gaoxiao`,
           },
         ]}
@@ -304,7 +304,7 @@ export default function IndustryCasesPage() {
           <div className="flex justify-center mb-6">
             <div className="w-20 h-20 bg-brand rounded-full flex items-center justify-center shadow-lg">
               <Image
-                src="/chat.webp"
+                src="/assets/images/services/chat.webp"
                 alt="专家咨询"
                 width={40}
                 height={40}

@@ -27,7 +27,7 @@ export default function TelecomIntelligentDataPage() {
     subtitle: '多模态自然语言对话式交互，实现零门槛的智能用数',
     description:
       '通过多模态的自然语言对话式交互、自动数据分析和展现，实现零门槛的智能用数。解决业务部门跨部门需求沟通中的高延时、长反馈、不满意等问题。',
-    detailPicName: '电信运营商.webp',
+    detailPicName: '/assets/images/cases/operator/operator-telecom.webp',
   };
 
   return (
@@ -79,7 +79,7 @@ export default function TelecomIntelligentDataPage() {
             <div className="relative">
               <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl bg-white p-4">
                 <Image
-                  src={`/${caseData.detailPicName}`}
+                  src={caseData.detailPicName}
                   alt={caseData.title}
                   width={600}
                   height={400}

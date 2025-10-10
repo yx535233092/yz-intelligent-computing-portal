@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/lib/store';
 import axios from 'axios';
+import type { UserInfoData } from '@/types/auth';
 
 export default function ContactUs() {
   useScrollToTop();

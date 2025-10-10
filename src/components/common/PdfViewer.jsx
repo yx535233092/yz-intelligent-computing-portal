@@ -1,7 +1,7 @@
 import * as pdfjs from 'pdfjs-dist';
 import { useEffect, useRef } from 'react';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `/5.4.54pdf.worker.min.mjs`;
+pdfjs.GlobalWorkerOptions.workerSrc = `/workers/pdf.worker.min.mjs`;
 
 export default function PdfViewer({ pdfUrl }) {
   const canvasRef = useRef(null);

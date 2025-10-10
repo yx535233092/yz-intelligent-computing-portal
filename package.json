@@ -12,7 +12,11 @@
     "delete": "pm2 delete ecosystem.config.js",
     "lint": "next lint",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "tsx prisma/seed.ts",
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
     "@ant-design/cssinjs": "^1.24.0",
@@ -72,6 +76,7 @@
     "lint-staged": "^16.1.5",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   },
   "husky": {

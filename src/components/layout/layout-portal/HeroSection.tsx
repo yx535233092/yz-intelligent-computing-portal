@@ -17,13 +17,13 @@ const pageConfigs: Record<string, PageConfig> = {
   '/portal/contact-us': {
     title: '联系我们',
     subtitle: 'Contact Us',
-    backgroundImage: '/11.webp',
+    backgroundImage: '/assets/images/banners/11.webp',
     breadcrumb: [{ title: '首页' }, { title: '联系我们' }],
   },
   '/portal/case': {
     title: '行业案例',
     subtitle: 'Industry Case',
-    backgroundImage: '/10.webp',
+    backgroundImage: '/assets/images/banners/10.webp',
     breadcrumb: [{ title: '首页' }, { title: '行业案例' }],
   },
 };
@@ -35,7 +35,7 @@ export default function HeroSection() {
   const defaultConfig = {
     title: '智算门户',
     subtitle: 'Intelligent Computing Portal',
-    backgroundImage: '/10.webp',
+    backgroundImage: '/assets/images/banners/10.webp',
     breadcrumb: [{ title: '首页' }],
   };
 

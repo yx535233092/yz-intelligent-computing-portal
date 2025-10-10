@@ -4,27 +4,28 @@ import React from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Dropdown, Space } from 'antd';
-import { authService } from '@/services/login';
+import { authService } from '@/apis/login';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/lib/store';
+import type { UserInfoData } from '@/types/auth';
 
 const items: MenuProps['items'] = [
-  {
-    label: (
-      <a
-        onClick={(e) => {
-          e.preventDefault();
-          location.href = location.origin + '/manage/profile';
-        }}
-      >
-        个人中心
-      </a>
-    ),
-    key: '0',
-  },
-  {
-    type: 'divider',
-  },
+  // {
+  //   label: (
+  //     <a
+  //       onClick={(e) => {
+  //         e.preventDefault();
+  //         location.href = location.origin + '/manage/profile';
+  //       }}
+  //     >
+  //       个人中心
+  //     </a>
+  //   ),
+  //   key: '0',
+  // },
+  // {
+  //   type: 'divider',
+  // },
   {
     label: (
       <a

@@ -30,7 +30,7 @@ jobs:
 
       # 5.构建产物打包
       - name: Tar Build
-        run: tar -czvf build.tar.gz .next/ public/ package.json next.config.ts ecosystem.config.js
+        run: tar -czvf build.tar.gz .next/ public/ package.json next.config.ts ecosystem.config.js prisma/ src/generated/
 
       # 6.检查上传路径是否存在
       - name: Check Upload Path
@@ -78,6 +78,9 @@ jobs:
             # 安装依赖
             echo "正在安装生产环境依赖..."
             npm install --production
+            # 生成 Prisma Client
+            echo "正在生成 Prisma Client..."
+            npx prisma generate
             # 检查pm2进程
             if pm2 describe "yz-portal" > /dev/null 2>&1; then
               echo "yz-portal 已启动，正在重载"

@@ -1,6 +1,6 @@
 'use client';
 
-import Profile from '@/modules/manage/components/profile';
+import Profile from '@/components/manage/profile';
 
 export default function ProfilePage() {
   return (

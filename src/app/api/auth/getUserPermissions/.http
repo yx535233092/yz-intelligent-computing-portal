@@ -1,0 +1,2 @@
+GET http://localhost:3000/api/auth/getUserPermissions
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc2MDA2NDY2NiwiZXhwIjoxNzYwMTUxMDY2fQ.Inw9tiL4SN-V48hesDhUS8QthTd5DFHqU1MDN9kZWJg

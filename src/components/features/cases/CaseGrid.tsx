@@ -36,6 +36,23 @@ const CaseGrid: React.FC<CaseGridProps> = React.memo(({ items }) => {
     }
   }, []);
 
+  const getImagePath = useCallback((routeAdress: string, picName: string) => {
+    if (routeAdress.includes('goverment')) {
+      return `/assets/images/cases/government/${picName}`;
+    } else if (
+      routeAdress.includes('operator') ||
+      routeAdress.includes('dianxin')
+    ) {
+      return `/assets/images/cases/operator/${picName}`;
+    } else if (routeAdress.includes('enterprise')) {
+      return `/assets/images/cases/enterprise/${picName}`;
+    } else if (routeAdress.includes('education')) {
+      return `/assets/images/cases/education/${picName}`;
+    } else {
+      return `/${picName}`;
+    }
+  }, []);
+
   const getIndustryIcon = useCallback((routeAdress: string) => {
     if (routeAdress.includes('goverment')) {
       // 政府 - 建筑物图标
@@ -211,7 +228,7 @@ const CaseGrid: React.FC<CaseGridProps> = React.memo(({ items }) => {
                     <div className="w-full h-full rounded-xl overflow-hidden shadow-lg border-2 border-white/50">
                       <Image
                         alt={item.title}
-                        src={`/${item.picName}`}
+                        src={getImagePath(item.routeAdress, item.picName)}
                         fill
                         className="object-cover"
                         priority={idx < 2}
@@ -313,7 +330,15 @@ const CaseGrid: React.FC<CaseGridProps> = React.memo(({ items }) => {
         )}
       </div>
     ));
-  }, [items, handleCaseClick, handleCardKeyDown, getIndustryLabel]);
+  }, [
+    items,
+    handleCaseClick,
+    handleCardKeyDown,
+    getIndustryLabel,
+    getIndustryIcon,
+    getImagePath,
+    router,
+  ]);
 
   return (
     <div className="w-full px-4 py-16 relative">

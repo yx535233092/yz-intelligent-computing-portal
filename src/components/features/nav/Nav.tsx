@@ -20,29 +20,25 @@ const items: MenuItem[] = [
     children: [
       {
         label: '模型工程服务',
-        key: '/portal/pro-services/model-service',
+        key: '/portal/service/service-model',
       },
       {
         label: '数据工程服务',
-        key: '/portal/pro-services/data-service',
+        key: '/portal/service/service-data',
       },
       {
         label: '应用工程服务',
-        key: '/portal/pro-services/app-service',
+        key: '/portal/service/service-app',
       },
       {
         label: '技术支撑服务',
-        key: '/portal/pro-services/consult-service',
+        key: '/portal/service/service-ts',
       },
-      // {
-      //   label: '开源软件服务',
-      //   key: '/pro-services/open-source-service',
-      // },
     ],
   },
   {
     label: '行业案例',
-    key: '/portal/industry-cases',
+    key: '/portal/case',
   },
 
   {

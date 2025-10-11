@@ -1,4 +1,4 @@
-import Layout from '@/components/layout/portal-layout/PortalLayout';
+import Layout from '@/components/layout/layout-portal/PortalLayout';
 
 export default function PortalLayout({
   children,

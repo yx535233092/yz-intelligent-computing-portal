@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useInView } from '@/hooks/useInView';
 import {
-  ArrowRightOutlined,
   FileTextOutlined,
   TableOutlined,
   BarChartOutlined,
@@ -20,6 +19,7 @@ import {
   MessageOutlined,
   DatabaseOutlined,
 } from '@ant-design/icons';
+import RouteButton from '@/components/ui/RouteButton';
 
 export default function HomePage() {
   const router = useRouter();
@@ -65,7 +65,7 @@ export default function HomePage() {
       title: '智能问数场景',
       desc: '数据洞察智能化，决策支持精准化',
       category: '智能问数',
-      examples: ['智能问数', 'ChatBI智能报表', 'ChatBI智能问数'],
+      examples: ['智能问数', 'ChatBI智能报表'],
     },
     {
       icon: BuildOutlined,
@@ -98,31 +98,31 @@ export default function HomePage() {
   // 行业案例数据
   const industryCases = [
     {
-      id: 'goverment',
+      id: 'goverment/gongan',
       title: '某市公安情报分析以案搜案',
       industry: '政府',
-      image: '/某市公安情报分析以案搜案.webp',
+      image: '/assets/images/cases/government/government-public-security.webp',
       desc: '基于AI大模型训练平台，形成辅助合成研判能力',
     },
     {
-      id: 'operator',
+      id: 'operator/liantong',
       title: '某省联通智能受理',
       industry: '运营商',
-      image: '/运营商1.webp',
+      image: '/assets/images/cases/operator/operator-liantong.webp',
       desc: '通过大模型实现智能受理',
     },
     {
-      id: 'enterprise',
+      id: 'enterprise/jituan',
       title: '某集团智能问答系统',
       industry: '企业',
-      image: '/某集团智能问答系统.webp',
+      image: '/assets/images/cases/enterprise/enterprise-group-qa.webp',
       desc: '面向企业集团构建的统一知识聚合检索系统',
     },
     {
-      id: 'education',
+      id: 'education/gaoxiao',
       title: '某高职校AI+知识服务',
       industry: '教育',
-      image: '/某高职校DEEPSEEK-AI+知识服务应用.webp',
+      image: '/assets/images/cases/education/education-university-1.webp',
       desc: 'AI智能助手提升高校管理效率和决策支持',
     },
   ];
@@ -189,7 +189,7 @@ export default function HomePage() {
         }`}
       >
         {/* 背景装饰 */}
-        <div className="absolute inset-0 bg-[url('/12.webp')] bg-cover bg-center opacity-20"></div>
+        <div className="absolute inset-0 bg-[url('/assets/images/banners/12.webp')] bg-cover bg-center opacity-20"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 to-transparent"></div>
 
         {/* 浮动装饰元素 */}
@@ -209,20 +209,18 @@ export default function HomePage() {
               我们提供从技术咨询、模型优化、算力管理到应用定制的全流程专家服务，致力于打通大模型从技术潜力到商业价值的“最后一公里”，助您高效构建、部署与扩展AI应用。
             </p>
             <div className="flex gap-6">
-              <button
-                onClick={() => router.push('/portal/pro-services/app-service')}
-                className="group relative bg-gradient-to-r from-brand to-red-700 hover:from-red-500 hover:to-brand text-white px-8 py-4 rounded-2xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-brand/30 flex items-center gap-3 overflow-hidden"
-              >
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-                <span className="relative z-10">立即体验</span>
-                <ArrowRightOutlined className="relative z-10 text-lg transition-all duration-300 group-hover:translate-x-1 group-hover:scale-110" />
-              </button>
-              <button
-                onClick={() => router.push('/portal/contact-us')}
-                className="group relative border-2 border-brand/40 hover:border-brand/80 hover:bg-gradient-to-r hover:from-brand/10 hover:to-red-600/10 text-red-50 hover:text-white px-8 py-4 rounded-2xl text-lg font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-brand/20 backdrop-blur-sm"
-              >
-                联系咨询
-              </button>
+              <RouteButton
+                text="立即体验"
+                routePath="/portal/service/service-app"
+                size="large"
+                showArrow
+              />
+              <RouteButton
+                text="联系咨询"
+                routePath="/portal/contact-us"
+                size="large"
+                isHollow
+              />
             </div>
           </div>
         </div>
@@ -276,14 +274,13 @@ export default function HomePage() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <button
-            onClick={() => router.push('/portal/pro-services/model-service')}
-            className="group bg-brand hover:bg-red-600 text-white px-8 py-4 rounded-xl text-lg font-medium transition-all duration-300 hover:scale-105 flex items-center gap-3 mx-auto"
-          >
-            了解详情
-            <ArrowRightOutlined className="transition-transform group-hover:translate-x-1" />
-          </button>
+        <div className="flex justify-center mt-12">
+          <RouteButton
+            text="了解详情"
+            routePath="/portal/service/service-model"
+            size="large"
+            showArrow
+          />
         </div>
       </section>
       {/* 数据服务 */}
@@ -322,13 +319,12 @@ export default function HomePage() {
             </div>
 
             <div className="mt-12">
-              <button
-                onClick={() => router.push('/portal/pro-services/data-service')}
-                className="group bg-brand hover:bg-red-600 text-white px-8 py-4 rounded-xl text-lg font-medium transition-all duration-300 hover:scale-105 flex items-center gap-3"
-              >
-                了解详情
-                <ArrowRightOutlined className="transition-transform group-hover:translate-x-1" />
-              </button>
+              <RouteButton
+                text="了解详情"
+                routePath="/portal/service/service-data"
+                size="large"
+                showArrow
+              />
             </div>
           </div>
 
@@ -429,14 +425,13 @@ export default function HomePage() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <button
-            onClick={() => router.push('/portal/pro-services/app-service')}
-            className="group bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-xl text-lg font-medium transition-all duration-300 hover:scale-105 flex items-center gap-3 mx-auto"
-          >
-            查看全部应用
-            <ArrowRightOutlined className="transition-transform group-hover:translate-x-1" />
-          </button>
+        <div className="flex justify-center mt-12">
+          <RouteButton
+            text="查看全部应用"
+            routePath="/portal/service/service-app"
+            size="large"
+            showArrow
+          />
         </div>
       </section>
       {/* 咨询培训服务 */}
@@ -493,16 +488,13 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="text-center mt-16">
-            <button
-              onClick={() =>
-                router.push('/portal/pro-services/consult-service')
-              }
-              className="group bg-gradient-to-r from-gray-900 to-gray-800 hover:from-brand hover:to-red-600 text-white px-10 py-4 rounded-2xl text-lg font-medium transition-all duration-500 hover:scale-105 hover:shadow-2xl flex items-center gap-3 mx-auto"
-            >
-              了解详情
-              <ArrowRightOutlined className="transition-transform group-hover:translate-x-1" />
-            </button>
+          <div className="flex justify-center mt-16">
+            <RouteButton
+              text="了解详情"
+              routePath="/portal/service/service-ts"
+              size="large"
+              showArrow
+            />
           </div>
         </div>
       </section>
@@ -528,9 +520,7 @@ export default function HomePage() {
           {industryCases.map((caseItem, index) => (
             <div
               key={index}
-              onClick={() =>
-                router.push(`/portal/industry-cases/${caseItem.id}`)
-              }
+              onClick={() => router.push(`/portal/case/${caseItem.id}`)}
               className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer"
               style={{
                 animationDelay: `${index * 0.2}s`,
@@ -559,14 +549,13 @@ export default function HomePage() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <button
-            onClick={() => router.push('/portal/industry-cases')}
-            className="group bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-xl text-lg font-medium transition-all duration-300 hover:scale-105 flex items-center gap-3 mx-auto"
-          >
-            查看更多案例
-            <ArrowRightOutlined className="transition-transform group-hover:translate-x-1" />
-          </button>
+        <div className="flex justify-center mt-12">
+          <RouteButton
+            text="查看更多案例"
+            routePath="/portal/case"
+            size="large"
+            showArrow
+          />
         </div>
       </section>
     </div>

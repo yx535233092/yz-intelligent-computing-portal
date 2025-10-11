@@ -4,23 +4,40 @@ import React from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Dropdown, Space } from 'antd';
-import { authService } from '@/modules/login/services/login';
+import { authService } from '@/apis/login';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/lib/store';
+import type { UserInfoData } from '@/types/auth';
 
 const items: MenuProps['items'] = [
+  // {
+  //   label: (
+  //     <a
+  //       onClick={(e) => {
+  //         e.preventDefault();
+  //         location.href = location.origin + '/manage/profile';
+  //       }}
+  //     >
+  //       个人中心
+  //     </a>
+  //   ),
+  //   key: '0',
+  // },
+  // {
+  //   type: 'divider',
+  // },
   {
     label: (
       <a
         onClick={(e) => {
           e.preventDefault();
-          location.href = location.origin + '/manage/profile';
+          location.href = location.origin + '/manage';
         }}
       >
-        个人中心
+        系统设置
       </a>
     ),
-    key: '0',
+    key: '1',
   },
   {
     type: 'divider',
@@ -36,7 +53,7 @@ const items: MenuProps['items'] = [
         退出登录
       </a>
     ),
-    key: '1',
+    key: '2',
   },
 ];
 

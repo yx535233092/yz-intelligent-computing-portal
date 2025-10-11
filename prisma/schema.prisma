@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id            Int           @id @default(autoincrement())
+  username      String        @unique
+  password      String        
+  isActive      Boolean       @default(true)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // 关联表：一个用户可以有多个角色
+  roles         UserRole[]
+}
+
+model Role {
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  description   String?
+
+  // 关联表： 一个角色可以被多个用户拥有，也可以有多个权限
+  users         UserRole[]
+  permissions   RolePermission[]
+}
+
+model Permission {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  description String?
+  
+  // 关联表：一个权限可以被多个角色拥有
+  roles       RolePermission[]
+}
+
+// 关联表：用户和角色的多对多关系
+model UserRole {
+  userId      Int
+  user        User   @relation(fields: [userId], references: [id])
+  roleId      Int
+  role        Role   @relation(fields: [roleId], references: [id])
+  
+  // 联合主键，确保用户和角色的组合是唯一的
+  @@id([userId, roleId])
+}
+
+// 关联表：角色和权限的多对多关系
+model RolePermission {
+  roleId      Int
+  role        Role       @relation(fields: [roleId], references: [id])
+  permissionId Int
+  permission  Permission @relation(fields: [permissionId], references: [id])
+  
+  // 联合主键，确保角色和权限的组合是唯一的
+  @@id([roleId, permissionId])
+}
+
+// 应用列表
+model Application {
+  id        Int       @id @default(autoincrement())
+  type      String
+  name      String
+  description   String    @db.Text
+  route     String
+  url       String?   @db.Text
+  sceneCategory   String
+  industryTag      String
+  icon      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  permissionKey   String?  @unique
+}
+

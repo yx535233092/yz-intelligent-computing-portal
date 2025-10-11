@@ -206,6 +206,10 @@ const config = {
         "fromEnvVar": null,
         "value": "darwin-arm64",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -223,6 +227,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -231,8 +236,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  username  String   @unique\n  password  String\n  isActive  Boolean  @default(true)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // 关联表：一个用户可以有多个角色\n  roles UserRole[]\n}\n\nmodel Role {\n  id          Int     @id @default(autoincrement())\n  name        String  @unique\n  description String?\n\n  // 关联表： 一个角色可以被多个用户拥有，也可以有多个权限\n  users       UserRole[]\n  permissions RolePermission[]\n}\n\nmodel Permission {\n  id          Int     @id @default(autoincrement())\n  name        String  @unique\n  description String?\n\n  // 关联表：一个权限可以被多个角色拥有\n  roles RolePermission[]\n}\n\n// 关联表：用户和角色的多对多关系\nmodel UserRole {\n  userId Int\n  user   User @relation(fields: [userId], references: [id])\n  roleId Int\n  role   Role @relation(fields: [roleId], references: [id])\n\n  // 联合主键，确保用户和角色的组合是唯一的\n  @@id([userId, roleId])\n}\n\n// 关联表：角色和权限的多对多关系\nmodel RolePermission {\n  roleId       Int\n  role         Role       @relation(fields: [roleId], references: [id])\n  permissionId Int\n  permission   Permission @relation(fields: [permissionId], references: [id])\n\n  // 联合主键，确保角色和权限的组合是唯一的\n  @@id([roleId, permissionId])\n}\n\n// 应用列表\nmodel Application {\n  id            Int      @id @default(autoincrement())\n  type          String\n  name          String\n  description   String   @db.Text\n  route         String\n  url           String?  @db.Text\n  sceneCategory String\n  industryTag   String\n  icon          String\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n  permissionKey String?  @unique\n}\n",
-  "inlineSchemaHash": "af2372db9d35900a0d9c0f49153b82df3cab71d296bb1db460721fdc81b2bdee",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  username  String   @unique\n  password  String\n  isActive  Boolean  @default(true)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // 关联表：一个用户可以有多个角色\n  roles UserRole[]\n}\n\nmodel Role {\n  id          Int     @id @default(autoincrement())\n  name        String  @unique\n  description String?\n\n  // 关联表： 一个角色可以被多个用户拥有，也可以有多个权限\n  users       UserRole[]\n  permissions RolePermission[]\n}\n\nmodel Permission {\n  id          Int     @id @default(autoincrement())\n  name        String  @unique\n  description String?\n\n  // 关联表：一个权限可以被多个角色拥有\n  roles RolePermission[]\n}\n\n// 关联表：用户和角色的多对多关系\nmodel UserRole {\n  userId Int\n  user   User @relation(fields: [userId], references: [id])\n  roleId Int\n  role   Role @relation(fields: [roleId], references: [id])\n\n  // 联合主键，确保用户和角色的组合是唯一的\n  @@id([userId, roleId])\n}\n\n// 关联表：角色和权限的多对多关系\nmodel RolePermission {\n  roleId       Int\n  role         Role       @relation(fields: [roleId], references: [id])\n  permissionId Int\n  permission   Permission @relation(fields: [permissionId], references: [id])\n\n  // 联合主键，确保角色和权限的组合是唯一的\n  @@id([roleId, permissionId])\n}\n\n// 应用列表\nmodel Application {\n  id            Int      @id @default(autoincrement())\n  type          String\n  name          String\n  description   String   @db.Text\n  route         String\n  url           String?  @db.Text\n  sceneCategory String\n  industryTag   String\n  icon          String\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n  permissionKey String?  @unique\n}\n",
+  "inlineSchemaHash": "d3465514ba0caf5a22fc4859ea5b40eac7f6e0e398d12ae9491d64a5afa9387b",
   "copyEngine": true
 }
 config.dirname = '/'

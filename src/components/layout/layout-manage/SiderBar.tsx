@@ -4,7 +4,7 @@ function SiderBar({ isCollapsed }: { isCollapsed: boolean }) {
   return (
     <div
       className={`min-h-screen bg-[#041428] flex flex-col transition-all duration-300 ease-in-out ${
-        isCollapsed ? 'w-[80px]' : 'w-[260px]'
+        isCollapsed ? 'w-[80px]' : 'min-w-[260px]'
       }`}
     >
       {/* 标题栏 */}

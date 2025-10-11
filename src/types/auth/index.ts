@@ -14,6 +14,17 @@ export interface Role {
   permissions?: Permission[];
 }
 
+// 用户相关类型
+export interface User {
+  id: number;
+  username: string;
+  password?: string;
+  isActive: boolean;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  roles?: Role[];
+}
+
 // 登录相关类型
 export interface LoginData {
   username: string;

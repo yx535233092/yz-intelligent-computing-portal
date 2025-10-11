@@ -7,7 +7,7 @@ import { getToken, removeToken } from '@/lib/utils/cookies';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 // 请求地址(后端地址)
-const BASE_URL = 'http://localhost:3000/';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 let appRouter: AppRouterInstance | null = null;
 let messageApi: {
   success: (msg: string) => void;

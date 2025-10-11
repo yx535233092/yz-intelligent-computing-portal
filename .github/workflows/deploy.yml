@@ -28,7 +28,7 @@ jobs:
 
       # 3.安装依赖
       - name: Install Dependencies
-        run: npm config set registry https://registry.npmmirror.com && npm install --legacy-peer-deps && npx prisma generate
+        run: npm install --legacy-peer-deps && npx prisma generate
 
       # 4.构建Nextjs 项目
       - name: Build Nextjs Project

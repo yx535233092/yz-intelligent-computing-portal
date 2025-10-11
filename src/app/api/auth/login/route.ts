@@ -6,7 +6,6 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { username, password } = body;
-    console.log(1);
 
     const user = await prisma.user.findFirst({
       where: {
@@ -14,7 +13,6 @@ export async function POST(req: NextRequest) {
         password,
       },
     });
-    console.log(2);
     if (!user) {
       return NextResponse.json(
         { message: '用户名或密码错误' },

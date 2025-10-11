@@ -2,9 +2,15 @@ name: h3c_portal CI/CD PipeLine
 
 # 当代码推送至master分支，触发工作流
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'The environment to deploy to'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -30,7 +36,7 @@ jobs:
 
       # 5.构建产物打包
       - name: Tar Build
-        run: tar -czvf build.tar.gz .next/ public/ package.json next.config.ts ecosystem.config.js prisma/ src/generated/
+        run: tar -czvf build.tar.gz .next/ public/ package.json next.config.ts ecosystem.config.js prisma/ next-env.d.ts
 
       # 6.检查上传路径是否存在
       - name: Check Upload Path
@@ -41,9 +47,9 @@ jobs:
           key: ${{ secrets.TULING_TOWN_PRIVATE }}
           port: ${{ secrets.PORT }}
           script: |
-            if [ ! -d "/private/yz-portal/frontend" ]; then
+            if [ ! -d "/private/yz-portal/h3c" ]; then
               echo "目录不存在，正在创建..."
-              mkdir -p /private/yz-portal/frontend
+              mkdir -p /private/yz-portal/h3c
             else
               echo "目录已存在。"
             fi
@@ -57,7 +63,7 @@ jobs:
           key: ${{ secrets.TULING_TOWN_PRIVATE }}
           port: ${{ secrets.PORT }}
           source: build.tar.gz
-          target: /private/yz-portal/frontend/
+          target: /private/yz-portal/h3c/
           clean: true
 
       # 8.部署到服务器,解压打包文件，重启pm2服务
@@ -70,20 +76,20 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             # 进入目录
-            cd /private/yz-portal/frontend
+            cd /private/yz-portal/h3c
             # 解压打包文件
             tar -xzvf build.tar.gz
             # 删除打包文件
             rm -rf build.tar.gz
             # 安装依赖
             echo "正在安装生产环境依赖..."
-            npm install --production
+            npm install --production --legacy-peer-deps
             # 检查pm2进程
-            if pm2 describe "yz-portal" > /dev/null 2>&1; then
-              echo "yz-portal 已启动，正在重载"
-              pm2 reload yz-portal
+            if pm2 describe "yz-portal-h3c" > /dev/null 2>&1; then
+              echo "yz-portal-h3c 已启动，正在重载"
+              pm2 reload yz-portal-h3c
             else
-              echo "yz-portal 未启动，正在启动"
+              echo "yz-portal-h3c 未启动，正在启动"
               pm2 start ecosystem.config.js
               pm2 save
             fi

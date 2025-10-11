@@ -1,12 +1,12 @@
 module.exports = {
   apps: [
     {
-      name: 'yz-portal',
+      name: 'yz-portal-h3c',
       script: 'npm',
       args: 'start',
       env: {
         NODE_ENV: 'production',
-        PORT: 3000,
+        PORT: 8001,
       },
     },
   ],

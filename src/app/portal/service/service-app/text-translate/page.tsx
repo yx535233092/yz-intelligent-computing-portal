@@ -9,6 +9,7 @@ import {
   SwapOutlined,
 } from '@ant-design/icons';
 import { translateAPI } from '@/apis/data-process/translate';
+import { copyToClipboard } from '@/lib/utils/clipboard';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -174,11 +175,11 @@ export default function TextTranslatePage() {
       return;
     }
 
-    try {
-      await navigator.clipboard.writeText(translatedText);
-    } catch (error) {
-      console.error('复制失败:', error);
-      message.error('复制失败');
+    const success = await copyToClipboard(translatedText);
+    if (success) {
+      message.success('复制成功');
+    } else {
+      message.error('复制失败，请手动复制');
     }
   };
 

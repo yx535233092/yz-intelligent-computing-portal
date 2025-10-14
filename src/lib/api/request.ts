@@ -50,12 +50,9 @@ api.interceptors.response.use(
       // 清除token
       removeToken();
       // 获取错误详情
-      let errorDetail = (error.response?.data as { detail: string }).detail;
-      // 如果错误详情为Not authenticated，则显示登录已过期，请重新登录
-      if (errorDetail === 'Not authenticated') {
-        errorDetail = '登录已过期，请重新登录';
-      }
-      messageApi?.error(errorDetail);
+      const errorMessage = (error.response?.data as { message: string })
+        .message;
+      messageApi?.error(errorMessage);
       // 跳转至登录页
       if (appRouter) {
         console.log('aixos: router push');

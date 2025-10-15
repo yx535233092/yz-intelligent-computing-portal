@@ -10,7 +10,7 @@ function DocumentProcessContent() {
   const dotsUrl =
     process.env.NODE_ENV === 'development'
       ? 'http://localhost:9000/dots'
-      : 'http://39.175.132.230:30128/dots';
+      : 'http://39.175.132.230:35036';
 
   useEffect(() => {
     const getPermissions = async () => {
@@ -34,7 +34,7 @@ function DocumentProcessContent() {
         }
       });
     };
-    getPermissions();
+    // getPermissions();
   }, [title]);
 
   return (

@@ -55,7 +55,7 @@ function LoginForm() {
             <Logo></Logo>
           </div>
           <h1 className={`text-[36px] font-bold ${styles['gradient-text']}`}>
-            智算服务平台
+            智算专业服务
           </h1>
         </div>
 

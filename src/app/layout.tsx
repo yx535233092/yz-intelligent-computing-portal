@@ -8,8 +8,7 @@ import RouterSetter from '@/components/common/RouterSetter';
  * 元数据配置
  */
 export const metadata: Metadata = {
-  title:
-    process.env.NODE_ENV === 'production' ? '新华三 - 智算门户' : '开发环境',
+  title: process.env.NODE_ENV === 'production' ? '智算专业门户' : '开发环境',
 };
 
 /**

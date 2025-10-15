@@ -2,13 +2,39 @@
 
 import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { getPermissionsAPI } from '@/apis/permission';
 
 function DocumentProcessContent() {
   const searchParams = useSearchParams();
   const title = searchParams.get('title');
+  const dotsUrl =
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:9000/dots'
+      : 'http://39.175.132.230:30128/dots';
 
   useEffect(() => {
-    console.log(title);
+    const getPermissions = async () => {
+      const res = await getPermissionsAPI();
+      res.permissions.find((item) => {
+        if (item.description && title) {
+          const isInclude = item.description.includes(title);
+          if (!isInclude) {
+            const btn = document.querySelector('iframe');
+            btn?.addEventListener('load', () => {
+              setTimeout(() => {
+                const parseBtn =
+                  btn?.contentWindow?.document.querySelector('#parse_button');
+                parseBtn?.setAttribute('disabled', 'true');
+                const uploadBtn =
+                  btn?.contentWindow?.document.querySelector('.svelte-edrmkl');
+                uploadBtn?.setAttribute('disabled', 'true');
+              }, 300);
+            });
+          }
+        }
+      });
+    };
+    getPermissions();
   }, [title]);
 
   return (
@@ -18,7 +44,7 @@ function DocumentProcessContent() {
         style={{
           height: 'calc(100vh - 64px)',
         }}
-        src={`http://39.175.132.230:35036/?title=${title}`}
+        src={`${dotsUrl}/?title=${title}`}
       ></iframe>
     </div>
   );

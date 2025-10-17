@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import 'ketcher-react/dist/index.css';
-import { Ketcher } from 'ketcher-core';
-// @ts-expect-error no types
-import { StandaloneStructServiceProvider } from 'ketcher-standalone';
+import type { Ketcher } from 'ketcher-core';
 import dynamic from 'next/dynamic';
 
 // 动态导入 Editor 和 InfoModal
@@ -25,7 +23,23 @@ const KetcherEditor = () => {
   const [smiles, setSmiles] = useState('');
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const localStructServiceProvider = new StandaloneStructServiceProvider();
+  const [localStructServiceProvider, setLocalStructServiceProvider] =
+    useState<unknown>(null);
+
+  // 初始化 StandaloneStructServiceProvider（仅在客户端）
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // 动态导入 ketcher-standalone 避免服务器端执行
+      // @ts-expect-error - ketcher-standalone types are not properly exported
+      import('ketcher-standalone').then(
+        (module: { StandaloneStructServiceProvider: new () => unknown }) => {
+          const StandaloneStructServiceProvider =
+            module.StandaloneStructServiceProvider;
+          setLocalStructServiceProvider(new StandaloneStructServiceProvider());
+        }
+      );
+    }
+  }, []);
 
   // 1. listen parent post message
   useEffect(() => {
@@ -43,7 +57,7 @@ const KetcherEditor = () => {
     return () => {
       window.removeEventListener('message', handleMessage);
     };
-  }, []);
+  }, [smiles]);
 
   const onInit = (ketcher: Ketcher) => {
     window.ketcher = ketcher;
@@ -70,7 +84,7 @@ const KetcherEditor = () => {
     });
   };
 
-  if (!smiles) {
+  if (!smiles || !localStructServiceProvider) {
     return <div>加载中...</div>;
   }
 
@@ -83,7 +97,7 @@ const KetcherEditor = () => {
           setErrorMessage(message.toString());
         }}
         staticResourcesUrl={'/ketcher/'}
-        structServiceProvider={localStructServiceProvider}
+        structServiceProvider={localStructServiceProvider as never}
         onInit={onInit}
       />
       {/* 错误处理 */}

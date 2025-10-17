@@ -18,7 +18,7 @@ function DocumentProcessContent() {
       res.permissions.find((item) => {
         if (item.description && title) {
           const isInclude = item.description.includes(title);
-          if (!isInclude) {
+          if (isInclude) {
             const btn = document.querySelector('iframe');
             btn?.addEventListener('load', () => {
               setTimeout(() => {

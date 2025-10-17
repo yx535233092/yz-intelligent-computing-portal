@@ -11,8 +11,8 @@ export default function HjPlatform() {
   // 根据环境设置API地址
   const baseUrl =
     process.env.NODE_ENV === 'development'
-      ? 'http://localhost:9000'
-      : 'http://39.175.132.230:30146';
+      ? 'http://localhost:6002'
+      : 'http://39.175.132.230:30162';
 
   useEffect(() => {
     const fetchAccessToken = async () => {
@@ -70,7 +70,7 @@ export default function HjPlatform() {
   return (
     <div>
       <iframe
-        src={`${baseUrl}/platform/docchain/chat`}
+        src={`${baseUrl}/docchain/chat`}
         style={{
           height: 'calc(100vh - 64px)',
           width: '100%',

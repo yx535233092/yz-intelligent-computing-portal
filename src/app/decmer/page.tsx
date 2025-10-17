@@ -1,8 +1,8 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { cardBase, softBtn, primaryBtn } from './className';
-import ParseTask from './ParseTask';
+import { cardBase, softBtn, primaryBtn } from './styles/className';
+import TaskCard from './components/TaskCard';
 
 export default function Decmer() {
   const [fileList, setFileList] = useState<File[]>([]);
@@ -118,7 +118,7 @@ export default function Decmer() {
       {fileList.length > 0 && (
         <div className={`${cardBase} p-12 text-center flex flex-col gap-6`}>
           {fileList.map((file, index) => (
-            <ParseTask
+            <TaskCard
               key={index}
               file={file}
               id={index}

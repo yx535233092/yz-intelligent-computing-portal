@@ -9,8 +9,8 @@ function DocumentProcessContent() {
   const title = searchParams.get('title');
   const dotsUrl =
     process.env.NODE_ENV === 'development'
-      ? 'http://localhost:9000/dots'
-      : 'http://39.175.132.230:35036';
+      ? 'http://localhost:6001'
+      : 'http://39.175.132.230:30161';
 
   useEffect(() => {
     const getPermissions = async () => {
@@ -49,8 +49,6 @@ function DocumentProcessContent() {
     </div>
   );
 }
-// http://39.175.132.230:35022/
-//http://192.168.10.24:7860/?title=${title}
 
 export default function DocumentProcess() {
   return (

@@ -1,23 +1,10 @@
-import { cardBase, softBtn } from './className';
-import { useState } from 'react';
+import { cardBase, softBtn } from '../styles/className';
+import { useEffect, useRef, useState } from 'react';
 import { LoadingOutlined } from '@ant-design/icons';
 import { chemicalParseAPI } from '@/apis/chemicalParse';
 import Image from 'next/image';
-import dynamic from 'next/dynamic';
 
-const ChemicalEditor = dynamic(
-  () => import('@/components/chemical/ChemicalEditor'),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex items-center justify-center h-full">
-        加载编辑器中...
-      </div>
-    ),
-  }
-);
-
-export default function ParseTask({
+function TaskCard({
   file,
   id,
   onDelete,
@@ -27,15 +14,21 @@ export default function ParseTask({
   onDelete: (id: number) => void;
 }) {
   const { name, lastModified } = file;
-
   const [status, setStatus] = useState<'解析中' | '解析完成' | '解析失败'>(
     '解析中'
   );
   const [smiles, setSmiles] = useState('');
   const [uploaded_file_url, setUploaded_file_url] = useState('');
+  const iframe = useRef(null);
+  const [initTimes, setInitTimes] = useState(0);
 
-  // 解析化学结构为 SMILES
-  const transformChemical2SMILES = (async () => {
+  // 1.Dom finish render do
+  useEffect(() => {
+    transformChemical2SMILES();
+  }, []);
+
+  // 2. 解析化学结构为 SMILES
+  const transformChemical2SMILES = async () => {
     const postData = new FormData();
     postData.append('file', file);
     postData.append('mode', 'analyze');
@@ -43,15 +36,46 @@ export default function ParseTask({
       const result = await chemicalParseAPI(postData);
       if (result.status === 'success_with_analysis') {
         setStatus('解析完成');
-        setSmiles(result.SMILES);
         setUploaded_file_url(result.uploaded_file_url);
+        setSmiles(result.SMILES);
       } else {
         setStatus('解析失败');
       }
     } catch (error) {
       setStatus('解析失败');
+      console.error(error);
     }
-  })();
+  };
+
+  // 3. post iframe message
+  useEffect(() => {
+    if (smiles && iframe.current && initTimes === 0) {
+      setInitTimes(1);
+      const iframeDom: HTMLIFrameElement = iframe.current;
+      iframeDom.addEventListener('load', () => {
+        console.log('load completed');
+        console.log('发送smiles:', smiles);
+        iframeDom.contentWindow?.postMessage(
+          {
+            smiles: smiles,
+          },
+          '*'
+        );
+      });
+    }
+  }, [smiles]);
+
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      console.log('接受子信息', e.data);
+      const { smiles } = e.data;
+      setSmiles(smiles);
+    };
+    window.addEventListener('message', handleMessage);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col gap-8 mt-8">
@@ -113,8 +137,13 @@ export default function ParseTask({
           {/* 内联编辑器示例 */}
           <div className="lg:col-span-2 pb-8">
             <div className="mb-2 text-[13px] text-black/60">结构编辑器</div>
-            <div className="rounded-xl border border-black/10 bg-white/90 p-2 h-full">
-              {status === '解析完成' && <ChemicalEditor smiles={smiles} />}
+            <div className="rounded-xl border border-black/10 bg-white/90 p-2 h-[500px]">
+              {status === '解析完成' && (
+                <iframe
+                  ref={iframe}
+                  src="/decmer/components/ketcher-editor"
+                ></iframe>
+              )}
             </div>
           </div>
         </div>
@@ -122,3 +151,5 @@ export default function ParseTask({
     </div>
   );
 }
+
+export default TaskCard;

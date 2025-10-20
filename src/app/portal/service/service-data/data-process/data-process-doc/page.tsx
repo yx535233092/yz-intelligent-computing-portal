@@ -2,40 +2,46 @@
 
 import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { getPermissionsAPI } from '@/apis/permission';
+import { useSelector } from 'react-redux';
+import { userPermissionSelector } from '@/lib/store/selectors/permissionSelector';
 
 function DocumentProcessContent() {
+  // 1. 获取用户权限
+  const userPermissions = useSelector(userPermissionSelector);
+
+  // 2. 获取url权限参数
   const searchParams = useSearchParams();
   const title = searchParams.get('title');
-  const dotsUrl =
-    process.env.NODE_ENV === 'development'
-      ? 'http://localhost:6001'
-      : 'http://39.175.132.230:30161';
+  const permissionKey = searchParams.get('permissionKey');
 
+  // 3. iframe地址拼接
+  const url = `/dots?title=${title}`;
+
+  // 4. 无权限禁用按钮
   useEffect(() => {
-    const getPermissions = async () => {
-      const res = await getPermissionsAPI();
-      res.permissions.find((item) => {
-        if (item.description && title) {
-          const isInclude = item.description.includes(title);
-          if (isInclude) {
-            const btn = document.querySelector('iframe');
-            btn?.addEventListener('load', () => {
-              setTimeout(() => {
-                const parseBtn =
-                  btn?.contentWindow?.document.querySelector('#parse_button');
-                parseBtn?.setAttribute('disabled', 'true');
-                const uploadBtn =
-                  btn?.contentWindow?.document.querySelector('.svelte-edrmkl');
-                uploadBtn?.setAttribute('disabled', 'true');
-              }, 300);
-            });
+    if (!permissionKey || !userPermissions.includes(permissionKey)) {
+      const iframe = document.querySelector('iframe');
+      // 每隔300ms获取一次dom元素，确保加载完成
+      iframe?.addEventListener('load', () => {
+        let isLoaded = false;
+        const interval = setInterval(() => {
+          if (iframe?.contentWindow?.document.querySelector('#parse_button')) {
+            isLoaded = true;
           }
-        }
+          if (isLoaded) {
+            const parseBtn =
+              iframe?.contentWindow?.document.querySelector('#parse_button');
+            console.log(parseBtn);
+            parseBtn?.setAttribute('disabled', 'true');
+            const uploadBtn =
+              iframe?.contentWindow?.document.querySelector('.svelte-edrmkl');
+            uploadBtn?.setAttribute('disabled', 'true');
+            clearInterval(interval);
+          }
+        }, 300);
       });
-    };
-    // getPermissions();
-  }, [title]);
+    }
+  }, []);
 
   return (
     <div>
@@ -44,7 +50,7 @@ function DocumentProcessContent() {
         style={{
           height: 'calc(100vh - 64px)',
         }}
-        src={`${dotsUrl}/?title=${title}`}
+        src={url}
       ></iframe>
     </div>
   );

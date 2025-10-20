@@ -5,12 +5,16 @@ import {
   LoadingOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
+  StopOutlined,
 } from '@ant-design/icons';
 import { useEffect, useState, useRef } from 'react';
 import { Empty, Tooltip } from 'antd';
 import { getMediaTaskList } from '@/apis/data-process/media';
 import ContextMenu from './ContextMenu';
 import type { MediaFileListProps, MediaTask } from '@/types/data-process';
+import { useSelector } from 'react-redux';
+import { userPermissionSelector } from '@/lib/store/selectors/permissionSelector';
+import { useSearchParams } from 'next/navigation';
 
 function MediaFileList({
   handleCreateMediaTask,
@@ -18,6 +22,23 @@ function MediaFileList({
   mediaTaskListRefresh,
   type,
 }: MediaFileListProps) {
+  // 1. 获取权限
+  const userPermissions = useSelector(userPermissionSelector);
+  const searchParams = useSearchParams();
+  const permissionKey = searchParams.get('permissionKey');
+  const [hasPermission, setHasPermission] = useState(false);
+
+  // 2. 判断权限
+  const judegePermission = () => {
+    if (permissionKey && userPermissions.includes(permissionKey)) {
+      return true;
+    }
+    return false;
+  };
+  useEffect(() => {
+    setHasPermission(judegePermission());
+  }, []);
+
   const [taskList, setTaskList] = useState<MediaTask[]>([]);
   const [activeMediaTask, setActiveMediaTask] = useState<MediaTask | null>(
     null
@@ -122,19 +143,28 @@ function MediaFileList({
         <>
           <span>任务列表 ({taskList.length})</span>
           <div className="flex gap-4">
-            <Tooltip
-              title="新建任务"
-              className="hover:scale-110 transition-all duration-300"
-            >
-              <PlusCircleOutlined
-                style={{
-                  color: '#888',
-                  fontSize: '24px',
-                  cursor: 'pointer',
-                }}
-                onClick={() => handleCreateMediaTask()}
-              />
-            </Tooltip>
+            {hasPermission ? (
+              <Tooltip
+                title="新建任务"
+                className="hover:scale-110 transition-all duration-300"
+              >
+                <PlusCircleOutlined
+                  style={{
+                    color: '#888',
+                    fontSize: '24px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => handleCreateMediaTask()}
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip
+                title="无权限"
+                className="hover:scale-110 transition-all duration-300"
+              >
+                <StopOutlined />
+              </Tooltip>
+            )}
           </div>
         </>
       </div>

@@ -1,7 +1,10 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { FileItem } from '@/types/excel';
+import { userPermissionSelector } from '@/lib/store/selectors/permissionSelector';
+import { useSelector } from 'react-redux';
+import { useSearchParams } from 'next/navigation';
 
 interface ExcelUploadProps {
   fileList: FileItem[];
@@ -20,6 +23,23 @@ export default function ExcelUpload({
   onFileSelect,
   onParseTable,
 }: ExcelUploadProps) {
+  // 1. 获取权限
+  const userPermissions = useSelector(userPermissionSelector);
+  const searchParams = useSearchParams();
+  const permissionKey = searchParams.get('permissionKey');
+  const [hasPermission, setHasPermission] = useState(false);
+
+  // 2. 判断权限
+  const judegePermission = () => {
+    if (permissionKey && userPermissions.includes(permissionKey)) {
+      return true;
+    }
+    return false;
+  };
+  useEffect(() => {
+    setHasPermission(judegePermission());
+  }, []);
+
   const [isDragging, setIsDragging] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -372,8 +392,10 @@ export default function ExcelUpload({
       {fileList.length > 0 && (
         <div className="flex gap-3 pt-4 flex-shrink-0">
           <button
-            onClick={onParseTable}
-            disabled={!selectedFileId || selectedFile?.isProcessing}
+            onClick={hasPermission ? onParseTable : () => {}}
+            disabled={
+              !selectedFileId || selectedFile?.isProcessing || !hasPermission
+            }
             className={`
               flex-1 px-4 py-2 rounded-lg font-medium transition-all duration-200
               ${
@@ -384,7 +406,9 @@ export default function ExcelUpload({
             `}
           >
             <div className="flex items-center justify-center gap-2">
-              {selectedFile?.isProcessing ? (
+              {!hasPermission ? (
+                <div>无权限</div>
+              ) : selectedFile?.isProcessing ? (
                 <>
                   <svg
                     className="w-5 h-5 animate-spin"

@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import {
   persistStore,
   persistReducer,
@@ -10,22 +10,28 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // 默认使用 localStorage
-import rootReducer from './combineReducers'; // 导入组合后的 reducer
+import userInfoReducer from './features/userInfoSlice'; // 导入userInfo切片
+import userPermissionReducer from './features/userPermission'; // 导入userPermission切片
 
 // 1. 配置持久化
 const persistConfig = {
   key: 'root', // 存储在本地的键名
-  version: 1, // 版本号
   storage, // 默认使用 localStorage
-  // 仅持久化 userInfo 切片，而忽略 isLoading
-  whitelist: ['userInfo'],
+  version: 1, // 版本号
+  whitelist: ['userInfo', 'userPermission'], // 仅持久化 userInfo 和 userPermission 切片
 };
 
-// 2. 将你的 rootReducer 包裹在 persistReducer 中
+// 2. 将组合根reducer
+const rootReducer = combineReducers({
+  userInfo: userInfoReducer,
+  userPermission: userPermissionReducer,
+});
+
+// 3. 包装reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
+// 4. 配置Store
 const store = configureStore({
-  // 使用包裹后的 reducer
   reducer: persistedReducer,
   // 3. 添加中间件，忽略 redux-persist 的 action，以避免序列化警告
   middleware: (getDefaultMiddleware) =>
@@ -36,9 +42,12 @@ const store = configureStore({
     }),
 });
 
-// 4. 创建 persistor 对象
+// 6. 导出类型
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+// 5. 创建 persistor 对象
 export const persistor = persistStore(store);
 
-export type RootState = ReturnType<typeof store.getState>;
-
+// 7. 导出store
 export default store;

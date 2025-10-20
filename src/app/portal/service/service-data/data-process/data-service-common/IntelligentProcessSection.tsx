@@ -97,76 +97,47 @@ const ProductCard = ({
             ))}
           </p>
         </div>
-        {hasPermission ? (
-          <a
-            href={link}
-            target="_blank"
-            className={commonStyles.linkStyle}
-            style={{
-              background: 'linear-gradient(135deg, #d32d26, #b71c1c)',
-              color: 'white',
-              padding: '0px 16px',
-              borderRadius: '25px',
-              textDecoration: 'none',
-              fontSize: '14px',
-              fontWeight: '600',
-              boxShadow: '0 4px 15px rgba(211, 45, 38, 0.3)',
-              border: '2px solid transparent',
-              transition: 'all 0.3s ease',
-              display: 'inline-block',
-              transform: 'translateY(0)',
-              position: 'relative',
-              overflow: 'hidden',
-              width: '120px',
-              height: '40px',
-              lineHeight: '35px',
-              textAlign: 'center',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px) ';
-              e.currentTarget.style.boxShadow =
-                '0 8px 25px rgba(211, 45, 38, 0.4)';
-              e.currentTarget.style.background =
-                'linear-gradient(135deg, #b71c1c, #8b0000)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0) scale(1)';
-              e.currentTarget.style.boxShadow =
-                '0 4px 15px rgba(211, 45, 38, 0.3)';
-              e.currentTarget.style.background =
-                'linear-gradient(135deg, #d32d26, #b71c1c)';
-            }}
-          >
-            立即体验 {'>'}
-          </a>
-        ) : (
-          <button
-            onClick={() => {
-              message.warning('您没有访问此服务的权限，请联系管理员开通');
-            }}
-            className={commonStyles.linkStyle}
-            style={{
-              background: 'linear-gradient(135deg, #9e9e9e, #757575)',
-              color: 'white',
-              padding: '0px 16px',
-              borderRadius: '25px',
-              textDecoration: 'none',
-              fontSize: '14px',
-              fontWeight: '600',
-              boxShadow: '0 4px 15px rgba(158, 158, 158, 0.3)',
-              border: '2px solid transparent',
-              transition: 'all 0.3s ease',
-              display: 'inline-block',
-              width: '120px',
-              height: '40px',
-              lineHeight: '35px',
-              textAlign: 'center',
-              cursor: 'not-allowed',
-            }}
-          >
-            暂无权限
-          </button>
-        )}
+        <a
+          href={link}
+          target="_blank"
+          className={commonStyles.linkStyle}
+          style={{
+            background: 'linear-gradient(135deg, #d32d26, #b71c1c)',
+            color: 'white',
+            padding: '0px 16px',
+            borderRadius: '25px',
+            textDecoration: 'none',
+            fontSize: '14px',
+            fontWeight: '600',
+            boxShadow: '0 4px 15px rgba(211, 45, 38, 0.3)',
+            border: '2px solid transparent',
+            transition: 'all 0.3s ease',
+            display: 'inline-block',
+            transform: 'translateY(0)',
+            position: 'relative',
+            overflow: 'hidden',
+            width: '120px',
+            height: '40px',
+            lineHeight: '35px',
+            textAlign: 'center',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px) ';
+            e.currentTarget.style.boxShadow =
+              '0 8px 25px rgba(211, 45, 38, 0.4)';
+            e.currentTarget.style.background =
+              'linear-gradient(135deg, #b71c1c, #8b0000)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+            e.currentTarget.style.boxShadow =
+              '0 4px 15px rgba(211, 45, 38, 0.3)';
+            e.currentTarget.style.background =
+              'linear-gradient(135deg, #d32d26, #b71c1c)';
+          }}
+        >
+          立即体验 {'>'}
+        </a>
       </div>
     </div>
   </div>

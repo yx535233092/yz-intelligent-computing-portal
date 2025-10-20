@@ -11,46 +11,6 @@ import type { FileItem } from '@/types/data-process';
 
 // 菜单列表
 const menus = [
-  // {
-  //   label: '常规文档解析',
-  //   type: 'document',
-  //   key: 0,
-  // },
-  // {
-  //   label: '表格文档解析',
-  //   type: 'document',
-  //   key: 1,
-  // },
-  // {
-  //   label: '公式类文档解析',
-  //   type: 'document',
-  //   key: 2,
-  // },
-  // {
-  //   label: '媒体报刊类文档解析',
-  //   type: 'document',
-  //   key: 3,
-  // },
-  // {
-  //   label: '论文解析',
-  //   type: 'document',
-  //   key: 4,
-  // },
-  // {
-  //   label: '试卷解析',
-  //   type: 'document',
-  //   key: 5,
-  // },
-  // {
-  //   label: '书籍解析',
-  //   type: 'document',
-  //   key: 6,
-  // },
-  // {
-  //   label: '手写解析',
-  //   type: 'document',
-  //   key: 7,
-  // },
   {
     label: '音频解析',
     type: 'audio',

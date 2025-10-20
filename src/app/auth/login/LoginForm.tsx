@@ -8,7 +8,10 @@ import LoadingContext from '@/components/common/LoadingContext';
 import { authService } from '@/apis/login';
 import styles from './loginForm.module.css';
 import { setUserInfo } from '@/lib/store/features/userInfoSlice';
+import { setUserPermissions } from '@/lib/store/features/userPermission';
 import { useDispatch } from 'react-redux';
+import { getUserPermissionsAPI } from '@/apis/applications';
+import { userPermissionSelector } from '@/lib/store/selectors/permissionSelector';
 
 function LoginForm() {
   const [username, setUsername] = useState('');
@@ -32,9 +35,11 @@ function LoginForm() {
         });
         // 存储用户信息至redux中
         dispatch(setUserInfo(userInfo));
-        // 存储用户应用列表至redux中
-        // const userAppList = await authService.getUserAppList();
-        // dispatch(setUserAppList(userAppList));
+
+        const userPermissions = await getUserPermissionsAPI();
+        // 存储用户权限至redux中
+        dispatch(setUserPermissions(userPermissions.data.permissions));
+
         // 4.登录成功重定向至首页
         location.href = '/';
       } catch (error) {

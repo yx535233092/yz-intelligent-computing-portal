@@ -15,7 +15,7 @@ function DocumentProcessContent() {
   const permissionKey = searchParams.get('permissionKey');
 
   // 3. iframe地址拼接
-  const url = `/dots?title=${title}`;
+  const url = `/dots/?title=${title}`;
 
   // 4. 无权限禁用按钮
   useEffect(() => {

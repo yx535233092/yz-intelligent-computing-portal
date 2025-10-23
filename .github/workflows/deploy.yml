@@ -36,7 +36,7 @@ jobs:
 
       # 5.构建产物打包
       - name: Tar Build
-        run: tar -czvf build.tar.gz .next/ public/ package.json next.config.ts ecosystem.config.js prisma/ next-env.d.ts
+        run: tar -czvf build.tar.gz .next/ public/ package.json next.config.ts ecosystem.config.js prisma/ next-env.d.ts .env.production
 
       # 6.检查上传路径是否存在
       - name: Check Upload Path

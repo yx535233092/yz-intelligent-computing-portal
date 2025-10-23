@@ -9,7 +9,7 @@ export default function Header() {
       {/* 标题与图标 */}
       <Logo />
       <Link className="text-xl font-normal ml-4 tracking-wide title" href="/">
-        智算专业服务
+        天津移动智算专业服务
       </Link>
 
       {/* 导航栏与登录用户信息 */}

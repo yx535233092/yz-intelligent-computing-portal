@@ -93,44 +93,7 @@ const tabItems = [
       />
     ),
   },
-  {
-    key: '2',
-    label: '运营商',
-    children: (
-      <CaseGrid
-        items={[
-          // {
-          //   title: '某省联通智能受理',
-          //   description:
-          //     '覆盖业务咨询、信息查询、业务受理热点应用场景，实现用户利用自然语言自助进行业务咨询、信息查询、业务办理，降低系统上手难度，改善人机交互友好性，提高省份客户系统满意度，助力省份客户降本增效。',
-          //   picName: '运营商1.webp',
-          //   routeAdress: '/industry-cases/operator',
-          // },
-          {
-            title: '某电信运营商智能问数',
-            description:
-              '通过多模态的自然语言对话式交互、自动数据分析和展现，实现零门槛的智能用数。',
-            picName: 'operator-telecom.webp',
-            routeAdress: `${BASE_URL}/operator/wenshu`,
-          },
-          {
-            title: '云南移动方案助手',
-            description:
-              '通过方案智能体的打标、推荐和编制，辅助一线进行优质方案的快速检索，促进方案编写效率提升40%，编写质量提升30%。',
-            picName: 'operator-yunnan-mobile.webp',
-            routeAdress: `${BASE_URL}/operator/yunnan`,
-          },
-          {
-            title: '山东移动标书助手',
-            description:
-              '针对编写招标文件过程中缺少文档编写辅助系统，完全依赖人工编写各类招投标文档，标书支撑面临编制工作量大、审核耗时长、依赖个人经验、存量数据挖掘不足等痛点。基于历史积累的投标文件、相关政策法规、人员资料信息等材料构建标书知识库，并融合大小模型能力，打造智慧标书助手，加快标书制作审核效率，提升标书人员专业水平。',
-            picName: 'operator-shandong-mobile.webp',
-            routeAdress: `${BASE_URL}/operator/shandong`,
-          },
-        ]}
-      />
-    ),
-  },
+
   {
     key: '3',
     label: '企业',

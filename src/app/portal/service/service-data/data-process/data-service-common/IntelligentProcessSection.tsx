@@ -61,28 +61,10 @@ const ProductCard = ({
       background: commonStyles.cardGradient,
       ...getAnimationStyle(isInView, delay),
       transition: 'all 0.3s ease',
-      opacity: hasPermission ? 1 : 0.6,
+      opacity: 1,
       position: 'relative',
     }}
   >
-    {!hasPermission && (
-      <div
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          background: 'rgba(255, 152, 0, 0.9)',
-          color: 'white',
-          padding: '4px 12px',
-          borderRadius: '12px',
-          fontSize: '12px',
-          fontWeight: 'bold',
-          zIndex: 10,
-        }}
-      >
-        🔒 需要权限
-      </div>
-    )}
     <div className="flex flex-col items-center text-center h-full">
       <div className={`mb-6 ${commonStyles.demoContainer}`}>{demoContent}</div>
       <div className="flex-1 flex flex-col justify-between items-center">

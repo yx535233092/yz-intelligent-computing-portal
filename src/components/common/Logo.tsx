@@ -5,9 +5,9 @@ export default function Logo() {
   return (
     <Link href="/">
       <Image
-        width={56}
+        width={38}
         height={20}
-        src="/assets/images/logos/h3c-logo.webp"
+        src="/assets/images/logos/yidong.png"
         alt="logo"
         priority
       />

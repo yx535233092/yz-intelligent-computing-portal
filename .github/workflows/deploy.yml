@@ -47,9 +47,9 @@ jobs:
           key: ${{ secrets.TULING_TOWN_PRIVATE }}
           port: ${{ secrets.PORT }}
           script: |
-            if [ ! -d "/private/yz-portal/h3c" ]; then
+            if [ ! -d "/private/yz-portal/tianjing" ]; then
               echo "目录不存在，正在创建..."
-              mkdir -p /private/yz-portal/h3c
+              mkdir -p /private/yz-portal/tianjing
             else
               echo "目录已存在。"
             fi
@@ -63,7 +63,7 @@ jobs:
           key: ${{ secrets.TULING_TOWN_PRIVATE }}
           port: ${{ secrets.PORT }}
           source: build.tar.gz
-          target: /private/yz-portal/h3c/
+          target: /private/yz-portal/tianjing/
           clean: true
 
       # 8.部署到服务器,解压打包文件，重启pm2服务
@@ -76,7 +76,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             # 进入目录
-            cd /private/yz-portal/h3c
+            cd /private/yz-portal/tianjing
             # 解压打包文件
             tar -xzvf build.tar.gz
             # 删除打包文件
@@ -85,11 +85,11 @@ jobs:
             echo "正在安装生产环境依赖..."
             npm install --production --legacy-peer-deps
             # 检查pm2进程
-            if pm2 describe "yz-portal-h3c" > /dev/null 2>&1; then
-              echo "yz-portal-h3c 已启动，正在重载"
-              pm2 reload yz-portal-h3c
+            if pm2 describe "yz-portal-tianjing" > /dev/null 2>&1; then
+              echo "yz-portal-tianjing 已启动，正在重载"
+              pm2 reload yz-portal-tianjing
             else
-              echo "yz-portal-h3c 未启动，正在启动"
+              echo "yz-portal-tianjing 未启动，正在启动"
               pm2 start ecosystem.config.js
               pm2 save
             fi

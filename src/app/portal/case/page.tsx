@@ -183,7 +183,7 @@ export default function IndustryCasesPage() {
             <p className="text-xl text-gray-500 text-center mb-18 leading-10 tracking-wider">
               协助众多企业完成了智能化数字化的转型及生产力工具的升级无论是快速扩张还是稳重求
               <br />
-              进，H3C都能应企业所需。
+              进，天津移动都能应企业所需。
             </p>
 
             <Tabs

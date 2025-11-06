@@ -11,7 +11,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -73,9 +73,9 @@ model Application {
   id            Int      @id @default(autoincrement())
   type          String
   name          String
-  description   String   @db.Text
+  description   String
   route         String
-  url           String?  @db.Text
+  url           String?
   sceneCategory String
   industryTag   String
   icon          String

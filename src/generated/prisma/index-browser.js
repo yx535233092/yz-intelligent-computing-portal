@@ -114,9 +114,6 @@ Prisma.NullTypes = {
  */
 
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -171,36 +168,9 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.UserOrderByRelevanceFieldEnum = {
-  username: 'username',
-  password: 'password'
-};
-
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
-};
-
-exports.Prisma.RoleOrderByRelevanceFieldEnum = {
-  name: 'name',
-  description: 'description'
-};
-
-exports.Prisma.PermissionOrderByRelevanceFieldEnum = {
-  name: 'name',
-  description: 'description'
-};
-
-exports.Prisma.ApplicationOrderByRelevanceFieldEnum = {
-  type: 'type',
-  name: 'name',
-  description: 'description',
-  route: 'route',
-  url: 'url',
-  sceneCategory: 'sceneCategory',
-  industryTag: 'industryTag',
-  icon: 'icon',
-  permissionKey: 'permissionKey'
 };
 
 

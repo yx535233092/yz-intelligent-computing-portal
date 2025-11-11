@@ -17,7 +17,7 @@ export async function middleware(req: NextRequest) {
   if (pathname.startsWith('/api/')) {
     const token = req.headers.get('Authorization')?.split(' ')[1];
     if (!token) {
-      return NextResponse.json({ message: '缺失token' }, { status: 401 });
+      return NextResponse.json({ message: '请求缺失token' }, { status: 401 });
     }
     try {
       const secret = new TextEncoder().encode('secret');
@@ -25,11 +25,11 @@ export async function middleware(req: NextRequest) {
       if (decoded) {
         return NextResponse.next();
       } else {
-        return NextResponse.json({ message: 'token验证失败' }, { status: 500 });
+        return NextResponse.json({ message: 'token验证失败' }, { status: 401 });
       }
     } catch (error) {
       return NextResponse.json(
-        { error, message: 'token验证失败' },
+        { error, message: '服务器错误' },
         { status: 500 }
       );
     }
@@ -51,6 +51,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL('/auth/login', req.url));
       }
     } catch (error) {
+      console.error(error);
       // 删除token并重定向至登录页
       req.cookies.delete('token');
       return NextResponse.redirect(new URL('/auth/login', req.url));

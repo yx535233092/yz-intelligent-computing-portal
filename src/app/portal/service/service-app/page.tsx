@@ -362,7 +362,6 @@ export default function AppService() {
                         onClick={() => handleAppClick(app)}
                         className={styles['app-card']}
                         style={{
-                          opacity: hasAccess ? 1 : 0.5,
                           cursor: hasAccess ? 'pointer' : 'not-allowed',
                         }}
                       >

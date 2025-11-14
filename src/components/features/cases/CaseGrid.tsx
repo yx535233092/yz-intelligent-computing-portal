@@ -31,6 +31,8 @@ const CaseGrid: React.FC<CaseGridProps> = React.memo(({ items }) => {
       return '企业';
     } else if (routeAdress.includes('education')) {
       return '教育';
+    } else if (routeAdress.includes('medical')) {
+      return '医疗';
     } else {
       return '其他';
     }
@@ -48,6 +50,8 @@ const CaseGrid: React.FC<CaseGridProps> = React.memo(({ items }) => {
       return `/assets/images/cases/enterprise/${picName}`;
     } else if (routeAdress.includes('education')) {
       return `/assets/images/cases/education/${picName}`;
+    } else if (routeAdress.includes('medical')) {
+      return `/assets/images/cases/medical/${picName}`;
     } else {
       return `/${picName}`;
     }

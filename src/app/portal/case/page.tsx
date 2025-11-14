@@ -144,6 +144,13 @@ const tabItems = [
             picName: 'enterprise-group-qa.webp',
             routeAdress: `${BASE_URL}/enterprise/jituan`,
           },
+          {
+            title: '气田PCS智能问数',
+            description:
+              '实现自然语言与业务数据库的问答交互，通过对接气田PCS系统生产数据库，实现大模型驱动下的业务数据问答，打造"所问即所得"的数据查询能力。',
+            picName: 'qitian.png',
+            routeAdress: `${BASE_URL}/enterprise/qitian`,
+          },
           // {
           //   title: '企业智能合同分析',
           //   description:
@@ -174,6 +181,23 @@ const tabItems = [
               '这是一个能融合数据、能智能服务、能任务闭环、还能安全交付的高校知识平台。通过统一门户、知识治理平台、智能体支撑底座，全面服务教研、申报、评估、管理等核心业务场景，并具备支撑智能体构建的持续演进能力。',
             picName: 'education-university-1.webp',
             routeAdress: `${BASE_URL}/education/gaoxiao`,
+          },
+        ]}
+      />
+    ),
+  },
+  {
+    key: '5',
+    label: '医疗',
+    children: (
+      <CaseGrid
+        items={[
+          {
+            title: '医学图像智慧分析诊断',
+            description:
+              '突破人工智慧病理诊断核心技术挑战，构建面向病理图像的人在回路智能AI诊断平台，研发针对高发癌症的辅助诊断、预后评估和生物标志物预测算法。',
+            picName: 'yiliao.png',
+            routeAdress: `${BASE_URL}/medical/yiliao`,
           },
         ]}
       />

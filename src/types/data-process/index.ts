@@ -108,6 +108,8 @@ export interface FieldType {
   vad_onset?: number;
   vad_offset?: number;
   file?: File; // 添加媒体文件字段
+  min_speakers?: number;
+  max_speakers?: number;
 }
 
 // 创建媒体任务响应

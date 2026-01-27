@@ -33,6 +33,8 @@ const CaseGrid: React.FC<CaseGridProps> = React.memo(({ items }) => {
       return '教育';
     } else if (routeAdress.includes('medical')) {
       return '医疗';
+    } else if (routeAdress.includes('energy')) {
+      return '能源';
     } else {
       return '其他';
     }
@@ -52,6 +54,8 @@ const CaseGrid: React.FC<CaseGridProps> = React.memo(({ items }) => {
       return `/assets/images/cases/education/${picName}`;
     } else if (routeAdress.includes('medical')) {
       return `/assets/images/cases/medical/${picName}`;
+    } else if (routeAdress.includes('energy')) {
+      return `/assets/images/cases/energy/${picName}`;
     } else {
       return `/${picName}`;
     }
@@ -312,24 +316,12 @@ const CaseGrid: React.FC<CaseGridProps> = React.memo(({ items }) => {
               </div>
             </div>
           </div>
-
-          {/* 底部装饰线 */}
-          <div className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
         </div>
 
         {/* 间距装饰 */}
         {idx < items.length - 1 && (
           <div className="relative py-12">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-1 h-16 bg-gradient-to-b from-transparent via-brand/20 to-transparent"></div>
-            </div>
-            <div className="flex justify-center">
-              <div className="flex space-x-2">
-                <div className="w-2 h-2 bg-brand/30 rounded-full"></div>
-                <div className="w-2 h-2 bg-purple-500/30 rounded-full"></div>
-                <div className="w-2 h-2 bg-blue-500/30 rounded-full"></div>
-              </div>
-            </div>
+            <div className="absolute inset-0 flex items-center justify-center"></div>
           </div>
         )}
       </div>

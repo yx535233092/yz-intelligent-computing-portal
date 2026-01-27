@@ -7,7 +7,7 @@ import type {
 const translateAPI = (data: TranslateRequest): Promise<TranslateRes> => {
   return api({
     method: 'POST',
-    url: 'http://39.175.132.230:35001/chinese_to_vietnamese/',
+    url: '/backend-api1/chinese_to_vietnamese/',
     params: {
       chinese_text: data.chinese_text,
     },

@@ -1,9 +1,7 @@
 services:
   app:
     container_name: yz-portal-h3c
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: yz-portal:x86
     restart: always
     # Ports are now managed by Nginx
     # ports:

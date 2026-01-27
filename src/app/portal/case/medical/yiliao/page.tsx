@@ -72,6 +72,7 @@ export default function MedicalImageAIPage() {
                 {caseData.title}
               </h1>
               <p className="text-xl text-cyan-600 font-semibold mb-6">
+                {}
                 {caseData.subtitle}
               </p>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">

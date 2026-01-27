@@ -8,7 +8,7 @@ import type {
 const getOcrPicAPI = (data: OcrPicReq): Promise<GetOcrPicRes> => {
   return api({
     method: 'POST',
-    url: 'http://39.175.132.230:35001/vietnamese_id_card_parse_get_image_only/',
+    url: 'https://u518772-a3ad-6cd189e9.westc.gpuhub.com:8443/backend-api1/vietnamese_id_card_parse_get_image_only/',
     params: data,
   });
 };
@@ -16,7 +16,7 @@ const getOcrPicAPI = (data: OcrPicReq): Promise<GetOcrPicRes> => {
 const ocrFileAPI = (data: OcrPicReq): Promise<OcrFileRes> => {
   return api({
     method: 'POST',
-    url: 'http://39.175.132.230:35001/vietnamese_id_card_parse/',
+    url: 'https://u518772-a3ad-6cd189e9.westc.gpuhub.com:8443/backend-api1/vietnamese_id_card_parse/',
     params: data,
   });
 };
@@ -32,7 +32,7 @@ const ocrUploadAPI = (
 
   return api({
     method: 'POST',
-    url: 'http://39.175.132.230:35001/vietnamese_id_card_parse_upload/',
+    url: 'https://u518772-a3ad-6cd189e9.westc.gpuhub.com:8443/backend-api1/vietnamese_id_card_parse_upload/',
     data: formData,
     headers: {
       'Content-Type': 'multipart/form-data',

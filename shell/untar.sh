@@ -1,0 +1,1 @@
+tar -xzf build.tar.gz && echo "解压完成"

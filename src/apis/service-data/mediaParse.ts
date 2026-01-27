@@ -16,7 +16,7 @@ const createMediaTaskAPI = (
     headers: {
       'Content-Type': 'multipart/form-data',
     },
-    url: 'http://39.175.132.230:35034/speech-to-text',
+    url: '/backend-api2/speech-to-text',
     data: formData,
     params,
   });
@@ -26,7 +26,7 @@ const createMediaTaskAPI = (
 const getMediaTaskListAPI = (): Promise<MediaTaskList> => {
   return api({
     method: 'GET',
-    url: 'http://39.175.132.230:35034/task/all',
+    url: '/backend-api2/task/all',
   });
 };
 
@@ -34,7 +34,7 @@ const getMediaTaskListAPI = (): Promise<MediaTaskList> => {
 const getMediaTaskDetailAPI = (id: string): Promise<MediaTaskDetail> => {
   return api({
     method: 'GET',
-    url: `http://39.175.132.230:35034/task/${id}`,
+    url: `/backend-api2/task/${id}`,
   });
 };
 
@@ -42,7 +42,7 @@ const getMediaTaskDetailAPI = (id: string): Promise<MediaTaskDetail> => {
 const deleteMediaTaskAPI = (id: string): Promise<void> => {
   return api({
     method: 'DELETE',
-    url: `http://39.175.132.230:35034/task/${id}/delete`,
+    url: `/backend-api2/task/${id}/delete`,
   });
 };
 

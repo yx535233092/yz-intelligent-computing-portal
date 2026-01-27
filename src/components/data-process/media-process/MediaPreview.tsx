@@ -40,6 +40,13 @@ function MediaPreview({ selectedMediaTask }: MediaPreviewProps) {
         const mediaTaskDetail = await getMediaTaskDetail(
           selectedMediaTask!.identifier
         );
+        console.log(mediaTaskDetail);
+        if (mediaTaskDetail.metadata.file_name.includes('.mp3')) {
+          mediaTaskDetail.metadata.url =
+            '/assets/audio/锵锵三人行_TN603_3d (mp3cut.net)_MP3.mp3';
+        } else {
+          mediaTaskDetail.metadata.url = '/assets/videos/多人视频.mov';
+        }
         setMediaTaskDetail(mediaTaskDetail);
 
         // 只在处理中状态时设置定时器，避免已完成任务的不必要刷新

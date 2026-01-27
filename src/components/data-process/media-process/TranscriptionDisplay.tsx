@@ -24,7 +24,7 @@ function TranscriptionDisplay({
   onSegmentClick,
   mediaTaskDetail,
 }: TranscriptionDisplayProps) {
-  const baseUrl = 'http://39.175.132.230:35034';
+  const baseUrl = '';
 
   // 获取媒体类型
   const mediaType = judgementMediaType(mediaTaskDetail?.metadata.url || '');

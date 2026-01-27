@@ -137,6 +137,13 @@ const tabItems = [
     children: (
       <CaseGrid
         items={[
+          // {
+          //   title: '360AI企业知识库',
+          //   description:
+          //     '打造行业领先的人工智能应用场景底座，实现知识AI化，从记录事实到AI指引行动。通过统一AI工作空间、多模型管理和知识全生命周期管理，构建智能化知识服务体系。',
+          //   picName: '360.png',
+          //   routeAdress: `${BASE_URL}/enterprise/360`,
+          // },
           {
             title: '某集团智能问答系统',
             description:
@@ -145,11 +152,11 @@ const tabItems = [
             routeAdress: `${BASE_URL}/enterprise/jituan`,
           },
           {
-            title: '气田PCS智能问数',
+            title: '萧宏集团智能体开发项目',
             description:
-              '实现自然语言与业务数据库的问答交互，通过对接气田PCS系统生产数据库，实现大模型驱动下的业务数据问答，打造"所问即所得"的数据查询能力。',
-            picName: 'qitian.png',
-            routeAdress: `${BASE_URL}/enterprise/qitian`,
+              '通过AI驱动的数据融合与风险预判，构建一个“看得清、管得住、控得稳”的智能项目管理中枢。',
+            picName: 'xiaohong.png',
+            routeAdress: `${BASE_URL}/enterprise/xiaohong`,
           },
           // {
           //   title: '企业智能合同分析',
@@ -186,18 +193,35 @@ const tabItems = [
       />
     ),
   },
+  // {
+  //   key: '5',
+  //   label: '医疗',
+  //   children: (
+  //     <CaseGrid
+  //       items={[
+  //         {
+  //           title: '医学图像智慧分析诊断',
+  //           description:
+  //             '突破人工智慧病理诊断核心技术挑战，构建面向病理图像的人在回路智能AI诊断平台，研发针对高发癌症的辅助诊断、预后评估和生物标志物预测算法。',
+  //           picName: 'yiliao.png',
+  //           routeAdress: `${BASE_URL}/medical/yiliao`,
+  //         },
+  //       ]}
+  //     />
+  //   ),
+  // },
   {
-    key: '5',
-    label: '医疗',
+    key: '6',
+    label: '能源',
     children: (
       <CaseGrid
         items={[
           {
-            title: '医学图像智慧分析诊断',
+            title: '气田PCS智能问数',
             description:
-              '突破人工智慧病理诊断核心技术挑战，构建面向病理图像的人在回路智能AI诊断平台，研发针对高发癌症的辅助诊断、预后评估和生物标志物预测算法。',
-            picName: 'yiliao.png',
-            routeAdress: `${BASE_URL}/medical/yiliao`,
+              '实现自然语言与业务数据库的问答交互，通过对接气田PCS系统生产数据库，实现大模型驱动下的业务数据问答，打造"所问即所得"的数据查询能力。',
+            picName: 'qitian.png',
+            routeAdress: `${BASE_URL}/energy/qitian`,
           },
         ]}
       />

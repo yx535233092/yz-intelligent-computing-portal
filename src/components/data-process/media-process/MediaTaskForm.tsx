@@ -28,6 +28,9 @@ function MediaTaskForm({
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     console.log('Success:', values);
     const { file, ...params } = values;
+    params.min_speakers = 5;
+    params.max_speakers = 5;
+
     const formData = new FormData();
     formData.append('file', file as File);
     // 创建任务
@@ -64,13 +67,13 @@ function MediaTaskForm({
       initialValues={{
         language: 'zh',
         task: 'transcribe',
-        model: 'large-v3',
+        model: 'tiny',
         device: 'cuda',
         device_index: 0,
         threads: 0,
         batch_size: 8,
         chunk_size: 20,
-        compute_type: 'float16',
+        compute_type: 'int8',
         interpolate_method: 'nearest',
         return_char_alignments: false,
         beam_size: 5,

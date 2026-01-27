@@ -52,3 +52,10 @@ npm run dev
 4. Git 提交 → Husky + lint-staged + commitlint 自动检查
 5. 构建前 → 完整的代码质量检查
 6. 部署前 → 类型检查和测试
+
+docker run -d \
+ --name h3c-portal \
+ -p 3000:3000 \
+ -e DATABASE_URL=file:./prisma/sqlite.db \
+ -v $(pwd)/prisma/sqlite.db:/app/prisma/sqlite.db \
+ h3c-portal

@@ -9,10 +9,9 @@ export default function HjPlatform() {
   const [isLoading, setIsLoading] = useState(true);
 
   // 根据环境设置API地址
-  const baseUrl =
-    process.env.NODE_ENV === 'development'
-      ? 'http://localhost:6002'
-      : 'http://39.175.132.230:30162';
+  const baseUrl = `${location.protocol}//${location.hostname}:12810`;
+  console.log('baseUrl', baseUrl);
+  
 
   useEffect(() => {
     const fetchAccessToken = async () => {

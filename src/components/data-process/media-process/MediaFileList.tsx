@@ -121,7 +121,7 @@ function MediaFileList({
           click: clickListener,
         });
       }
-    }, 1000);
+    }, 3000);
 
     return () => {
       // 组件销毁时清除定时器和所有事件监听器

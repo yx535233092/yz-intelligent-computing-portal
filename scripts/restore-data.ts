@@ -2,8 +2,8 @@
 import { Database } from 'sqlite3';
 import { PrismaClient } from '../src/generated/prisma';
 
-// 读取刚刚重命名的备份文件
-const sqliteDb = new Database('backup/sqlite_restored.db');
+// 读取归档到 addtionnal 目录的备份文件
+const sqliteDb = new Database('addtionnal/backup/sqlite_restored.db');
 const prisma = new PrismaClient();
 
 async function restore() {

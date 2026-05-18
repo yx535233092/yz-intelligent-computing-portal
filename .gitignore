@@ -7,3 +7,4 @@ package-lock.json
 # /src/generated/prisma
 *.tar.gz
 backup/backup_db.tar
+addtionnal/

@@ -1,4 +1,0 @@
-"id","name","description","is_active"
-1,guest,访客角色,true
-2,user,普通用户角色,true
-3,admin,管理员角色,true

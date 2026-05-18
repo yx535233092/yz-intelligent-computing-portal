@@ -1,7 +1,0 @@
-"id","name","resource","action","description"
-1,user:read,user,read,读取用户信息
-2,user:write,user,write,修改用户信息
-3,user:delete,user,delete,删除用户
-4,admin:read,admin,read,管理员读取权限
-5,admin:write,admin,write,管理员写入权限
-6,admin:all,admin,all,管理员所有权限

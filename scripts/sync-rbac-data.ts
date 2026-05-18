@@ -38,7 +38,7 @@ function parseCSV(content: string) {
 }
 
 async function main() {
-  const backupDir = path.join(process.cwd(), 'remote-pgsql-backup');
+  const backupDir = path.join(process.cwd(), 'addtionnal/remote-pgsql-backup');
   
   console.log('--- 开始同步 RBAC 数据 ---');
 

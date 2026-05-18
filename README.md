@@ -155,6 +155,8 @@ uvicorn main:app --reload --host 0.0.0.0 --port 29000
 - `src/lib/`：请求封装、状态管理、工具函数
 - `src/apis/`：前端调用后端接口的封装层
 - `public/`：静态资源、案例图片、文档样例、上传文件
+- `data/postgres_data/`：Docker Compose 运行时使用的 PostgreSQL 数据目录
+- `data/legacy/`：脚本迁移用的 SQLite 数据文件
 - `addtionnal/`：历史备份、导出物、临时产物等非运行必需文件
 
 ## 目录结构

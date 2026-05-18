@@ -2,7 +2,7 @@
 import { Database } from 'sqlite3';
 import { PrismaClient } from '../src/generated/prisma';
 
-const backupDb = new Database('backup/sqlite.db');
+const backupDb = new Database('data/legacy/backup.sqlite.db');
 const prisma = new PrismaClient();
 
 async function migrate() {

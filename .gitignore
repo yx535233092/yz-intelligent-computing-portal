@@ -8,3 +8,4 @@ package-lock.json
 *.tar.gz
 backup/backup_db.tar
 addtionnal/
+data/postgres_data/postmaster.pid

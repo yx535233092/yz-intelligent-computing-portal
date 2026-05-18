@@ -32,7 +32,7 @@ type RolePermissionRow = {
   permissionId: number;
 };
 
-const sqliteDb = new Database('prisma/sqlite.db');
+const sqliteDb = new Database('data/legacy/rbac.sqlite.db');
 const prisma = new PrismaClient();
 
 function all<T>(sql: string): Promise<T[]> {
@@ -56,7 +56,7 @@ async function resetSequence(table: string, column = 'id') {
 }
 
 async function main() {
-  console.log('Reading RBAC data from prisma/sqlite.db...');
+  console.log('Reading RBAC data from data/legacy/rbac.sqlite.db...');
 
   const [users, roles, permissions, userRoles, rolePermissions] = await Promise.all([
     all<UserRow>('SELECT * FROM "User" ORDER BY id'),

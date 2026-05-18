@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 // 指定备份文件的路径
-const BACKUP_DB_PATH = path.join(__dirname, '../backup/sqlite.db');
+const BACKUP_DB_PATH = path.join(__dirname, '../data/legacy/backup.sqlite.db');
 process.env.DATABASE_URL = `file:${BACKUP_DB_PATH}`;
 
 const prisma = new PrismaClient();

@@ -538,7 +538,7 @@ export default function OCRRecognizePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8f8f8] py-4 md:py-8">
+    <div className="bg-[#f8f8f8] py-4 md:py-8">
       <div className="container mx-auto px-4">
         <div className="mb-6 md:mb-8">
           <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">

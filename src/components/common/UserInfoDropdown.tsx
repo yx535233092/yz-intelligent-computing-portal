@@ -34,7 +34,7 @@ const items: MenuProps['items'] = [
           location.href = location.origin + '/manage';
         }}
       >
-        系统设置
+        后台管理
       </a>
     ),
     key: '1',

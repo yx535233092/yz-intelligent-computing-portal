@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useInView } from '@/hooks/useInView';
 import { products } from './productData';
-import { getUserPermissionsAPI } from '@/apis/applications';
 import { message } from 'antd';
 
 // 提取公共样式
@@ -43,8 +42,6 @@ const ProductCard = ({
   link,
   isInView,
   delay = 0,
-  hasPermission = true,
-  permissionKey,
 }: {
   title: string;
   description: string[];
@@ -52,8 +49,6 @@ const ProductCard = ({
   link: string;
   isInView: boolean;
   delay?: number;
-  hasPermission?: boolean;
-  permissionKey?: string;
 }) => (
   <div
     className={commonStyles.roundedCard}
@@ -61,28 +56,10 @@ const ProductCard = ({
       background: commonStyles.cardGradient,
       ...getAnimationStyle(isInView, delay),
       transition: 'all 0.3s ease',
-      opacity: hasPermission ? 1 : 0.6,
+      opacity: 1,
       position: 'relative',
     }}
   >
-    {!hasPermission && (
-      <div
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          background: 'rgba(255, 152, 0, 0.9)',
-          color: 'white',
-          padding: '4px 12px',
-          borderRadius: '12px',
-          fontSize: '12px',
-          fontWeight: 'bold',
-          zIndex: 10,
-        }}
-      >
-        🔒 需要权限
-      </div>
-    )}
     <div className="flex flex-col items-center text-center h-full">
       <div className={`mb-6 ${commonStyles.demoContainer}`}>{demoContent}</div>
       <div className="flex-1 flex flex-col justify-between items-center">
@@ -171,39 +148,10 @@ const TabButton = ({
 export default function IntelligentProcessSection() {
   const [activeTab, setActiveTab] = useState('text');
   const [productTitle, setProductTitle] = useState('智能文档处理');
-  const [userPermissions, setUserPermissions] = useState<string[]>([]);
-  const [permissionsLoaded, setPermissionsLoaded] = useState(false);
 
   const [intelligentProcessRef, isIntelligentProcessInView] = useInView({
     threshold: 0.1,
   });
-
-  // 获取用户权限
-  useEffect(() => {
-    const fetchUserPermissions = async () => {
-      try {
-        const res = await getUserPermissionsAPI();
-        setUserPermissions(res.data.permissions || []);
-      } catch (error) {
-        console.error('获取用户权限失败:', error);
-        setUserPermissions([]);
-      } finally {
-        setPermissionsLoaded(true);
-      }
-    };
-
-    fetchUserPermissions();
-  }, []);
-
-  // 检查是否有权限访问服务
-  const hasPermission = (permissionKey?: string) => {
-    // 如果服务没有设置权限key，表示不需要权限验证
-    if (!permissionKey) {
-      return true;
-    }
-    // 检查用户是否有该服务的权限
-    return userPermissions.includes(permissionKey);
-  };
 
   // 选项卡配置
   const tabs = [
@@ -271,18 +219,16 @@ export default function IntelligentProcessSection() {
 
       {/* 选项卡内容 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {permissionsLoaded &&
-          products[activeTab as keyof typeof products]?.map(
-            (product, index) => (
-              <ProductCard
-                key={index}
-                {...product}
-                isInView={isIntelligentProcessInView}
-                delay={index * 0.2}
-                hasPermission={hasPermission(product.permissionKey)}
-              />
-            )
-          )}
+        {products[activeTab as keyof typeof products]?.map(
+          (product, index) => (
+            <ProductCard
+              key={index}
+              {...product}
+              isInView={isIntelligentProcessInView}
+              delay={index * 0.2}
+            />
+          )
+        )}
       </div>
     </section>
   );

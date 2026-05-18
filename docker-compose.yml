@@ -1,30 +1,60 @@
 services:
-  app:
-    container_name: yz-portal-h3c
-    build:
-      context: .
-      dockerfile: Dockerfile
+  db:
+    image: postgres:15-alpine
+    container_name: intelligent_portal_db
     restart: always
-    # Ports are now managed by Nginx
-    # ports:
-    #   - "8001:3000"
     environment:
-      - NODE_ENV=production
-      - DATABASE_URL=file:/app/prisma/sqlite.db
-    env_file:
-      - .env
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-yz-portal}
     volumes:
-      # Mount the prisma directory to persist the SQLite database and migrations
-      - ./prisma:/app/prisma
+      - ./backup/backup_db/backup_db/postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-yz-portal}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: intelligent_portal_web
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-yz-portal}
+      AUTH_SERVICE_URL: http://python-api:9000
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "3000"
+    command: ["npm", "start", "--", "-H", "0.0.0.0", "-p", "3000"]
+
+  python-api:
+    build: ./python_service
+    container_name: intelligent_portal_python
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-yz-portal}
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "9000"
 
   nginx:
-    image: nginx:stable-alpine
-    container_name: yz-portal-nginx
+    image: nginx:alpine
+    container_name: intelligent_portal_nginx
     restart: always
     ports:
-      - "12800:80" # Main App Entrance (Host 8001 -> Container 80)
-      - "12810:8080" # Proxy Entrance (Host 10088 -> Container 10088)
+      - "80:80"
     volumes:
-      - ./nginx.prod.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - app
+      web:
+        condition: service_started
+      python-api:
+        condition: service_started

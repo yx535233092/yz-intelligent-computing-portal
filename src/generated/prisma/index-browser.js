@@ -114,6 +114,9 @@ Prisma.NullTypes = {
  */
 
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -160,7 +163,49 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   icon: 'icon',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  permissionKey: 'permissionKey'
+  permissionKey: 'permissionKey',
+  password: 'password',
+  username: 'username',
+  needsAuth: 'needsAuth',
+  sortOrder: 'sortOrder',
+  isPublic: 'isPublic'
+};
+
+exports.Prisma.VisitLogScalarFieldEnum = {
+  id: 'id',
+  path: 'path',
+  duration: 'duration',
+  userId: 'userId',
+  username: 'username',
+  ip: 'ip',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.Media_tasksScalarFieldEnum = {
+  id: 'id',
+  file_name: 'file_name',
+  task_type: 'task_type',
+  status: 'status',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  result: 'result',
+  error_message: 'error_message',
+  start_time: 'start_time'
+};
+
+exports.Prisma.ContactScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  company: 'company',
+  email: 'email',
+  phone: 'phone',
+  service: 'service',
+  message: 'message',
+  loginUser: 'loginUser',
+  clientIp: 'clientIp',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -168,9 +213,25 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 
 
@@ -180,7 +241,10 @@ exports.Prisma.ModelName = {
   Permission: 'Permission',
   UserRole: 'UserRole',
   RolePermission: 'RolePermission',
-  Application: 'Application'
+  Application: 'Application',
+  VisitLog: 'VisitLog',
+  media_tasks: 'media_tasks',
+  Contact: 'Contact'
 };
 
 /**

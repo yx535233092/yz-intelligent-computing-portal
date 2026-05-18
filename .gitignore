@@ -6,3 +6,4 @@ package-lock.json
 .DS_Store
 # /src/generated/prisma
 *.tar.gz
+backup/backup_db.tar

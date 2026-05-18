@@ -1,11 +1,5 @@
 import React from 'react';
 
-// 文档解析基准地址
-const DOCUMENT_BASE_URL =
-  '/portal/service/service-data/data-process/data-process-doc';
-// 表格解析基准地址
-const EXCEL_BASE_URL =
-  '/portal/service/service-data/data-process/data-process-excel';
 // 媒体解析基准地址
 const MEDIA_BASE_URL =
   '/portal/service/service-data/data-process/data-process-media';
@@ -20,8 +14,7 @@ export const products = {
         '识别文档基本结构和文本内容',
         '尽可能保持原有格式信息',
       ],
-      link: `${DOCUMENT_BASE_URL}?title=常规文档解析&permissionKey=data:normal_text`,
-      permissionKey: 'data:normal_text',
+      link: `${MEDIA_BASE_URL}?type=doc&title=常规文档解析`,
       demoContent: (
         <div className="w-[160px] h-[120px] flex items-center justify-center relative">
           {/* 操作流程：文档 → AI解析 → 结构化文本 */}
@@ -73,8 +66,7 @@ export const products = {
     {
       title: '表格文档解析',
       description: ['行合并表格', '列合并表格', '跨页表格'],
-      link: `${DOCUMENT_BASE_URL}?title=表格文档解析&permissionKey=data:table`,
-      permissionKey: 'data:table',
+      link: `${MEDIA_BASE_URL}?type=doc&title=表格文档解析`,
       demoContent: (
         <div className="w-[160px] h-[120px] flex items-center justify-center relative">
           {/* 操作流程：复杂表格 → AI识别 → 结构化数据 */}
@@ -129,8 +121,7 @@ export const products = {
     {
       title: '公式类文档解析',
       description: ['数学公式精准识别', 'LaTeX格式输出', '复杂公式结构解析'],
-      link: `${DOCUMENT_BASE_URL}?title=公式类文档解析&permissionKey=data:formula`,
-      permissionKey: 'data:formula',
+      link: `${MEDIA_BASE_URL}?type=doc&title=公式类文档解析`,
       demoContent: (
         <div className="w-[160px] h-[120px] flex items-center justify-center relative">
           {/* 操作流程：公式文档 → AI识别 → LaTeX代码 */}
@@ -179,8 +170,7 @@ export const products = {
     {
       title: '媒体报刊类文档解析',
       description: ['报纸版面解析', '杂志内容解析', '研究报告解析'],
-      link: `${DOCUMENT_BASE_URL}?title=媒体报刊类文档解析&permissionKey=data:media_newspaper`,
-      permissionKey: 'data:media_newspaper',
+      link: `${MEDIA_BASE_URL}?type=doc&title=媒体报刊类文档解析`,
       demoContent: (
         <div className="w-[160px] h-[120px] flex items-center justify-center relative">
           {/* 操作流程：报纸杂志 → AI解析 → 结构化内容 */}
@@ -233,8 +223,7 @@ export const products = {
     {
       title: '论文解析',
       description: ['普通论文解析', '化学论文解析', '章节结构提取'],
-      link: `${DOCUMENT_BASE_URL}?title=论文解析&permissionKey=data:thesis`,
-      permissionKey: 'data:thesis',
+      link: `${MEDIA_BASE_URL}?type=doc&title=论文解析`,
       demoContent: (
         <div className="w-[160px] h-[120px] flex items-center justify-center relative">
           {/* 操作流程：学术论文 → AI分析 → 结构化数据 */}
@@ -303,8 +292,7 @@ export const products = {
     {
       title: '试卷解析',
       description: ['题目选项识别', '答案区域提取', '评分标准解析'],
-      link: `${DOCUMENT_BASE_URL}?title=试卷解析&permissionKey=data:testpaper`,
-      permissionKey: 'data:testpaper',
+      link: `${MEDIA_BASE_URL}?type=doc&title=试卷解析`,
       demoContent: (
         <div className="w-[160px] h-[120px] flex items-center justify-center relative">
           {/* 操作流程：试卷 → AI解析 → 结构化题目 */}
@@ -369,8 +357,7 @@ export const products = {
     {
       title: '多区域表格解析',
       description: ['智能识别页面多表格', '分别解析输出', '保持数据完整性'],
-      link: `${EXCEL_BASE_URL}?title=多区域表格解析&permissionKey=data:multi_area_table`,
-      permissionKey: 'data:multi_area_table',
+      link: `${MEDIA_BASE_URL}?type=excel&title=多区域表格解析`,
       demoContent: (
         <div className="w-[160px] h-[120px] flex items-center justify-center relative">
           {/* 操作流程：多表格页面 → AI识别 → 分别解析 */}
@@ -443,8 +430,7 @@ export const products = {
     {
       title: '复杂表头解析(合并场景)',
       description: ['多层级表头识别', '合并单元格处理', '表格逻辑结构还原'],
-      link: `${EXCEL_BASE_URL}?title=复杂表头解析(合并场景)&type=2&permissionKey=data:complex_header`,
-      permissionKey: 'data:complex_header',
+      link: `${MEDIA_BASE_URL}?type=excel&title=复杂表头解析(合并场景)&headerMode=2`,
       demoContent: (
         <div className="w-[160px] h-[120px] flex items-center justify-center relative">
           {/* 操作流程：复杂表头 → AI解析 → 逻辑结构 */}
@@ -524,8 +510,7 @@ export const products = {
     {
       title: '书籍解析',
       description: ['古代文献识别', '繁体字、古文字', '专业书籍处理'],
-      link: `${DOCUMENT_BASE_URL}?title=书籍解析&permissionKey=data:book`,
-      permissionKey: 'data:book',
+      link: `${MEDIA_BASE_URL}?type=doc&title=书籍解析`,
       demoContent: (
         <div className="w-[160px] h-[120px] flex items-center justify-center relative">
           {/* 操作流程：书籍图片 → AI识别 → 繁体文本 */}
@@ -575,8 +560,7 @@ export const products = {
     {
       title: '手写识别',
       description: ['高精度手写识别', '多种笔迹风格', '草书行书支持'],
-      link: `${DOCUMENT_BASE_URL}?title=手写识别&permissionKey=data:handwrite`,
-      permissionKey: 'data:handwrite',
+      link: `${MEDIA_BASE_URL}?type=doc&title=手写识别`,
       demoContent: (
         <div className="w-[160px] h-[120px] flex items-center justify-center relative">
           {/* 操作流程：手写图片 → AI识别 → 数字化文本 */}
@@ -628,8 +612,7 @@ export const products = {
     {
       title: '音频解析',
       description: ['语音转文字识别', '多语言语音支持', '音频内容智能分析'],
-      link: `${MEDIA_BASE_URL}?type=audio&permissionKey=data:audio`,
-      permissionKey: 'data:audio',
+      link: `${MEDIA_BASE_URL}?type=audio`,
       demoContent: (
         <div className="w-[160px] h-[120px] flex items-center justify-center relative">
           {/* 操作流程：音频文件 → AI识别 → 文字转录 */}
@@ -688,8 +671,7 @@ export const products = {
     {
       title: '视频解析',
       description: ['视频内容分析', '关键帧提取', '视频转文字描述'],
-      link: `${MEDIA_BASE_URL}?type=video&permissionKey=data:video`,
-      permissionKey: 'data:video',
+      link: `${MEDIA_BASE_URL}?type=video`,
       demoContent: (
         <div className="w-[160px] h-[120px] flex items-center justify-center relative">
           {/* 操作流程：视频文件 → AI分析 → 内容摘要 */}

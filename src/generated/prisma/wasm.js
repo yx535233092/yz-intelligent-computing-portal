@@ -86,6 +86,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -132,7 +135,49 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   icon: 'icon',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  permissionKey: 'permissionKey'
+  permissionKey: 'permissionKey',
+  password: 'password',
+  username: 'username',
+  needsAuth: 'needsAuth',
+  sortOrder: 'sortOrder',
+  isPublic: 'isPublic'
+};
+
+exports.Prisma.VisitLogScalarFieldEnum = {
+  id: 'id',
+  path: 'path',
+  duration: 'duration',
+  userId: 'userId',
+  username: 'username',
+  ip: 'ip',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.Media_tasksScalarFieldEnum = {
+  id: 'id',
+  file_name: 'file_name',
+  task_type: 'task_type',
+  status: 'status',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  result: 'result',
+  error_message: 'error_message',
+  start_time: 'start_time'
+};
+
+exports.Prisma.ContactScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  company: 'company',
+  email: 'email',
+  phone: 'phone',
+  service: 'service',
+  message: 'message',
+  loginUser: 'loginUser',
+  clientIp: 'clientIp',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -140,9 +185,25 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 
 
@@ -152,7 +213,10 @@ exports.Prisma.ModelName = {
   Permission: 'Permission',
   UserRole: 'UserRole',
   RolePermission: 'RolePermission',
-  Application: 'Application'
+  Application: 'Application',
+  VisitLog: 'VisitLog',
+  media_tasks: 'media_tasks',
+  Contact: 'Contact'
 };
 /**
  * Create the Client
@@ -165,7 +229,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/app/src/generated/prisma",
+      "value": "/Users/x1a0/Desktop/code/h3c/Intelligent_computing_portal/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -174,7 +238,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "linux-arm64-openssl-3.0.x",
+        "value": "darwin-arm64",
         "native": true
       },
       {
@@ -183,7 +247,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/app/prisma/schema.prisma",
+    "sourceFilePath": "/Users/x1a0/Desktop/code/h3c/Intelligent_computing_portal/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -196,7 +260,7 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
+  "activeProvider": "postgresql",
   "postinstall": false,
   "inlineDatasources": {
     "db": {
@@ -206,13 +270,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  username  String   @unique\n  password  String\n  isActive  Boolean  @default(true)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // 关联表：一个用户可以有多个角色\n  roles UserRole[]\n}\n\nmodel Role {\n  id          Int     @id @default(autoincrement())\n  name        String  @unique\n  description String?\n\n  // 关联表： 一个角色可以被多个用户拥有，也可以有多个权限\n  users       UserRole[]\n  permissions RolePermission[]\n}\n\nmodel Permission {\n  id          Int     @id @default(autoincrement())\n  name        String  @unique\n  description String?\n\n  // 关联表：一个权限可以被多个角色拥有\n  roles RolePermission[]\n}\n\n// 关联表：用户和角色的多对多关系\nmodel UserRole {\n  userId Int\n  user   User @relation(fields: [userId], references: [id])\n  roleId Int\n  role   Role @relation(fields: [roleId], references: [id])\n\n  // 联合主键，确保用户和角色的组合是唯一的\n  @@id([userId, roleId])\n}\n\n// 关联表：角色和权限的多对多关系\nmodel RolePermission {\n  roleId       Int\n  role         Role       @relation(fields: [roleId], references: [id])\n  permissionId Int\n  permission   Permission @relation(fields: [permissionId], references: [id])\n\n  // 联合主键，确保角色和权限的组合是唯一的\n  @@id([roleId, permissionId])\n}\n\n// 应用列表\nmodel Application {\n  id            Int      @id @default(autoincrement())\n  type          String\n  name          String\n  description   String\n  route         String\n  url           String?\n  sceneCategory String\n  industryTag   String\n  icon          String\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n  permissionKey String?  @unique\n}\n",
-  "inlineSchemaHash": "9b9191cf12cd97ebc79cd66ea2c566d6f376323957c54568ec26f5e61fdadc53",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        Int        @id @default(autoincrement())\n  username  String     @unique\n  password  String\n  isActive  Boolean    @default(true)\n  createdAt DateTime   @default(now())\n  updatedAt DateTime   @updatedAt\n  roles     UserRole[]\n}\n\nmodel Role {\n  id          Int              @id @default(autoincrement())\n  name        String           @unique\n  description String?\n  permissions RolePermission[]\n  users       UserRole[]\n}\n\nmodel Permission {\n  id          Int              @id @default(autoincrement())\n  name        String           @unique\n  description String?\n  roles       RolePermission[]\n}\n\nmodel UserRole {\n  userId Int\n  roleId Int\n  role   Role @relation(fields: [roleId], references: [id])\n  user   User @relation(fields: [userId], references: [id])\n\n  @@id([userId, roleId])\n}\n\nmodel RolePermission {\n  roleId       Int\n  permissionId Int\n  permission   Permission @relation(fields: [permissionId], references: [id])\n  role         Role       @relation(fields: [roleId], references: [id])\n\n  @@id([roleId, permissionId])\n}\n\nmodel Application {\n  id            Int      @id @default(autoincrement())\n  type          String\n  name          String\n  description   String\n  route         String\n  url           String?\n  sceneCategory String\n  industryTag   String\n  icon          String\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n  permissionKey String?  @unique\n  password      String?\n  username      String?\n  needsAuth     Boolean  @default(false)\n  sortOrder     Int      @default(0)\n  isPublic      Boolean  @default(false)\n}\n\nmodel VisitLog {\n  id        Int      @id @default(autoincrement())\n  path      String\n  duration  Int\n  userId    Int?\n  username  String?\n  ip        String?\n  userAgent String?\n  createdAt DateTime @default(now())\n}\n\nmodel media_tasks {\n  id            String    @id @db.VarChar\n  file_name     String    @db.VarChar\n  task_type     String?   @db.VarChar\n  status        String?   @db.VarChar\n  created_at    DateTime? @db.Timestamp(6)\n  updated_at    DateTime? @db.Timestamp(6)\n  result        Json?     @db.Json\n  error_message String?\n  start_time    DateTime? @db.Timestamp(6)\n\n  @@index([id], map: \"ix_media_tasks_id\")\n}\n\nmodel Contact {\n  id        Int      @id @default(autoincrement())\n  name      String\n  company   String?\n  email     String\n  phone     String\n  service   String?\n  message   String\n  loginUser String?\n  clientIp  String?\n  userAgent String?\n  createdAt DateTime @default(now())\n}\n",
+  "inlineSchemaHash": "1c05e1f2d0fe9f3e17908f8132df4efa3ffda95fb3e39f4676137cb09d1005b6",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"UserRole\",\"relationName\":\"UserToUserRole\"}],\"dbName\":null},\"Role\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"UserRole\",\"relationName\":\"RoleToUserRole\"},{\"name\":\"permissions\",\"kind\":\"object\",\"type\":\"RolePermission\",\"relationName\":\"RoleToRolePermission\"}],\"dbName\":null},\"Permission\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"RolePermission\",\"relationName\":\"PermissionToRolePermission\"}],\"dbName\":null},\"UserRole\":{\"fields\":[{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserRole\"},{\"name\":\"roleId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"role\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"RoleToUserRole\"}],\"dbName\":null},\"RolePermission\":{\"fields\":[{\"name\":\"roleId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"role\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"RoleToRolePermission\"},{\"name\":\"permissionId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"permission\",\"kind\":\"object\",\"type\":\"Permission\",\"relationName\":\"PermissionToRolePermission\"}],\"dbName\":null},\"Application\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"route\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sceneCategory\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"industryTag\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"icon\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"permissionKey\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"UserRole\",\"relationName\":\"UserToUserRole\"}],\"dbName\":null},\"Role\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"permissions\",\"kind\":\"object\",\"type\":\"RolePermission\",\"relationName\":\"RoleToRolePermission\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"UserRole\",\"relationName\":\"RoleToUserRole\"}],\"dbName\":null},\"Permission\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"RolePermission\",\"relationName\":\"PermissionToRolePermission\"}],\"dbName\":null},\"UserRole\":{\"fields\":[{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"roleId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"role\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"RoleToUserRole\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserRole\"}],\"dbName\":null},\"RolePermission\":{\"fields\":[{\"name\":\"roleId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"permissionId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"permission\",\"kind\":\"object\",\"type\":\"Permission\",\"relationName\":\"PermissionToRolePermission\"},{\"name\":\"role\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"RoleToRolePermission\"}],\"dbName\":null},\"Application\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"route\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sceneCategory\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"industryTag\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"icon\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"permissionKey\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"needsAuth\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"sortOrder\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"isPublic\",\"kind\":\"scalar\",\"type\":\"Boolean\"}],\"dbName\":null},\"VisitLog\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"path\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"duration\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ip\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userAgent\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"media_tasks\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"file_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"task_type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"result\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"error_message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"start_time\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Contact\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"company\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"service\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"loginUser\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientIp\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userAgent\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

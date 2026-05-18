@@ -1,18 +1,38 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useState, useCallback, useEffect, Suspense } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import ExcelUpload from '@/components/features/excel/ExcelUpload';
 import ExcelPreview from '@/components/features/excel/ExcelPreview';
 import ExcelResult from '@/components/features/excel/ExcelResult';
 import type { FileItem, UploadResult, ExcelProcessState } from '@/types/excel';
 import { excelParseAPI } from '@/apis/service-data/excelParse';
+import { 
+  MenuFoldOutlined, 
+  MenuUnfoldOutlined,
+  AppstoreOutlined,
+  FileExcelOutlined,
+  CodeOutlined,
+  RocketOutlined,
+  CloudUploadOutlined,
+  ArrowRightOutlined,
+  LoadingOutlined
+} from '@ant-design/icons';
+import { Tooltip, Segmented, Button, message, theme } from 'antd';
 
-function ExcelProcessContent() {
+type ViewMode = 'split' | 'preview' | 'result';
+
+export default function ExcelProcessPage() {
   const searchParams = useSearchParams();
   const title = searchParams.get('title');
+  const { token } = theme.useToken();
+  const isInitialized = useRef(false);
+  
+  // UI 状态
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [viewMode, setViewMode] = useState<ViewMode>('preview'); 
 
-  // 主状态管理
+  // 数据状态
   const [state, setState] = useState<ExcelProcessState>({
     fileList: [],
     selectedFileId: null,
@@ -20,215 +40,243 @@ function ExcelProcessContent() {
     error: null,
   });
 
-  // 获取当前选中的文件
-  const selectedFile =
-    state.fileList.find((file) => file.id === state.selectedFileId) || null;
+  const selectedFile = useMemo(() => 
+    state.fileList.find((f) => f.id === state.selectedFileId) || null
+  , [state.fileList, state.selectedFileId]);
 
-  // 加载默认文件
+  // 加载默认示例文件
   useEffect(() => {
+    if (isInitialized.current) return;
+    isInitialized.current = true;
+
     const loadDefaultFile = async () => {
       let defaultFilePath = '';
-
-      if (title === '复杂表头解析(合并场景)') {
-        defaultFilePath =
-          '/documents/excel/【内部核算】先天云服务器云平台项目配置清单20250512_20250514.xlsx';
-      } else if (title === '多区域表格解析') {
-        defaultFilePath =
-          '/documents/excel/（冷板）液冷系统配置组合规格表.xlsx';
+      if (title?.includes('复杂表头')) {
+        defaultFilePath = '/documents/excel/【内部核算】先天云服务器云平台项目配置清单20250512_20250514.xlsx';
+      } else if (title?.includes('多区域')) {
+        defaultFilePath = '/documents/excel/（冷板）液冷系统配置组合规格表.xlsx';
       }
 
       if (defaultFilePath) {
         try {
-          setState((prev) => ({ ...prev, isLoading: true, error: null }));
-
-          const response = await fetch(defaultFilePath);
-          if (response.ok) {
-            const blob = await response.blob();
-            const filename = defaultFilePath.split('/').pop() || 'default.xlsx';
-            const file = new File([blob], filename, {
-              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            });
-
-            const arrayBuffer = await file.arrayBuffer();
-            const fileId = `default-${Date.now()}`;
-
-            const newFileItem: FileItem = {
-              id: fileId,
-              file,
-              uploadTime: new Date(),
-              arrayBuffer,
-            };
-
-            setState((prev) => ({
-              ...prev,
-              fileList: [newFileItem],
-              selectedFileId: fileId,
-              isLoading: false,
-            }));
-          }
-        } catch (error) {
-          console.warn('加载默认文件失败:', error);
-          setState((prev) => ({
-            ...prev,
-            isLoading: false,
-            error: '加载默认文件失败',
-          }));
+          setState(prev => ({ ...prev, isLoading: true }));
+          const res = await fetch(defaultFilePath);
+          if (!res.ok) throw new Error('Failed');
+          const blob = await res.blob();
+          const file = new File([blob], defaultFilePath.split('/').pop() || 'sample.xlsx');
+          handleFileAdd(file);
+        } catch (e) {
+          console.warn('默认文件加载失败');
+          setState(prev => ({ ...prev, isLoading: false }));
         }
       }
     };
-
     loadDefaultFile();
   }, [title]);
 
-  // 添加文件
   const handleFileAdd = useCallback(async (file: File) => {
-    try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
-
-      const arrayBuffer = await file.arrayBuffer();
-      const fileId = `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-      const newFileItem: FileItem = {
-        id: fileId,
-        file,
-        uploadTime: new Date(),
-        arrayBuffer,
+    const arrayBuffer = await file.arrayBuffer();
+    const newFile: FileItem = {
+      id: `file-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      file,
+      uploadTime: new Date(),
+      arrayBuffer,
+    };
+    
+    setState(prev => {
+      const isDuplicate = prev.fileList.some(f => f.file.name === file.name && f.file.size === file.size);
+      if (isDuplicate) {
+        return {
+          ...prev,
+          isLoading: false,
+          selectedFileId: prev.fileList.find(f => f.file.name === file.name && f.file.size === file.size)?.id || prev.selectedFileId
+        };
+      }
+      
+      return {
+        ...prev,
+        fileList: [newFile, ...prev.fileList],
+        selectedFileId: newFile.id,
+        isLoading: false
       };
+    });
+    
+    setViewMode('preview');
+    if (!isSidebarOpen) setIsSidebarOpen(true);
+  }, [isSidebarOpen]);
 
-      setState((prev) => ({
+  const handleFileDelete = (id: string) => {
+    setState(prev => {
+      const newList = prev.fileList.filter(f => f.id !== id);
+      return {
         ...prev,
-        fileList: [...prev.fileList, newFileItem],
-        selectedFileId: fileId,
-        isLoading: false,
-      }));
-    } catch (error) {
-      console.error('文件读取失败:', error);
-      setState((prev) => ({
-        ...prev,
-        isLoading: false,
-        error: '文件读取失败',
-      }));
-    }
-  }, []);
+        fileList: newList,
+        selectedFileId: prev.selectedFileId === id ? (newList[0]?.id || null) : prev.selectedFileId
+      };
+    });
+  };
 
-  // 选择文件
-  const handleFileSelect = useCallback((fileId: string) => {
-    setState((prev) => ({
+  const handleParse = async () => {
+    if (!selectedFile) return;
+    setViewMode('split');
+    
+    setState(prev => ({
       ...prev,
-      selectedFileId: fileId,
-      error: null,
+      fileList: prev.fileList.map(f => f.id === selectedFile.id ? { ...f, isProcessing: true, error: undefined } : f)
     }));
-  }, []);
-
-  // 解析表格
-  const handleParseTable = useCallback(async () => {
-    if (!selectedFile) {
-      setState((prev) => ({ ...prev, error: '请先选择一个文件' }));
-      return;
-    }
 
     try {
-      // 更新文件状态为处理中
-      setState((prev) => ({
-        ...prev,
-        fileList: prev.fileList.map((file) =>
-          file.id === selectedFile.id
-            ? { ...file, isProcessing: true, error: undefined }
-            : file
-        ),
-        error: null,
-      }));
-
       const formData = new FormData();
       formData.append('file', selectedFile.file);
+      if (title?.includes('复杂表头') || searchParams.get('type') === '2') {
+        formData.append('header_rows', '2');
+      }
 
-      const result: UploadResult = await excelParseAPI(formData);
+      const result = await excelParseAPI(formData);
 
-      // 更新文件处理结果
-      setState((prev) => ({
+      setState(prev => ({
         ...prev,
-        fileList: prev.fileList.map((file) =>
-          file.id === selectedFile.id
-            ? { ...file, result, isProcessing: false, error: undefined }
-            : file
-        ),
+        fileList: prev.fileList.map(f => f.id === selectedFile.id ? { ...f, isProcessing: false, result } : f)
       }));
-
-      console.log('表格解析成功:', result);
-    } catch (error) {
-      console.error('表格解析失败:', error);
-      const errorMessage =
-        error instanceof Error ? error.message : '表格解析失败';
-
-      // 更新文件错误状态
-      setState((prev) => ({
+      message.success('解析完成');
+    } catch (e) {
+      console.error(e);
+      setState(prev => ({
         ...prev,
-        fileList: prev.fileList.map((file) =>
-          file.id === selectedFile.id
-            ? { ...file, isProcessing: false, error: errorMessage }
-            : file
-        ),
-        error: errorMessage,
+        fileList: prev.fileList.map(f => f.id === selectedFile.id ? { ...f, isProcessing: false, error: '服务不可用' } : f)
       }));
+      message.error('解析失败');
     }
-  }, [selectedFile]);
+  };
 
   return (
-    <div>
-      <div className="flex items-center justify-between py-2 border-b-1 border-gray-200">
-        <span className="text-lg font-semibold text-gray-800 px-8">
-          {title}
-        </span>
-      </div>
-      <div className="flex h-[calc(100vh-117px)]">
-        <div className="w-[380px] flex-shrink-0 h-full">
-          <div className="flex flex-col h-full p-4">
-            <div className="flex-1 flex flex-col">
-              <h1 className="text-lg font-semibold mb-2">我的文件</h1>
+    <div className="h-screen flex flex-col bg-white font-sans text-slate-700 overflow-hidden">
+      {/* 1. Global Header (极简) */}
+      <header className="h-12 border-b border-gray-200 px-4 flex items-center justify-between bg-white z-30 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center text-white">
+            <FileExcelOutlined />
+          </div>
+          <span className="font-bold text-gray-700">{title || 'Excel 智能解析'}</span>
+        </div>
+      </header>
+
+      {/* 2. Main Layout */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Sidebar */}
+        <div 
+          className={`
+            relative z-20 flex-shrink-0 bg-gray-50 border-r border-gray-200 transition-all duration-300 ease-in-out
+            ${isSidebarOpen ? 'w-[280px] translate-x-0' : 'w-0 -translate-x-full opacity-0 overflow-hidden'}
+          `}
+        >
+          <div className="w-[280px] h-full flex flex-col">
+            <div className="flex justify-between items-center px-4 h-12 border-b border-gray-200/50 bg-gray-50">
+              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Explorer</span>
+              <Button type="text" size="small" icon={<MenuFoldOutlined />} onClick={() => setIsSidebarOpen(false)} className="text-gray-400" />
+            </div>
+            <div className="flex-1 min-h-0">
               <ExcelUpload
                 fileList={state.fileList}
                 selectedFileId={state.selectedFileId}
                 isLoading={state.isLoading}
                 onFileAdd={handleFileAdd}
-                onFileSelect={handleFileSelect}
-                onParseTable={handleParseTable}
+                onFileSelect={(id) => setState(p => ({ ...p, selectedFileId: id }))}
+                onFileDelete={handleFileDelete}
               />
             </div>
           </div>
         </div>
-        <div className="flex-1 min-w-0 overflow-hidden p-4 h-full">
-          <div className="h-full flex flex-col">
-            <h1 className="text-lg font-semibold mb-2">预览文件</h1>
-            <div className="flex-1 min-h-0">
-              <ExcelPreview
-                fileArrayBuffer={selectedFile?.arrayBuffer || null}
-                fileName={selectedFile?.file.name || null}
-              />
+
+        {/* Workspace Stage */}
+        <main className="flex-1 flex flex-col min-w-0 bg-white relative">
+          {/* Workspace Toolbar (上下文相关) */}
+          <div className="h-12 border-b border-gray-200 px-4 flex items-center justify-between bg-white shrink-0">
+            <div className="flex items-center gap-3">
+              {!isSidebarOpen && (
+                <Tooltip title="展开侧边栏">
+                  <Button icon={<MenuUnfoldOutlined />} onClick={() => setIsSidebarOpen(true)} type="text" />
+                </Tooltip>
+              )}
+              {selectedFile ? (
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-gray-500">当前文件:</span>
+                  <span className="font-medium text-gray-800 max-w-[300px] truncate">{selectedFile.file.name}</span>
+                </div>
+              ) : (
+                <span className="text-gray-400 text-sm">未选择文件</span>
+              )}
             </div>
+
+            {selectedFile && (
+              <div className="flex items-center gap-4">
+                <Segmented<ViewMode>
+                  options={[
+                    { value: 'preview', icon: <FileExcelOutlined />, label: '预览' },
+                    { value: 'split', icon: <AppstoreOutlined />, label: '对比' },
+                    { value: 'result', icon: <CodeOutlined />, label: '结果' },
+                  ]}
+                  value={viewMode}
+                  onChange={setViewMode}
+                  size="small"
+                />
+                <div className="h-4 w-px bg-gray-200"></div>
+                <Button 
+                  type="primary"
+                  size="small"
+                  icon={selectedFile.isProcessing ? <LoadingOutlined /> : <RocketOutlined />}
+                  onClick={handleParse}
+                  loading={selectedFile.isProcessing}
+                  className="bg-blue-600 px-4"
+                >
+                  {selectedFile.result ? '重新解析' : '开始解析'}
+                </Button>
+              </div>
+            )}
           </div>
-        </div>
-        <div className="flex-1 p-4 h-full">
-          <div className="h-full flex flex-col">
-            <h1 className="text-lg font-semibold mb-2">处理结果</h1>
-            <div className="flex-1 min-h-0">
-              <ExcelResult
-                result={selectedFile?.result}
-                error={selectedFile?.error || state.error}
-                isProcessing={selectedFile?.isProcessing || false}
-                fileName={selectedFile?.file.name || null}
-              />
-            </div>
+
+          {/* Canvas Content */}
+          <div className="flex-1 relative overflow-hidden bg-gray-50/30">
+            {!selectedFile ? (
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                <CloudUploadOutlined style={{ fontSize: 64, opacity: 0.2 }} />
+                <p className="mt-4 text-gray-500 font-medium">准备就绪</p>
+                <p className="text-sm">请从左侧上传或选择文件</p>
+              </div>
+            ) : (
+              <div className="absolute inset-0 flex">
+                {/* 左：预览区 */}
+                {(viewMode === 'split' || viewMode === 'preview') && (
+                  <div className={`
+                    h-full transition-all duration-300 ease-in-out border-r border-gray-200 bg-white min-w-0 overflow-hidden
+                    ${viewMode === 'preview' ? 'flex-1' : 'flex-[1.2]'}
+                  `}>
+                    <ExcelPreview 
+                      fileArrayBuffer={selectedFile.arrayBuffer || null} 
+                      fileName={selectedFile.file.name} 
+                    />
+                  </div>
+                )}
+
+                {/* 右：结果区 */}
+                {(viewMode === 'split' || viewMode === 'result') && (
+                  <div className={`
+                    h-full transition-all duration-300 ease-in-out bg-white flex flex-col min-w-0 overflow-hidden
+                    ${viewMode === 'result' ? 'flex-1' : 'flex-1'}
+                  `}>
+                    <ExcelResult 
+                      result={selectedFile.result} 
+                      error={selectedFile.error} 
+                      isProcessing={selectedFile.isProcessing || false} 
+                      fileName={selectedFile.file.name} 
+                    />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-        </div>
+        </main>
       </div>
     </div>
-  );
-}
-
-export default function ExcelProcess() {
-  return (
-    <Suspense fallback={<div>加载中...</div>}>
-      <ExcelProcessContent />
-    </Suspense>
   );
 }

@@ -6,9 +6,14 @@ export interface ApplicationData {
   description: string;
   route: string;
   url?: string;
+  username?: string;
+  password?: string;
   sceneCategory: string;
   industryTag: string;
   icon: string;
+  sortOrder: number;
+  needsAuth: boolean;
+  isPublic: boolean;
   createdAt: string;
   updatedAt: string;
   permissionKey?: string;

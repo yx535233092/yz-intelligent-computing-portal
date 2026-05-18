@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-multipart
+pandas
+openpyxl
+tabulate
+faster-whisper
+ffmpeg-python
+sqlalchemy
+psycopg2-binary

@@ -154,6 +154,7 @@ export interface MediaPreviewProps {
 
 // 媒体任务详情
 export interface MediaTaskDetail {
+  identifier: string; // Add identifier
   status: 'completed' | 'failed' | 'processing';
   result: MediaTaskDetailResult;
   metadata: MediaTaskDetailMetadata;

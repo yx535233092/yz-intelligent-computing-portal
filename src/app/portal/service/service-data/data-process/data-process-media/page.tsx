@@ -6,20 +6,37 @@ import FileList from '@/components/data-process/FileList';
 import Preview from '@/components/data-process/Preview';
 import Header from '@/components/data-process/Header';
 import MediaProcess from '@/components/data-process/media-process/MediaProcess';
+import ExcelProcess from '@/components/data-process/excel-process/ExcelProcess';
+import DocProcess from '@/components/data-process/doc-process/DocProcess';
 import { useSearchParams } from 'next/navigation';
+import { AudioOutlined, VideoCameraOutlined, FileExcelOutlined, FileTextOutlined } from '@ant-design/icons';
 import type { FileItem } from '@/types/data-process';
 
 // 菜单列表
 const menus = [
   {
+    label: '文档解析',
+    type: 'doc',
+    key: 11,
+    icon: <FileTextOutlined />,
+  },
+  {
+    label: '表格解析',
+    type: 'excel',
+    key: 10,
+    icon: <FileExcelOutlined />,
+  },
+  {
     label: '音频解析',
     type: 'audio',
     key: 8,
+    icon: <AudioOutlined />,
   },
   {
     label: '视频解析',
     type: 'video',
     key: 9,
+    icon: <VideoCameraOutlined />,
   },
 ];
 
@@ -58,13 +75,17 @@ function ProcessContent({
       return <MediaProcess type="audio"></MediaProcess>;
     case 'video':
       return <MediaProcess type="video"></MediaProcess>;
+    case 'excel':
+      return <ExcelProcess />;
+    case 'doc':
+      return <DocProcess />;
   }
 }
 
 // 数据处理页面
 export default function DataProcess() {
   const searchParams = useSearchParams();
-  const [activeMenu, setActiveMenu] = useState(8);
+  const [activeMenu, setActiveMenu] = useState(11);
   const [activeFile, setActiveFile] = useState<FileItem | null>(null);
 
   // 根据搜索参数设置默认菜单
@@ -74,6 +95,10 @@ export default function DataProcess() {
       setActiveMenu(8);
     } else if (type === 'video') {
       setActiveMenu(9);
+    } else if (type === 'excel' || type === 'table') {
+      setActiveMenu(10);
+    } else if (type === 'doc' || type === 'text' || type === 'image') {
+      setActiveMenu(11);
     }
   }, [type]);
 

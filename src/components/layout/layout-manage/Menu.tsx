@@ -13,10 +13,9 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 // 菜单列表
 const items: MenuItem[] = [
-  { key: '1', icon: <AppstoreOutlined />, label: '门户页面' },
-  { key: '2', icon: <AppstoreOutlined />, label: '仪表台' },
-  // { key: '3', icon: <UserOutlined />, label: '个人信息' },
-  // { key: '4', icon: <UserOutlined />, label: '主题配置' },
+  { key: '2', icon: <AppstoreOutlined />, label: '驾驶舱' },
+  { key: '9', icon: <SafetyOutlined />, label: '系统监控' },
+  { key: '8', icon: <AppstoreOutlined />, label: '应用管理' },
   { key: '7', icon: <UserOutlined />, label: '用户管理' },
   { key: '6', icon: <TeamOutlined />, label: '角色管理' },
   { key: '5', icon: <SafetyOutlined />, label: '权限管理' },
@@ -26,9 +25,7 @@ const ManageMenu = function ({ isCollapsed }: { isCollapsed: boolean }) {
   const router = useRouter();
 
   const handleMenuClick = (e: { key: string }) => {
-    if (e.key === '1') {
-      router.push('/');
-    } else if (e.key === '2') {
+    if (e.key === '2') {
       router.push('/manage/dashborad');
     } else if (e.key === '3') {
       router.push('/manage/profile');
@@ -40,11 +37,15 @@ const ManageMenu = function ({ isCollapsed }: { isCollapsed: boolean }) {
       router.push('/manage/role');
     } else if (e.key === '7') {
       router.push('/manage/users');
+    } else if (e.key === '8') {
+      router.push('/manage/application');
+    } else if (e.key === '9') {
+      router.push('/manage/monitoring');
     }
   };
 
   return (
-    <div>
+    <div className="bg-[#001529]">
       <Menu
         defaultSelectedKeys={['2']}
         defaultOpenKeys={['sub1']}
@@ -53,6 +54,7 @@ const ManageMenu = function ({ isCollapsed }: { isCollapsed: boolean }) {
         inlineCollapsed={isCollapsed}
         items={items}
         onClick={handleMenuClick}
+        style={{ borderRight: 0 }}
       />
     </div>
   );

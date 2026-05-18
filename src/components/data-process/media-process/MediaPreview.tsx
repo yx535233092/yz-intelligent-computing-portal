@@ -13,7 +13,6 @@ import formatTime from '@/lib/utils/formatTime';
 import type { MediaPreviewProps, MediaTaskDetail } from '@/types/data-process';
 
 function MediaPreview({ selectedMediaTask }: MediaPreviewProps) {
-  const [currentTime, setCurrentTime] = useState(0);
   const [mediaTaskDetail, setMediaTaskDetail] =
     useState<MediaTaskDetail | null>(null);
 
@@ -41,23 +40,17 @@ function MediaPreview({ selectedMediaTask }: MediaPreviewProps) {
           selectedMediaTask!.identifier
         );
         console.log(mediaTaskDetail);
-        if (mediaTaskDetail.metadata.file_name.includes('.mp3')) {
-          mediaTaskDetail.metadata.url =
-            '/assets/audio/锵锵三人行_TN603_3d (mp3cut.net)_MP3.mp3';
-        } else {
-          mediaTaskDetail.metadata.url = '/assets/videos/多人视频.mov';
-        }
         setMediaTaskDetail(mediaTaskDetail);
 
         // 只在处理中状态时设置定时器，避免已完成任务的不必要刷新
         if (mediaTaskDetail?.status === 'processing') {
-          // 每1s获取任务详情
+          // 高频轮询 (300ms) 以减少感知延迟
           getMediaTaskDetailInterval = setInterval(async () => {
             const mediaTaskDetail = await getMediaTaskDetail(
               selectedMediaTask!.identifier
             );
             setMediaTaskDetail(mediaTaskDetail);
-          }, 1000);
+          }, 300);
         }
       }
     };
@@ -86,23 +79,6 @@ function MediaPreview({ selectedMediaTask }: MediaPreviewProps) {
     );
   }
 
-  const handleSegmentClick = (startTime: number) => {
-    setCurrentTime(startTime);
-  };
-
-  const getStatusTag = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return <Tag color="green">转录完成</Tag>;
-      case 'processing':
-        return <Tag color="blue">转录中</Tag>;
-      case 'failed':
-        return <Tag color="red">转录失败</Tag>;
-      default:
-        return <Tag color="default">等待中</Tag>;
-    }
-  };
-
   return (
     <Suspense fallback={<div>加载中...</div>}>
       <div className="bg-white  h-full  rounded-xl flex flex-col flex-1 ">
@@ -110,67 +86,20 @@ function MediaPreview({ selectedMediaTask }: MediaPreviewProps) {
         <header className="h-[80px] flex items-center justify-between text-black text-xl p-6 font-bold border-b border-gray-100">
           <div className="flex items-center gap-3">
             <span>任务详情</span>
+            <span className="text-base font-normal text-gray-500 ml-2">{mediaTaskDetail.metadata.file_name}</span>
           </div>
         </header>
 
         {/* 内容区域 */}
-        <main className="flex-1 p-6 overflow-y-auto mb-4">
-          {mediaTaskDetail?.status === 'processing' ? (
-            // 处理中状态
-            <div className="h-full flex flex-col items-center justify-center">
-              <Spin size="large" />
-              <p className="mt-4 text-lg text-gray-600">正在转录中...</p>
-              <p className="text-sm text-gray-500">
-                这可能需要几分钟时间，请耐心等待
-              </p>
-            </div>
-          ) : (
-            // 完成状态或其他状态
+        <main className="flex-1 p-6 overflow-hidden mb-4">
+            {/* 始终展示内容框架，不再根据 processing 状态全屏 Loading */}
             <div className="h-full flex flex-col gap-6">
-              {/* 任务信息卡片 */}
-              <Card size="small">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-3">
-                      <h3 className="text-lg font-semibold text-gray-800">
-                        {mediaTaskDetail?.metadata.file_name}
-                      </h3>
-                      {getStatusTag(mediaTaskDetail!.status)}
-                    </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
-                      <span className="flex items-center gap-1">
-                        <ClockCircleOutlined />
-                        创建时间: {formattedCreateTime}
-                      </span>
-                      {mediaTaskDetail?.metadata.dutation && (
-                        <span className="flex items-center gap-1">
-                          <PlayCircleOutlined />
-                          时长: {mediaTaskDetail!.metadata.dutation}
-                        </span>
-                      )}
-                      {/* {mediaTaskDetail?.metadata.language && (
-                      <span className="flex items-center gap-1">
-                        <FileTextOutlined />
-                        类型:{' '}
-                        {mediaTaskDetail?.metadata.language === 'audio'
-                          ? '音频'
-                          : '视频'}
-                      </span>
-                    )} */}
-                    </div>
-                  </div>
-                </div>
-              </Card>
-
-              {/* 转录结果显示 */}
+              {/* 转录结果显示 (现在集成了播放器和所有功能) */}
               <TranscriptionDisplay
                 transcription={mediaTaskDetail?.result}
-                currentTime={currentTime}
-                onSegmentClick={handleSegmentClick}
                 mediaTaskDetail={mediaTaskDetail}
               />
             </div>
-          )}
         </main>
       </div>
     </Suspense>

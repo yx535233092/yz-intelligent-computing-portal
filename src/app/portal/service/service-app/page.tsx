@@ -19,10 +19,11 @@ import {
   PictureOutlined,
   RightOutlined,
 } from '@ant-design/icons';
+import { useRouter } from 'next/navigation';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useInView } from '@/hooks/useInView';
 import styles from './page.module.css';
-import { getApplicationsAPI, getUserPermissionsAPI } from '@/apis/applications';
+import { getApplicationsAPI } from '@/apis/applications';
 
 // 应用数据类型
 interface Application {
@@ -54,11 +55,11 @@ const iconMap: { [key: string]: React.ReactNode } = {
 };
 
 export default function AppService() {
+  const router = useRouter();
   useScrollToTop();
   const [activeCategory, setActiveCategory] = useState('全部');
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
-  const [userPermissions, setUserPermissions] = useState<string[]>([]);
 
   // 动画相关的hooks
   const [heroRef, isHeroInView] = useInView({ threshold: 0.3 });
@@ -70,15 +71,9 @@ export default function AppService() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // 并行获取应用列表和用户权限
-        const [appsRes, permissionsRes] = await Promise.all([
-          getApplicationsAPI(),
-          getUserPermissionsAPI().catch(() => ({
-            data: { permissions: [], roles: [] },
-          })),
-        ]);
-        setApplications(appsRes.applications);
-        setUserPermissions(permissionsRes.data.permissions);
+        // 获取应用列表
+        const appsRes = await getApplicationsAPI({ pageSize: 100 });
+        setApplications(appsRes.applications || appsRes.data || []);
       } catch (error) {
         console.error('获取数据失败:', error);
       } finally {
@@ -89,12 +84,13 @@ export default function AppService() {
     fetchData();
   }, []);
 
-  // 筛选应用
+  // 筛选应用并排序 (API已经排好序，这里保持过滤逻辑)
   const filteredApps = useMemo(() => {
-    if (activeCategory === '全部') {
-      return applications;
+    let apps = applications;
+    if (activeCategory !== '全部') {
+      apps = applications.filter((app) => app.sceneCategory === activeCategory);
     }
-    return applications.filter((app) => app.sceneCategory === activeCategory);
+    return apps;
   }, [activeCategory, applications]);
 
   // 分类选项
@@ -107,22 +103,9 @@ export default function AppService() {
     // { key: '智能客服', label: '智能客服', icon: <CustomerServiceOutlined /> },
   ];
 
-  // 检查应用是否有访问权限
-  const hasPermission = (app: Application) => {
-    // 如果应用没有设置 permissionKey，表示不需要权限验证，任何人都可以访问
-    if (!app.permissionKey) {
-      return true;
-    }
-    // 检查用户是否有该应用的权限
-    return userPermissions.includes(app.permissionKey);
-  };
-
   const handleAppClick = (app: Application) => {
-    // 如果没有权限，不执行任何操作
-    if (!hasPermission(app)) {
-      return;
-    }
-    window.open(app.route, '_blank');
+    // 跳转通用渲染页
+    window.open(`/portal/app/${app.id}`, '_blank');
   };
 
   return (
@@ -347,7 +330,6 @@ export default function AppService() {
             <>
               <Row gutter={[20, 20]}>
                 {filteredApps.map((app, index) => {
-                  const hasAccess = hasPermission(app);
                   return (
                     <Col
                       xs={24}
@@ -358,18 +340,18 @@ export default function AppService() {
                       key={app.id || index}
                     >
                       <Card
-                        hoverable={hasAccess}
+                        hoverable={true}
                         onClick={() => handleAppClick(app)}
                         className={styles['app-card']}
                         style={{
-                          cursor: hasAccess ? 'pointer' : 'not-allowed',
+                          cursor: 'pointer',
                         }}
                       >
                         {/* 主题色竖条 */}
                         <div
                           className={styles['app-theme-bar']}
                           style={{
-                            opacity: hasAccess ? 1 : 0.5,
+                            opacity: 1,
                           }}
                         />
 
@@ -381,35 +363,21 @@ export default function AppService() {
                               size={48}
                               className={styles['app-avatar']}
                               style={{
-                                opacity: hasAccess ? 1 : 0.6,
+                                opacity: 1,
                               }}
                             />
                           </div>
                           <div className={styles['app-info']}>
                             <h4
                               className={styles['app-title']}
-                              style={{
-                                color: hasAccess ? undefined : '#999',
-                              }}
                             >
                               {app.name}
-                              {!hasAccess && (
-                                <span
-                                  style={{
-                                    marginLeft: '8px',
-                                    fontSize: '12px',
-                                    color: '#999',
-                                  }}
-                                >
-                                  (无权限)
-                                </span>
-                              )}
                             </h4>
                             <div className={styles['app-meta']}>
                               <span
                                 className={styles['app-tag']}
                                 style={{
-                                  opacity: hasAccess ? 1 : 0.6,
+                                  opacity: 1,
                                 }}
                               >
                                 {app.industryTag}
@@ -417,7 +385,7 @@ export default function AppService() {
                               <span
                                 className={styles['app-category']}
                                 style={{
-                                  opacity: hasAccess ? 1 : 0.6,
+                                  opacity: 1,
                                 }}
                               >
                                 {app.sceneCategory}
@@ -430,9 +398,6 @@ export default function AppService() {
                         <div className={styles['app-description-wrapper']}>
                           <p
                             className={styles['app-description']}
-                            style={{
-                              color: hasAccess ? undefined : '#999',
-                            }}
                           >
                             {app.description}
                           </p>
@@ -443,16 +408,13 @@ export default function AppService() {
                           <div className={styles['app-action']}>
                             <span
                               className={styles['app-action-text']}
-                              style={{
-                                color: hasAccess ? undefined : '#999',
-                              }}
                             >
-                              {hasAccess ? '立即使用' : '暂无权限'}
+                              立即使用
                             </span>
                             <RightOutlined
                               className={styles['arrow-icon']}
                               style={{
-                                opacity: hasAccess ? 1 : 0.5,
+                                opacity: 1,
                               }}
                             />
                           </div>

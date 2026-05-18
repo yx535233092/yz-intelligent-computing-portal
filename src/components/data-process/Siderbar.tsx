@@ -17,11 +17,11 @@ function Siderbar({
   activeMenu: number;
   onMenuChange: (menu: number) => void;
 }) {
-  // 是否折叠
-  const [isClose, setIsClose] = useState(false);
+  // 是否折叠，默认设置为 true (缩小)
+  const [isClose, setIsClose] = useState(true);
 
   // 切换选中的解析文件类型
-  const changeActiveItem = (item: Item) => {
+  const changeActiveItem = (item: any) => {
     if (activeMenu === item.key) {
       return;
     }
@@ -30,57 +30,44 @@ function Siderbar({
 
   return (
     <div
-      className={`flex flex-col ${isClose ? 'w-[80px]' : 'w-[320px]'} transition-all duration-300`}
+      className={`flex flex-col ${isClose ? 'w-[64px]' : 'w-[280px]'} transition-all duration-300 bg-white border-r border-gray-200 h-full`}
     >
-      {/* 菜单 */}
-      <div className="flex-1 px-6 flex flex-col gap-4">
+      {/* 顶部控制栏 */}
+      <div className={`h-[80px] flex items-center ${isClose ? 'justify-center' : 'justify-between px-4'} border-b border-gray-100`}>
+        {!isClose && <h1 className="text-lg font-bold text-gray-800 whitespace-nowrap">数据类型</h1>}
+        
         {isClose ? (
-          <div className="py-6 flex justify-center">
-            <Tooltip title="展开">
-              <MenuUnfoldOutlined
-                style={{
-                  color: '#888',
-                  fontSize: '24px',
-                  cursor: 'pointer',
-                }}
-                onClick={() => {
-                  setIsClose(false);
-                }}
-              />
-            </Tooltip>
-          </div>
+          <MenuUnfoldOutlined
+            className="text-gray-500 text-xl cursor-pointer hover:text-brand transition-colors"
+            onClick={() => setIsClose(false)}
+          />
         ) : (
-          <div>
-            <div className="text-lg font-bold py-6 border-b border-gray-200 flex justify-between overflow-hidden transition-all duration-300 whitespace-nowrap">
-              <h1>数据类型</h1>
-              <Tooltip title="折叠">
-                <MenuFoldOutlined
-                  style={{
-                    color: '#888',
-                    fontSize: '24px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => {
-                    setIsClose(true);
-                  }}
-                />
-              </Tooltip>
-            </div>
-            {menus.map((item) => {
-              return (
-                <div
-                  className={`whitespace-nowrap w-full h-[50px] rounded-xl flex items-center px-6 text-lg transition-all duration-300 cursor-pointer ${
-                    activeMenu === item.key ? 'bg-red-700' : 'bg-white'
-                  } ${activeMenu === item.key ? 'text-white' : 'text-black'}`}
-                  key={item.key}
-                  onClick={() => changeActiveItem(item)}
-                >
-                  {item.label}
-                </div>
-              );
-            })}
-          </div>
+          <MenuFoldOutlined
+            className="text-gray-500 text-xl cursor-pointer hover:text-brand transition-colors"
+            onClick={() => setIsClose(true)}
+          />
         )}
+      </div>
+
+      {/* 菜单列表 */}
+      <div className="flex-1 py-4 flex flex-col gap-2 px-2">
+        {menus.map((item: any) => {
+          const isActive = activeMenu === item.key;
+          return (
+            <div
+              key={item.key}
+              className={`
+                h-[50px] rounded-xl flex items-center cursor-pointer transition-all duration-300
+                ${isActive ? 'bg-red-50 text-red-600' : 'text-gray-600 hover:bg-gray-100'}
+                ${isClose ? 'justify-center px-0' : 'px-4 gap-3'}
+              `}
+              onClick={() => changeActiveItem(item)}
+            >
+              <span className="text-xl">{item.icon}</span>
+              {!isClose && <span className="text-base font-medium whitespace-nowrap overflow-hidden">{item.label}</span>}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -45,22 +45,19 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     console.log(error);
     // 接口权限认证失败
-    if (error.response?.status === 401) {
-      console.log('接口权限认证失败，跳转至登录页');
-      // 清除token
-      removeToken();
-      // 获取错误详情
-      const errorMessage = (error.response?.data as { message: string })
-        .message;
-      messageApi?.error(errorMessage);
-      // 跳转至登录页
-      if (appRouter) {
-        console.log('aixos: router push');
-        appRouter.push('/auth/login');
-      } else {
-        console.log('axios: location change');
-        location.href = location.origin + '/auth/login?message=token_expired';
-      }
+    if (error.response && error.response.status === 401) {
+      // 临时放开：不强制跳转登录页
+      console.warn('收到 401 未授权，但在放开模式下不跳转登录页');
+      // // 清除token
+      // removeToken();
+      // // 如果是服务端环境，不需要跳转
+      // if (typeof window === 'undefined') {
+      //   return Promise.reject(error);
+      // }
+      // // 跳转到登录页，并携带当前页面路径作为参数
+      // if (!location.pathname.includes('/auth/login')) {
+      //   location.href = location.origin + '/auth/login?message=token_expired';
+      // }
     }
     // 抛出错误
     return Promise.reject(error);

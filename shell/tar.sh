@@ -1,1 +1,0 @@
-tar -czvf build.tar.gz public shell prisma src .env .env.production ecosystem.config.js next-env.d.ts next.config.ts package.json postcss.config.mjs tsconfig.json && echo "打包完成:build.tar.gz"

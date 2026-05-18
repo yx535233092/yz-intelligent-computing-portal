@@ -1,10 +1,17 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import type { FileItem } from '@/types/excel';
-import { userPermissionSelector } from '@/lib/store/selectors/permissionSelector';
-import { useSelector } from 'react-redux';
-import { useSearchParams } from 'next/navigation';
+import { 
+  PlusOutlined, 
+  FileExcelOutlined, 
+  LoadingOutlined, 
+  CheckCircleTwoTone, 
+  CloseCircleTwoTone,
+  DeleteOutlined,
+  SearchOutlined
+} from '@ant-design/icons';
+import { Button, Input, Empty } from 'antd';
 
 interface ExcelUploadProps {
   fileList: FileItem[];
@@ -12,7 +19,7 @@ interface ExcelUploadProps {
   isLoading: boolean;
   onFileAdd: (file: File) => void;
   onFileSelect: (fileId: string) => void;
-  onParseTable: () => void;
+  onFileDelete?: (fileId: string) => void;
 }
 
 export default function ExcelUpload({
@@ -21,550 +28,117 @@ export default function ExcelUpload({
   isLoading,
   onFileAdd,
   onFileSelect,
-  onParseTable,
+  onFileDelete
 }: ExcelUploadProps) {
-  // 1. 获取权限
-  const userPermissions = useSelector(userPermissionSelector);
-  const searchParams = useSearchParams();
-  const permissionKey = searchParams.get('permissionKey');
-  const [hasPermission, setHasPermission] = useState(false);
-
-  // 2. 判断权限
-  const judegePermission = () => {
-    if (permissionKey && userPermissions.includes(permissionKey)) {
-      return true;
-    }
-    return false;
-  };
-  useEffect(() => {
-    setHasPermission(judegePermission());
-  }, []);
-
-  const [isDragging, setIsDragging] = useState(false);
-  const [showExportMenu, setShowExportMenu] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const exportTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [searchTerm, setSearchTime] = useState('');
 
-  // 文件选择处理
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      onFileAdd(file);
+  // 格式化时间
+  const formatTime = (date: Date) => {
+    // 如果是今天，只显示时间
+    if (date.toDateString() === new Date().toDateString()) {
+      return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
     }
+    return date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' });
   };
 
-  // 拖拽处理函数
-  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-
-    const files = Array.from(e.dataTransfer.files);
-    const excelFile = files.find(
-      (file) =>
-        file.name.toLowerCase().endsWith('.xlsx') ||
-        file.name.toLowerCase().endsWith('.xls')
-    );
-
-    if (excelFile) {
-      onFileAdd(excelFile);
-    }
-  };
-
-  // 点击上传区域触发文件选择
-  const handleUploadAreaClick = () => {
-    if (!isLoading) {
-      fileInputRef.current?.click();
-    }
-  };
-
-  // 格式化上传时间
-  const formatUploadTime = (date: Date) => {
-    return date.toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
-  };
-
-  // 获取选中的文件
-  const selectedFile = fileList.find((file) => file.id === selectedFileId);
-
-  // 处理导出文件 - MD格式
-  const handleExportMarkdown = () => {
-    if (!selectedFile?.result) {
-      alert('请先解析表格数据');
-      return;
-    }
-
-    try {
-      const markdownContent = selectedFile.result.data?.md_format;
-      if (!markdownContent || typeof markdownContent !== 'string') {
-        alert('没有可导出的Markdown内容');
-        return;
-      }
-
-      const BOM = '\uFEFF';
-      const finalContent = BOM + markdownContent;
-
-      const blob = new Blob([finalContent], {
-        type: 'text/markdown;charset=utf-8',
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${selectedFile.file.name.replace(
-        /\.(xlsx|xls)$/i,
-        ''
-      )}_data.md`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      setShowExportMenu(false);
-      console.log('Markdown导出成功');
-    } catch (error) {
-      console.error('导出Markdown失败:', error);
-      alert(`导出失败：${error instanceof Error ? error.message : '未知错误'}`);
-    }
-  };
-
-  // 处理导出文件 - JSON格式
-  const handleExportJson = () => {
-    if (!selectedFile?.result) {
-      alert('请先解析表格数据');
-      return;
-    }
-
-    try {
-      const exportData = {
-        fileInfo: {
-          filename: selectedFile.result.filename,
-          rows: selectedFile.result.rows,
-          columns: selectedFile.result.columns,
-          uploadTime: selectedFile.uploadTime,
-        },
-        data: selectedFile.result.data,
-      };
-
-      const jsonContent = JSON.stringify(exportData, null, 2);
-
-      const blob = new Blob([jsonContent], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${selectedFile.file.name.replace(/\.(xlsx|xls)$/i, '')}_data.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      setShowExportMenu(false);
-      console.log('JSON导出成功');
-    } catch (error) {
-      console.error('导出JSON失败:', error);
-      alert('导出失败，请重试');
-    }
-  };
-
-  // 处理鼠标进入导出按钮区域
-  const handleExportMouseEnter = () => {
-    if (selectedFile) {
-      if (exportTimeoutRef.current) {
-        clearTimeout(exportTimeoutRef.current);
-      }
-      setShowExportMenu(true);
-    }
-  };
-
-  // 处理鼠标离开导出按钮区域
-  const handleExportMouseLeave = () => {
-    exportTimeoutRef.current = setTimeout(() => {
-      setShowExportMenu(false);
-    }, 200);
-  };
-
-  // 处理鼠标进入菜单区域
-  const handleMenuMouseEnter = () => {
-    if (exportTimeoutRef.current) {
-      clearTimeout(exportTimeoutRef.current);
-    }
-  };
-
-  // 处理鼠标离开菜单区域
-  const handleMenuMouseLeave = () => {
-    setShowExportMenu(false);
-  };
+  const filteredList = fileList.filter(f => f.file.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
-    <div className="flex flex-col h-full space-y-4">
-      {/* 上传区域 */}
-      <div
-        className={`
-          relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-all duration-200 flex-shrink-0
-          ${
-            isDragging
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
-          }
-          ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}
-        `}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-        onClick={handleUploadAreaClick}
-      >
+    <div className="flex flex-col h-full bg-gray-50/50">
+      {/* 顶部操作区 */}
+      <div className="px-3 py-3 space-y-3 border-b border-gray-200/60 flex-shrink-0">
+        <Button 
+          type="primary" 
+          block 
+          icon={<PlusOutlined />} 
+          loading={isLoading}
+          onClick={() => fileInputRef.current?.click()}
+          className="bg-blue-600 hover:bg-blue-500 border-none shadow-sm h-9 font-medium"
+        >
+          上传 Excel
+        </Button>
+        <Input 
+          prefix={<SearchOutlined className="text-gray-400" />} 
+          placeholder="搜索文件..." 
+          className="bg-white border-gray-200 text-sm"
+          variant="filled"
+          value={searchTerm}
+          onChange={e => setSearchTime(e.target.value)}
+        />
         <input
           ref={fileInputRef}
           type="file"
           accept=".xlsx,.xls"
-          onChange={handleFileChange}
           className="hidden"
-          disabled={isLoading}
+          onChange={(e) => e.target.files?.[0] && onFileAdd(e.target.files[0])}
         />
-
-        <div className="space-y-3">
-          {/* 上传图标 */}
-          <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-            {isLoading ? (
-              <svg
-                className="w-6 h-6 text-blue-600 animate-spin"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-            ) : (
-              <svg
-                className="w-6 h-6 text-blue-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                />
-              </svg>
-            )}
-          </div>
-
-          {/* 上传文字 */}
-          <div>
-            <p className="text-lg font-medium text-gray-900">
-              {isLoading
-                ? '处理中...'
-                : isDragging
-                  ? '释放文件以上传'
-                  : '拖拽文件到此处或点击上传'}
-            </p>
-            <p className="text-sm text-gray-500 mt-1">
-              支持 .xlsx/.xls 格式的Excel文件
-            </p>
-          </div>
-        </div>
       </div>
 
-      {/* 文件列表 */}
-      <div className="flex-1 flex flex-col min-h-0">
-        <h3 className="text-md font-medium mb-2 flex-shrink-0">文件列表</h3>
+      {/* 列表区 */}
+      <div className="flex-1 overflow-y-auto min-h-0 py-2">
         {fileList.length === 0 ? (
-          <p className="text-gray-500 text-sm">暂无文件</p>
+          <div className="flex flex-col items-center justify-center h-48 text-gray-400 px-4">
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无文件" />
+            <p className="text-xs text-center mt-2">支持拖拽上传</p>
+          </div>
         ) : (
-          <div className="flex-1 border border-gray-300 overflow-y-auto rounded-lg">
-            <div className="space-y-1 p-2">
-              {fileList.map((fileItem) => {
-                const isSelected = selectedFileId === fileItem.id;
-                return (
-                  <div
-                    key={fileItem.id}
-                    className={`
-                      p-3 rounded-lg cursor-pointer transition-all duration-200
-                      ${
-                        isSelected
-                          ? 'bg-blue-100 border-blue-300 border'
-                          : 'hover:bg-gray-50 border border-transparent'
-                      }
-                    `}
-                    onClick={() => onFileSelect(fileItem.id)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div
-                          className={`
-                          font-medium truncate
-                          ${isSelected ? 'text-blue-800' : 'text-gray-900'}
-                        `}
-                        >
-                          {fileItem.file.name}
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1 space-y-1">
-                          <div>
-                            大小: {(fileItem.file.size / 1024).toFixed(1)} KB
-                          </div>
-                          <div>
-                            上传时间: {formatUploadTime(fileItem.uploadTime)}
-                          </div>
-                          {fileItem.isProcessing && (
-                            <div className="text-blue-600 flex items-center gap-1">
-                              <svg
-                                className="w-3 h-3 animate-spin"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                />
-                              </svg>
-                              解析中...
-                            </div>
-                          )}
-                          {fileItem.result && !fileItem.isProcessing && (
-                            <div className="text-green-600">✓ 已解析</div>
-                          )}
-                          {fileItem.error && !fileItem.isProcessing && (
-                            <div className="text-red-600">✗ 解析失败</div>
-                          )}
-                        </div>
-                      </div>
+          <ul className="px-2 space-y-0.5">
+            {filteredList.map((file) => {
+              const isSelected = selectedFileId === file.id;
+              return (
+                <li
+                  key={file.id}
+                  onClick={() => onFileSelect(file.id)}
+                  className={`
+                    group relative flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200
+                    ${isSelected 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'hover:bg-gray-100 text-gray-600'
+                    }
+                  `}
+                >
+                  {/* 状态图标 */}
+                  <div className="flex-shrink-0 flex items-center justify-center w-5">
+                    {file.isProcessing ? (
+                      <LoadingOutlined className="text-blue-500" />
+                    ) : file.result ? (
+                      <CheckCircleTwoTone twoToneColor="#52c41a" />
+                    ) : file.error ? (
+                      <CloseCircleTwoTone twoToneColor="#ff4d4f" />
+                    ) : (
+                      <FileExcelOutlined className={`text-lg ${isSelected ? 'text-blue-500' : 'text-gray-400'}`} />
+                    )}
+                  </div>
 
-                      {isSelected && (
-                        <div className="ml-3 flex-shrink-0">
-                          <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
-                            <svg
-                              className="w-4 h-4 text-white"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                      )}
+                  {/* 文件信息 */}
+                  <div className="flex-1 min-w-0 flex flex-col">
+                    <span className="truncate text-sm leading-tight">{file.file.name}</span>
+                    <div className="flex items-center gap-2 mt-0.5 opacity-60 text-[10px]">
+                      <span>{formatTime(file.uploadTime)}</span>
+                      <span>•</span>
+                      <span>{(file.file.size / 1024).toFixed(0)}KB</span>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </div>
+
+                  {/* 删除按钮 (Hover) */}
+                  {onFileDelete && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onFileDelete(file.id);
+                      }}
+                      className="opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-all"
+                    >
+                      <DeleteOutlined className="text-xs" />
+                    </button>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
         )}
       </div>
-
-      {/* 操作按钮 */}
-      {fileList.length > 0 && (
-        <div className="flex gap-3 pt-4 flex-shrink-0">
-          <button
-            onClick={hasPermission ? onParseTable : () => {}}
-            disabled={
-              !selectedFileId || selectedFile?.isProcessing || !hasPermission
-            }
-            className={`
-              flex-1 px-4 py-2 rounded-lg font-medium transition-all duration-200
-              ${
-                selectedFileId && !selectedFile?.isProcessing
-                  ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm hover:shadow-md'
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              }
-            `}
-          >
-            <div className="flex items-center justify-center gap-2">
-              {!hasPermission ? (
-                <div>无权限</div>
-              ) : selectedFile?.isProcessing ? (
-                <>
-                  <svg
-                    className="w-5 h-5 animate-spin"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                    />
-                  </svg>
-                  解析中...
-                </>
-              ) : (
-                <>
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  解析表格
-                </>
-              )}
-            </div>
-          </button>
-
-          <div className="relative flex-1">
-            <button
-              onMouseEnter={handleExportMouseEnter}
-              onMouseLeave={handleExportMouseLeave}
-              disabled={!selectedFile?.result}
-              className={`
-                w-full px-4 py-2 rounded-lg font-medium transition-all duration-200
-                ${
-                  selectedFile?.result
-                    ? 'bg-green-600 text-white hover:bg-green-700 shadow-sm hover:shadow-md'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                }
-              `}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-                导出结果
-                <svg
-                  className="w-4 h-4 ml-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
-            </button>
-
-            {/* 导出格式菜单 */}
-            {showExportMenu && selectedFile?.result && (
-              <div
-                className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 min-w-max"
-                style={{
-                  animation: 'fadeInUp 0.2s ease-out',
-                }}
-                onMouseEnter={handleMenuMouseEnter}
-                onMouseLeave={handleMenuMouseLeave}
-              >
-                <div className="p-1">
-                  <button
-                    onClick={handleExportMarkdown}
-                    className="w-full px-4 py-3 text-left hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 hover:text-blue-800 flex items-center gap-3 text-gray-700 transition-all duration-200 rounded-lg group"
-                  >
-                    <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors">
-                      <svg
-                        className="w-4 h-4 text-blue-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium text-sm">Markdown</div>
-                      <div className="text-xs text-gray-500 group-hover:text-blue-600">
-                        生成格式化的表格文档
-                      </div>
-                    </div>
-                    <div className="text-gray-400 text-xs">.md</div>
-                  </button>
-
-                  <div className="h-px bg-gray-100 mx-2 my-1"></div>
-
-                  <button
-                    onClick={handleExportJson}
-                    className="w-full px-4 py-3 text-left hover:bg-gradient-to-r hover:from-green-50 hover:to-green-100 hover:text-green-800 flex items-center gap-3 text-gray-700 transition-all duration-200 rounded-lg group"
-                  >
-                    <div className="flex items-center justify-center w-8 h-8 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors">
-                      <svg
-                        className="w-4 h-4 text-green-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium text-sm">JSON</div>
-                      <div className="text-xs text-gray-500 group-hover:text-green-600">
-                        结构化数据格式
-                      </div>
-                    </div>
-                    <div className="text-gray-400 text-xs">.json</div>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

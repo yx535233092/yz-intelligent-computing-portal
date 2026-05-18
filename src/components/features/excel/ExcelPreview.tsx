@@ -1,146 +1,210 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { JsExcelPreview } from '@js-preview/excel';
+import { Button, Modal, Tooltip, Spin, Empty } from 'antd';
+import { 
+  FullscreenOutlined, 
+  FullscreenExitOutlined, 
+  FileExcelOutlined,
+  ReloadOutlined
+} from '@ant-design/icons';
 
 interface ExcelPreviewProps {
   fileArrayBuffer: ArrayBuffer | null;
   fileName: string | null;
 }
 
-export default function ExcelPreview({
-  fileArrayBuffer,
-  fileName,
-}: ExcelPreviewProps) {
+// 核心渲染器组件
+const ExcelRenderer = ({ 
+  fileArrayBuffer, 
+  onLoadStart, 
+  onLoadEnd 
+}: { 
+  fileArrayBuffer: ArrayBuffer;
+  onLoadStart?: () => void;
+  onLoadEnd?: (success: boolean) => void;
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const previewerRef = useRef<JsExcelPreview | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
-  useEffect(() => {
-    const initPreview = async () => {
-      if (!fileArrayBuffer || !containerRef.current) {
-        return;
-      }
+  const initPreview = useCallback(async () => {
+    if (!containerRef.current || !fileArrayBuffer) return;
 
-      try {
-        setIsLoading(true);
-
-        // 清理之前的预览器
-        if (previewerRef.current) {
-          try {
-            previewerRef.current.destroy();
-          } catch (e) {
-            console.warn('清理预览器时出错:', e);
-          }
-          previewerRef.current = null;
-        }
-
-        // 清空容器内容
-        if (containerRef.current) {
-          containerRef.current.innerHTML = '';
-        }
-
-        // 创建新的预览器实例
-        const { default: jsPreview } = await import('@js-preview/excel');
-        const instance = jsPreview.init(containerRef.current);
-
-        // 预览文件
-        await instance.preview(fileArrayBuffer);
-        previewerRef.current = instance;
-
-        console.log('Excel预览加载成功:', fileName);
-      } catch (error) {
-        console.error('Excel预览失败:', error);
-
-        // 显示错误信息
-        if (containerRef.current) {
-          containerRef.current.innerHTML = `
-            <div class="flex items-center justify-center h-full">
-              <div class="text-center text-gray-500">
-                <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <p class="text-lg font-medium">预览失败</p>
-                <p class="text-sm mt-1">请检查文件格式是否正确</p>
-              </div>
-            </div>
-          `;
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (fileArrayBuffer) {
-      initPreview();
-    } else {
-      // 没有文件时显示空状态
-      if (containerRef.current) {
-        containerRef.current.innerHTML = `
-          <div class="flex items-center justify-center h-full">
-            <div class="text-center text-gray-500">
-              <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-              </svg>
-              <p class="text-lg font-medium">暂无文件</p>
-              <p class="text-sm mt-1">请先上传Excel文件</p>
-            </div>
-          </div>
-        `;
-      }
-      setIsLoading(false);
-    }
-
-    // 清理函数
-    return () => {
+    try {
+      onLoadStart?.();
+      
+      // 清理旧实例
       if (previewerRef.current) {
         try {
           previewerRef.current.destroy();
         } catch (e) {
-          console.warn('组件卸载时清理预览器失败:', e);
+          console.warn('Failed to destroy previous previewer instance:', e);
         }
         previewerRef.current = null;
       }
+      containerRef.current.innerHTML = '';
+
+      // 动态导入并初始化
+      const { default: jsPreview } = await import('@js-preview/excel');
+      const instance = jsPreview.init(containerRef.current);
+      
+      await instance.preview(fileArrayBuffer);
+      previewerRef.current = instance;
+      
+      onLoadEnd?.(true);
+    } catch (e) {
+      console.error('Preview init failed', e);
+      onLoadEnd?.(false);
+    }
+  }, [fileArrayBuffer]);
+
+  useEffect(() => {
+    initPreview();
+
+    // 监听容器大小变化，重新渲染以适应布局
+    // 使用防抖，防止在布局动画过程中频繁重绘
+    let resizeTimer: NodeJS.Timeout;
+    
+    if (containerRef.current) {
+      resizeObserverRef.current = new ResizeObserver(() => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          console.log('Container resized, refreshing preview...');
+          initPreview();
+        }, 300); // 300ms 延迟，匹配 CSS transition duration
+      });
+      resizeObserverRef.current.observe(containerRef.current);
+    }
+
+    return () => {
+      clearTimeout(resizeTimer);
+      try {
+        previewerRef.current?.destroy();
+      } catch (e) {
+        console.warn('Failed to destroy previewer instance:', e);
+      }
+      resizeObserverRef.current?.disconnect();
     };
-  }, [fileArrayBuffer, fileName]);
+  }, [initPreview]);
+
+  return <div ref={containerRef} className="w-full h-full bg-white" />;
+};
+
+export default function ExcelPreview({ fileArrayBuffer, fileName }: ExcelPreviewProps) {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  // 使用 key 强制重新挂载渲染器（例如在全屏切换时）
+  const [renderKey, setRenderKey] = useState(0);
+
+  const handleReload = () => {
+    setRenderKey(k => k + 1);
+  };
+
+  if (!fileArrayBuffer) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center bg-white text-gray-400">
+        <Empty
+          image={<FileExcelOutlined style={{ fontSize: 64, color: '#e5e7eb' }} />}
+          description="暂无预览文件"
+        />
+      </div>
+    );
+  }
 
   return (
-    <div className="relative w-full h-[calc(100vh-200px)]">
-      {/* 加载状态 */}
+    <div className="relative w-full h-full group bg-white">
+      {/* 渲染器 */}
+      {!hasError ? (
+        <ExcelRenderer 
+          key={renderKey}
+          fileArrayBuffer={fileArrayBuffer} 
+          onLoadStart={() => {
+            setIsLoading(true);
+            setHasError(false);
+          }}
+          onLoadEnd={(success) => {
+            setIsLoading(false);
+            setHasError(!success);
+          }}
+        />
+      ) : (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50">
+          <p className="text-gray-500 mb-2">预览加载失败</p>
+          <Button icon={<ReloadOutlined />} onClick={handleReload}>重试</Button>
+        </div>
+      )}
+
+      {/* Loading 遮罩 */}
       {isLoading && (
-        <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
-          <div className="flex items-center gap-3">
-            <svg
-              className="w-6 h-6 text-blue-600 animate-spin"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              />
-            </svg>
-            <span className="text-gray-600">加载预览中...</span>
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 z-10 backdrop-blur-sm">
+          <Spin size="large" />
+          <span className="mt-4 text-gray-500 font-medium">加载预览中...</span>
+        </div>
+      )}
+
+      {/* 悬浮工具栏 */}
+      {!isLoading && !hasError && (
+        <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
+          <Tooltip title="刷新">
+            <Button
+              icon={<ReloadOutlined />}
+              shape="circle"
+              size="small"
+              onClick={handleReload}
+              className="bg-white/90 backdrop-blur shadow-sm border-gray-200 text-gray-500"
+            />
+          </Tooltip>
+          <Tooltip title="全屏查看">
+            <Button
+              icon={<FullscreenOutlined />}
+              shape="circle"
+              size="small"
+              onClick={() => setIsFullscreen(true)}
+              className="bg-white/90 backdrop-blur shadow-sm border-gray-200 text-gray-500"
+            />
+          </Tooltip>
+        </div>
+      )}
+
+      {/* 全屏 Modal */}
+      <Modal
+        open={isFullscreen}
+        footer={null}
+        onCancel={() => setIsFullscreen(false)}
+        width="100vw"
+        styles={{ 
+          content: { height: '100vh', padding: 0, borderRadius: 0, background: '#f8fafc' },
+          body: { height: '100%', display: 'flex', flexDirection: 'column' }
+        }}
+        closeIcon={null} // 自定义关闭按钮
+        destroyOnHidden
+      >
+        <div className="flex-shrink-0 h-14 bg-white border-b border-gray-200 px-6 flex items-center justify-between shadow-sm z-10">
+          <div className="flex items-center gap-2">
+            <FileExcelOutlined className="text-green-600 text-xl" />
+            <span className="font-bold text-gray-700">{fileName}</span>
+          </div>
+          <Button 
+            type="text" 
+            icon={<FullscreenExitOutlined />} 
+            onClick={() => setIsFullscreen(false)}
+            className="text-gray-500 hover:text-red-500 hover:bg-red-50"
+          >
+            退出全屏
+          </Button>
+        </div>
+        <div className="flex-1 overflow-hidden p-6">
+          <div className="w-full h-full bg-white shadow-xl rounded-xl overflow-hidden border border-gray-200">
+            <ExcelRenderer 
+              fileArrayBuffer={fileArrayBuffer} 
+              // 全屏时不显示 Loading 遮罩，因为通常很快
+            />
           </div>
         </div>
-      )}
-
-      {/* 文件名显示 */}
-      {fileName && !isLoading && (
-        <div className="absolute top-2 left-2 bg-black bg-opacity-75 text-white px-3 py-1 rounded text-sm z-10">
-          {fileName}
-        </div>
-      )}
-
-      {/* 预览容器 */}
-      <div
-        ref={containerRef}
-        className="w-full h-full border border-gray-200 rounded-md overflow-hidden bg-white"
-        id="excel-preview-container"
-      />
+      </Modal>
     </div>
   );
 }

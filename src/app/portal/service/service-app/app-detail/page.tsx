@@ -17,7 +17,7 @@ function AppDetailContent() {
       try {
         setLoading(true);
         const res = await getApplicationsAPI();
-        const foundApp = res.applications.find((app) => app.name === appName);
+        const foundApp = (res.applications || res.data || []).find((app) => app.name === appName);
         setApp(foundApp || null);
       } catch (error) {
         console.error('获取应用详情失败:', error);
@@ -44,11 +44,13 @@ function AppDetailContent() {
 
   if (app && app.url) {
     return (
-      <iframe
-        style={{ height: 'calc(100vh - 64px)', width: '100%', border: 'none' }}
-        src={app.url}
-        title={app.name}
-      />
+      <div className="w-full h-full bg-white overflow-hidden relative">
+        <iframe
+          className="absolute inset-0 w-full h-full border-none"
+          src={app.url}
+          title={app.name}
+        />
+      </div>
     );
   } else {
     return (

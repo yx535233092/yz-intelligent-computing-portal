@@ -47,7 +47,7 @@ const items: MenuItem[] = [
   },
 ];
 
-export default function Nav() {
+export default function Nav({ mode = 'horizontal' }: { mode?: MenuProps['mode'] }) {
   // 每次渲染导航栏都滚动到顶部
   useScrollToTop();
 
@@ -66,7 +66,7 @@ export default function Nav() {
   };
 
   return (
-    <nav>
+    <nav className={mode === 'inline' ? 'w-full' : ''}>
       <ConfigProvider
         theme={{
           components: {
@@ -82,10 +82,10 @@ export default function Nav() {
         }}
       >
         <Menu
-          style={{ borderBottom: 'none' }}
+          style={{ borderBottom: 'none', borderRight: 'none' }}
           onClick={onClick}
           selectedKeys={[current]}
-          mode="horizontal"
+          mode={mode}
           items={items}
         />
       </ConfigProvider>

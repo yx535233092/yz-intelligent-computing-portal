@@ -1,7 +1,13 @@
 import Layout from '@/components/layout/layout-manage/ManageLayout';
+import VisitTracker from '@/components/common/VisitTracker';
 
 function ManageLayout({ children }: { children: React.ReactNode }) {
-  return <Layout>{children}</Layout>;
+  return (
+    <Layout>
+      <VisitTracker />
+      {children}
+    </Layout>
+  );
 }
 
 export default ManageLayout;

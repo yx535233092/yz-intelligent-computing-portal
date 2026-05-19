@@ -59,59 +59,103 @@
 - 应用与页面数据：`/api/applications`、`/api/applications/[id]`、`/api/getApplications`、`/api/getFileListByLabel`
 - 业务提交与统计：`/api/submitContact`、`/api/monitoring/visit`、`/api/getAccessToken`
 
-## 部署方式
+## 本地开发
 
-### 1. 本地开发
+本地开发保留两种方式：
 
-适合功能开发与调试。
+1. 前端和 Python 服务源码直接跑，基础设施通过 Docker 启动。
+2. 上生产环境前，在本地模拟 Docker 启动整套服务。
+
+### 1. 日常开发：源码直跑 + PostgreSQL 走 Docker
+
+适合日常功能开发、页面调试、接口联调和 Python 服务调试。这个模式下，前端和 Python 服务直接运行源码，数据库等基础设施通过 Docker 起。
+
+建议的启动方式：
+
+1. 先启动 PostgreSQL 容器，确保数据库地址可用。
+2. 再启动 Python 服务，用于 Excel 解析等后端能力。
+3. 最后启动前端开发服务，进行页面开发和接口调试。
+
+推荐的本地流程：
 
 ```bash
+# 1) 启动 PostgreSQL
+docker compose up -d db
+
+# 2) 启动 Python 服务
+cd python_service
+pip install -r requirements.txt
+uvicorn main:app --reload --host 0.0.0.0 --port 29000
+
+# 3) 启动前端
+cd ..
 npm install
 npm run dev
 ```
 
-默认开发端口为 `13000`，来自 `package.json` 中的 `dev` 脚本。
+这个模式下需要关注的环境变量主要是：
 
-如果需要访问数据库与权限功能，确保本地 `PostgreSQL` 已启动，并正确配置 `.env.development`。
+- `DATABASE_URL`：指向本地 PostgreSQL，通常是 `postgresql://postgres:postgres@localhost:5432/yz-portal`
+- `AUTH_SERVICE_URL`：认证服务地址，当前默认是 `http://localhost:20080`
+- `NEXT_PUBLIC_API_URL`：前端请求基础路径，当前默认是 `/`
 
-### 2. PM2 部署
+### 2. 联调/上线前验证：本地模拟 Docker
 
-项目根目录提供了 `ecosystem.config.js`，用于 PM2 方式启动。
+适合在上线前验证容器启动链路、服务依赖关系和整体部署方式。这个模式更接近生产环境，重点是确认 `docker compose` 下各服务能否正常联动，而不是源码级调试。
+
+建议的启动方式：
+
+1. 先准备好镜像或本地构建镜像。
+2. 再用 `docker compose up -d` 拉起整套服务。
+3. 通过容器日志和对外访问地址确认服务是否正常。
+
+推荐的本地流程：
 
 ```bash
-npm run build
-pm2 start ecosystem.config.js
+docker compose up -d
 ```
 
-PM2 配置里默认运行：
+这个模式下主要验证以下内容：
 
-- 应用名：`yz-portal-h3c`
-- 启动命令：`npm start`
-- 端口：`8001`
+- `web` 前端容器是否能正常启动
+- `python-api` 是否能正常提供服务
+- `db` 是否能正常初始化并保持健康
+- `nginx` 是否能正确转发请求
+- 前端、认证服务、数据库、Python 服务之间的调用链是否正常
 
-### 3. Docker 单容器部署
+如果你只是想验证容器编排和服务联动，这种方式会更接近线上环境。
 
-`Dockerfile` 采用多阶段构建，构建 `Next.js` 生产镜像。
+## 部署方式
+
+### 1. Docker Compose 镜像部署
+
+当前项目的实际部署方式是：
+
+1. 在本地先构建镜像。
+2. 将镜像文件和部署必备文件上传到服务器。
+3. 服务器执行 `docker load` 导入镜像。
+4. 服务器使用 `docker compose` 启动整套服务。
+
+本地构建示例：
 
 ```bash
-docker build -t h3c-portal .
-docker run -d --name h3c-portal -p 3000:3000 h3c-portal
+docker build -t h3c-portal-web:latest .
+docker build -t h3c-portal-python:latest ./python_service
+docker save -o h3c-portal-images.tar h3c-portal-web:latest h3c-portal-python:latest
 ```
 
-适合仅部署 Web 服务的场景。
+上传到服务器的内容建议至少包含：
 
-### 4. Docker Compose 联合部署
+- `h3c-portal-images.tar`
+- `docker-compose.yml`
+- `nginx/nginx.conf`
+- `.env` 或 `.env.production`
+- `data/postgres_data/` 目录
 
-`docker-compose.yml` 提供了完整的联动部署方案，包含：
-
-- `db`：`PostgreSQL 15`
-- `web`：Next.js 前端/后端服务
-- `python-api`：Python 数据解析服务
-- `nginx`：统一反向代理入口
-
-示例启动方式：
+服务器启动示例：
 
 ```bash
+docker load -i h3c-portal-images.tar
 docker compose up -d
 ```
 
@@ -122,7 +166,12 @@ docker compose up -d
 - `3000`：Web 服务容器内部端口
 - `9000`：Python 服务容器内部暴露端口
 
-### 5. Python 数据解析服务
+说明：
+
+- 如果你希望服务器只依赖镜像而不参与源码构建，`docker-compose.yml` 里的 `web` 和 `python-api` 服务需要使用 `image:` 引用已导入的镜像。
+- 如果继续使用当前仓库里的 `build:` 配置，`docker compose up -d` 仍可能尝试在服务器侧重新构建镜像。
+
+### 2. Python 数据解析服务
 
 `python_service/README.md` 中描述了独立启动方式，主要用于 Excel 解析。
 
@@ -133,6 +182,29 @@ uvicorn main:app --reload --host 0.0.0.0 --port 29000
 ```
 
 在当前 `docker-compose.yml` 中，该服务以 `python-api` 的形式参与联动部署。
+
+### 3. 当前线上部署状态
+
+线上项目文件夹地址：
+
+- 认证服务 /root/workspace-yx/software/h3c-auth/
+- 项目 /root/workspace-yx/software/yz-portal/
+
+目前线上环境只需要启动 `h3c-auth` 和 `yz-portal` 这两个 `docker compose` 项目即可，其他服务不影响当前门户的主流程。
+
+服务器上的服务状态示例：
+
+```bash
+docker compose ls
+NAME                STATUS              CONFIG FILES
+h3c-auth            running(4)          /root/workspace-yx/software/h3c-auth/docker-compose.yml
+yz-portal           running(4)          /root/workspace-yx/software/yz-portal/docker-compose.yml
+```
+
+其中：
+
+- `h3c-auth`：认证服务
+- `yz-portal`：门户主服务
 
 ## 必备文件
 
@@ -146,6 +218,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 29000
 - [.env.production](./.env.production)：生产环境变量
 - [prisma/schema.prisma](./prisma/schema.prisma)：数据库模型定义
 - [Dockerfile](./Dockerfile)：Web 服务镜像构建文件
+- [python_service/Dockerfile](./python_service/Dockerfile)：Python 服务镜像构建文件
 - [docker-compose.yml](./docker-compose.yml)：整套联动部署文件
 - [ecosystem.config.js](./ecosystem.config.js)：PM2 启动配置
 - [python_service/README.md](./python_service/README.md)：Python 服务说明
